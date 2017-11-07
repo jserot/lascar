@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="FilenameExt.html">
+<link rel="next" href="OrderedTypeExt.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of extensions" rel=Appendix href="index_extensions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Utils" rel="Chapter" href="Utils.html">
+<link title="Misc" rel="Chapter" href="Misc.html">
+<link title="Dot" rel="Chapter" href="Dot.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="Stringable" rel="Chapter" href="Stringable.html">
+<link title="StringExt" rel="Chapter" href="StringExt.html">
+<link title="FilenameExt" rel="Chapter" href="FilenameExt.html">
+<link title="ListExt" rel="Chapter" href="ListExt.html">
+<link title="OrderedTypeExt" rel="Chapter" href="OrderedTypeExt.html">
+<link title="SetExt" rel="Chapter" href="SetExt.html"><title>ListExt</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="FilenameExt.html" title="FilenameExt">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="OrderedTypeExt.html" title="OrderedTypeExt">Next</a>
+</div>
+<h1>Module <a href="type_ListExt.html">ListExt</a></h1>
+
+<pre><span class="keyword">module</span> ListExt: <code class="code"><span class="keyword">sig</span></code> <a href="ListExt.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info module top">
+Extension to the <code class="code"><span class="constructor">Stdlib</span>.<span class="constructor">List</span></code> module<br>
+</div>
+<hr width="100%">
+
+<pre><span id="VALfold_lefti"><span class="keyword">val</span> fold_lefti</span> : <code class="type">('a -> int -> 'b -> 'a) -> 'a -> 'b list -> 'a</code></pre><div class="info ">
+<code class="code">fold_lefti f a [b1; ...; bn]</code> is <code class="code">f (... (f 1 (f 0 a b1) b2) ...) bn</code>.<br>
+</div>
+
+<pre><span id="VALfold_righti"><span class="keyword">val</span> fold_righti</span> : <code class="type">(int -> 'a -> 'b -> 'b) -> 'a list -> 'b -> 'b</code></pre><div class="info ">
+<code class="code">fold_righti f [a1; ...; an] b</code> is <code class="code">f a1 (f (n-2) a2 (... (f (n-1) an b) ...))</code>.<br>
+</div>
+
+<pre><span id="VALsplit3"><span class="keyword">val</span> split3</span> : <code class="type">('a * 'b * 'c) list -> 'a list * 'b list * 'c list</code></pre><div class="info ">
+Transform a list of triplets into a triplet of lists.<br>
+</div>
+
+<pre><span id="VALcombine3"><span class="keyword">val</span> combine3</span> : <code class="type">'a list -> 'b list -> 'c list -> ('a * 'b * 'c) list</code></pre><div class="info ">
+Transform a triplet of lists into a list of triplets.<br>
+</div>
+
+<pre><span id="VALto_string"><span class="keyword">val</span> to_string</span> : <code class="type">('a -> string) -> string -> 'a list -> string</code></pre><div class="info ">
+<code class="code">to_string f sep [x1;...;xn]</code> returns <code class="code">f x1 ^ sep ^ f x2 ^ sep ^ ... ^ sep ^ f xn</code>
+        or the empty string if the list is empty<br>
+</div>
+
+<pre><span id="VALrange"><span class="keyword">val</span> range</span> : <code class="type">(int -> 'a) -> int -> int -> 'a list</code></pre><div class="info ">
+<code class="code">make f n1 n2</code> returns <code class="code">[f n1; ..., f n2]</code> if <code class="code">n2&gt;=n1</code> or the empty list if <code class="code">n2&lt;n1</code><br>
+</div>
+
+<pre><span id="VALindex_of"><span class="keyword">val</span> index_of</span> : <code class="type">'a -> 'a list -> int</code></pre><div class="info ">
+<code class="code">index_of e l</code> returns the index of the first occurence of <code class="code">e</code> in list <code class="code">l</code>, starting at 0.<br>
+<b>Raises</b> <code>Failure</code> is <code class="code">e</code> does not occur in <code class="code">l</code><br>
+</div>
+
+<pre><span id="VALflat_map"><span class="keyword">val</span> flat_map</span> : <code class="type">('a -> 'b list) -> 'a list -> 'b list</code></pre><div class="info ">
+<code class="code">flat_map f [x1;...,xn]</code> is <code class="code">f x1 @ f x2 @ ... @ f xn</code><br>
+</div>
+
+<pre><span id="VALinter"><span class="keyword">val</span> inter</span> : <code class="type">'a list -> 'a list -> 'a list</code></pre><div class="info ">
+<code class="code">inter l1 l2</code> returns the intersection of the lists <code class="code">l1</code> and <code class="code">l2</code><br>
+</div>
+
+<pre><span id="VALunion"><span class="keyword">val</span> union</span> : <code class="type">'a list -> 'a list -> 'a list</code></pre><div class="info ">
+<code class="code">union l1 l2</code> returns the union of the lists <code class="code">l1</code> and <code class="code">l2</code><br>
+</div>
+
+<pre><span id="VALmerge"><span class="keyword">val</span> merge</span> : <code class="type">?cmp:('a -> 'a -> int) -> 'a list -> 'a list -> 'a list</code></pre><div class="info ">
+<code class="code">merge p l1 l2</code> merges lists <code class="code">l1</code> and <code class="code">l2</code> using comparison function <code class="code">cmp</code> (default: Pervasives.compare).
+        For example, <code class="code">merge [1;3;8] [2;5;6;10] = [1;2;3;5;5;8;10]</code>.<br>
+</div>
+
+<pre><span id="VALprod"><span class="keyword">val</span> prod</span> : <code class="type">('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list</code></pre><div class="info ">
+<code class="code">prod f l1 l2</code> computes the "product" of lists <code class="code">l1</code> and <code class="code">l2</code>, i.e. the list obtained by applying <code class="code">f</code> to each
+        possible pair of elements of <code class="code">l1</code> and <code class="code">l2</code>.<br>
+</div>
+
+<pre><span id="VALcart_prod2"><span class="keyword">val</span> cart_prod2</span> : <code class="type">'a list -> 'b list -> ('a * 'b) list</code></pre><div class="info ">
+<code class="code">cart_prod</code> is a specialized version of <code class="code">prod</code> in which <code class="code">f x y = (x,y)</code><br>
+</div>
+
+<pre><span id="VALprod3"><span class="keyword">val</span> prod3</span> : <code class="type">('a -> 'b -> 'c -> 'd) -> 'a list -> 'b list -> 'c list -> 'd list</code></pre>
+<pre><span id="VALcart_prod3"><span class="keyword">val</span> cart_prod3</span> : <code class="type">'a list -> 'b list -> 'c list -> ('a * 'b * 'c) list</code></pre><div class="info ">
+<code class="code">prod3</code> (resp. <code class="code">cart_prod3</code>) are generalisations of <a href="ListExt.html#VALprod"><code class="code"><span class="constructor">ListExt</span>.prod</code></a> (resp. <a href="ListExt.html#VALcart_prod2"><code class="code"><span class="constructor">ListExt</span>.cart_prod2</code></a>) to three input lists<br>
+</div>
+
+<pre><span id="VALcart_prodn"><span class="keyword">val</span> cart_prodn</span> : <code class="type">'a list list -> 'a list list</code></pre><div class="info ">
+<code class="code">gen_cart_prod</code> computes the n-ary cartesian product of lists.<br>
+</div>
+
+<pre><span id="VALfilter_map"><span class="keyword">val</span> filter_map</span> : <code class="type">('a -> bool) -> ('a -> 'b) -> 'a list -> 'b list</code></pre><div class="info ">
+<code class="code">filter_map p f l</code> is a short-cut for <code class="code"><span class="constructor">List</span>.map f (<span class="constructor">List</span>.filter p l)</code><br>
+</div>
+
+<pre><span id="VALiter_sep"><span class="keyword">val</span> iter_sep</span> : <code class="type">('a -> unit) -> (unit -> unit) -> 'a list -> unit</code></pre><div class="info ">
+<code class="code">iter_sep f g l</code> is like <code class="code"><span class="constructor">List</span>.iter f l</code> but calls function <code class="code">g</code> between each call to function <code class="code">f</code>.<br>
+</div>
+
+<pre><span id="VALiter_fst"><span class="keyword">val</span> iter_fst</span> : <code class="type">(bool -> 'a -> unit) -> 'a list -> unit</code></pre><div class="info ">
+<code class="code">iter_fst f [x1;x2;...xn]</code> is <code class="code">f <span class="keyword">true</span> x1; f <span class="keyword">false</span> x2; ...; f <span class="keyword">false</span> xn</code><br>
+</div>
+
+<pre><span id="VALremove"><span class="keyword">val</span> remove</span> : <code class="type">'a -> 'a list -> 'a list</code></pre><div class="info ">
+<code class="code">remove e l</code> is a short-cut for <code class="code"><span class="constructor">List</span>.filter (<span class="keyword">fun</span> e' <span class="keywordsign">-&gt;</span> e &lt;&gt; e') l)</code><br>
+</div>
+
+<pre><span id="VALpower_set"><span class="keyword">val</span> power_set</span> : <code class="type">'a list -> 'a list list</code></pre><div class="info ">
+<code class="code">power_set l</code> computes the "power set" of <code class="code">l</code>, i.e. the list of all lists composed of elements of <code class="code">l</code>.
+        The length of the result is <code class="code">2^n</code>, where <code class="code">n</code> is the length of <code class="code">l</code>.
+        Example: <code class="code">power [1;2;3]</code> is <code class="code">[[];[1];[2];[3];[1;2];[1;3];[2;3];[1;2;3]]</code><br>
+</div>
+
+<pre><span id="VALpower"><span class="keyword">val</span> power</span> : <code class="type">int -> 'a list -> 'a list list</code></pre><div class="info ">
+<code class="code">power n l</code> computes the list of all lists of length <code class="code">n</code> made of elements of <code class="code">l</code>.
+        The length of the result is <code class="code">m^n</code>, where <code class="code">m</code> is the length of <code class="code">l</code>.
+        Example : <code class="code">power 2 [1;2;3]</code> is <code class="code">[[1;1];[2;1];[3;1];[1;2];[2;2];[3;2];[1;3];[2;3];[3;3]]</code><br>
+</div>
+
+<pre><span id="VALassoc"><span class="keyword">val</span> assoc</span> : <code class="type">?cmp:('a -> 'a -> int) -> 'a -> ('a * 'c) list -> 'c</code></pre>
+<pre><span id="VALmem_assoc"><span class="keyword">val</span> mem_assoc</span> : <code class="type">?cmp:('a -> 'a -> int) -> 'a -> ('a * 'c) list -> bool</code></pre><div class="info ">
+<code class="code">assoc</code> (resp. <code class="code">mem_assoc</code>) is a variant of <code class="code"><span class="constructor">Stdlib</span>.<span class="constructor">List</span>.assoc</code> (resp. <code class="code"><span class="constructor">Stdlib</span>.<span class="constructor">List</span>.mem_assoc</code>) in which
+        the comparison function used for comparing keys can be passed as an optional argument. By default,
+        <code class="code"><span class="constructor">Pervasive</span>.compare</code> is used.<br>
+</div>
+
+<pre><span id="VALreplace_assoc"><span class="keyword">val</span> replace_assoc</span> : <code class="type">?cmp:('a -> 'a -> int) -> 'a -> 'c -> ('a * 'c) list -> ('a * 'c) list</code></pre><div class="info ">
+<code class="code">replace_assoc k v l</code> replaces the value associated to each occurrence of key <code class="code">k</code> by <code class="code">v</code> in 
+        the association list <code class="code">l</code>. If <code class="code">k</code> does not occur, <code class="code">l</code> is unchanged. As for <a href="ListExt.html#VALassoc"><code class="code"><span class="constructor">ListExt</span>.assoc</code></a> and <a href="ListExt.html#VALmem_assoc"><code class="code"><span class="constructor">ListExt</span>.mem_assoc</code></a>,
+        the comparison function can be specified with the optional argument <code class="code">cmp</code>.<br>
+</div>
+
+<pre><span id="VALscatter"><span class="keyword">val</span> scatter</span> : <code class="type">('a -> int) -> 'a list -> 'a list array</code></pre><div class="info ">
+<code class="code">scatter h l</code> returns an array <code class="code">a</code> in which <code class="code">a.(i)</code> is the list of all elements <code class="code">x</code> of <code class="code">l</code> such that <code class="code">h x = i</code>.
+        The length of the array is computed from the maximum value of <code class="code">h</code> on <code class="code">l</code>.
+        Example: <code class="code">scatter <span class="constructor">String</span>.length [<span class="string">"a"</span>;<span class="string">"bc"</span>;<span class="string">"de"</span>;<span class="string">"fghi"</span>]</code> is <code class="code">[|[];[<span class="string">"a"</span>];[<span class="string">"bc;de"</span>];[];[<span class="string">"fghi"</span>]|]</code>.<br>
+</div>
+
+<pre><span id="VALparse"><span class="keyword">val</span> parse</span> : <code class="type">string -> (Genlex.token Stream.t -> 'a) -> Genlex.token Stream.t -> 'a list</code></pre><div class="info ">
+Higher-order parser for lists<br>
+</div>
+</body></html>

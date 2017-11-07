@@ -1,0 +1,4 @@
+- "classical" operations (product, union, ...) for NFAs and DFAs
+- Kripke structures
+- Buchi automata
+- SMV output 

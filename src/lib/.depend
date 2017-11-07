@@ -1,0 +1,33 @@
+ltsa.cmo : ltsa.cmi
+ltsa.cmx : ltsa.cmi
+lts.cmo : ltsa.cmi lts.cmi
+lts.cmx : ltsa.cmx lts.cmi
+nfa.cmo : ltsa.cmi nfa.cmi
+nfa.cmx : ltsa.cmx nfa.cmi
+dfa.cmo : nfa.cmi ltsa.cmi dfa.cmi
+dfa.cmx : nfa.cmx ltsa.cmx dfa.cmi
+valuation.cmo : valuation.cmi
+valuation.cmx : valuation.cmi
+mealy.cmo : valuation.cmi ltsa.cmi lts.cmi mealy.cmi
+mealy.cmx : valuation.cmx ltsa.cmx lts.cmx mealy.cmi
+moore.cmo : valuation.cmi ltsa.cmi moore.cmi
+moore.cmx : valuation.cmx ltsa.cmx moore.cmi
+fsm_expr.cmo : fsm_expr.cmi
+fsm_expr.cmx : fsm_expr.cmi
+fsm.cmo : valuation.cmi ltsa.cmi fsm_expr.cmi fsm.cmi
+fsm.cmx : valuation.cmx ltsa.cmx fsm_expr.cmx fsm.cmi
+conv.cmo : valuation.cmi nfa.cmi moore.cmi mealy.cmi ltsa.cmi lts.cmi \
+    fsm_expr.cmi fsm.cmi dfa.cmi conv.cmi
+conv.cmx : valuation.cmx nfa.cmx moore.cmx mealy.cmx ltsa.cmx lts.cmx \
+    fsm_expr.cmx fsm.cmx dfa.cmx conv.cmi
+ltsa.cmi :
+lts.cmi : ltsa.cmi
+nfa.cmi : ltsa.cmi
+dfa.cmi : nfa.cmi ltsa.cmi
+valuation.cmi :
+mealy.cmi : valuation.cmi ltsa.cmi lts.cmi
+moore.cmi : valuation.cmi ltsa.cmi
+fsm_expr.cmi :
+fsm.cmi : valuation.cmi ltsa.cmi fsm_expr.cmi
+conv.cmi : valuation.cmi nfa.cmi moore.cmi mealy.cmi ltsa.cmi lts.cmi \
+    fsm.cmi dfa.cmi

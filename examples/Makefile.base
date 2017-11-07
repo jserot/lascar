@@ -1,0 +1,18 @@
+include ../../../config
+
+DOTVIEW=open -a Graphviz
+
+all: run
+
+run: a.out
+	./a.out
+
+a.out: $(SRCS)
+	$(CAMLC) -I ../../../src/utils -I ../../../src/lib utils.cma lascar.cma $<
+
+clean:
+	@\rm -f a.out *.cmi *.cmo
+
+clobber: clean
+	@\rm -f *.dot *.tex
+	@\rm -f *~

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Tree.html">
+<link rel="next" href="Stringable.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of extensions" rel=Appendix href="index_extensions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Utils" rel="Chapter" href="Utils.html">
+<link title="Misc" rel="Chapter" href="Misc.html">
+<link title="Dot" rel="Chapter" href="Dot.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="Stringable" rel="Chapter" href="Stringable.html">
+<link title="StringExt" rel="Chapter" href="StringExt.html">
+<link title="FilenameExt" rel="Chapter" href="FilenameExt.html">
+<link title="ListExt" rel="Chapter" href="ListExt.html">
+<link title="OrderedTypeExt" rel="Chapter" href="OrderedTypeExt.html">
+<link title="SetExt" rel="Chapter" href="SetExt.html"><title>Option</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Tree.html" title="Tree">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Stringable.html" title="Stringable">Next</a>
+</div>
+<h1>Module <a href="type_Option.html">Option</a></h1>
+
+<pre><span class="keyword">module</span> Option: <code class="code"><span class="keyword">sig</span></code> <a href="Option.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info module top">
+Several functions operating on values of type <code class="code"><span class="keywordsign">'</span>a option</code><br>
+</div>
+<hr width="100%">
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">('a -> 'b) -> 'a option -> 'b option</code></pre><div class="info ">
+<code class="code">apply f v</code> is <code class="code"><span class="constructor">Some</span> (f x)</code> if <code class="code">v</code> is <code class="code"><span class="constructor">Some</span> x</code>, <code class="code"><span class="constructor">None</span></code> if <code class="code">v</code> is <code class="code"><span class="constructor">None</span></code><br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">('a -> unit) -> 'a option -> unit</code></pre><div class="info ">
+<code class="code">iter f x</code> applies <code class="code">f</code> to <code class="code">v</code> if <code class="code">x</code> is <code class="code"><span class="constructor">Some</span> v</code>, does nothing if <code class="code">x</code> is <code class="code"><span class="constructor">None</span></code><br>
+</div>
+
+<pre><span id="VALto_string"><span class="keyword">val</span> to_string</span> : <code class="type">('a -> string) -> 'a option -> string</code></pre><div class="info ">
+<code class="code">to_string f v</code> is <code class="code">f x</code> if <code class="code">v</code> is <code class="code"><span class="constructor">Some</span> x</code>, <code class="code"><span class="string">""</span></code> if <code class="code">v</code> is <code class="code"><span class="constructor">None</span></code><br>
+</div>
+</body></html>

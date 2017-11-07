@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Lts.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of extensions" rel=Appendix href="index_extensions.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Ltsa" rel="Chapter" href="Ltsa.html">
+<link title="Lts" rel="Chapter" href="Lts.html">
+<link title="Nfa" rel="Chapter" href="Nfa.html">
+<link title="Dfa" rel="Chapter" href="Dfa.html">
+<link title="Valuation" rel="Chapter" href="Valuation.html">
+<link title="Mealy" rel="Chapter" href="Mealy.html">
+<link title="Moore" rel="Chapter" href="Moore.html">
+<link title="Fsm_expr" rel="Chapter" href="Fsm_expr.html">
+<link title="Fsm" rel="Chapter" href="Fsm.html">
+<link title="Conv" rel="Chapter" href="Conv.html"><title>Ltsa</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Lts.html" title="Lts">Next</a>
+</div>
+<h1>Module <a href="type_Ltsa.html">Ltsa</a></h1>
+
+<pre><span class="keyword">module</span> Ltsa: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info module top">
+Labeled Transition Systems with State Attributes
+<p>
+
+    A Labeled Transition System with Attributes on states (LTSA) is 6-uple <code class="code">(<span class="constructor">Q</span>,<span class="constructor">L</span>,<span class="constructor">A</span>,<span class="constructor">I</span>,a,<span class="constructor">R</span>)</code> where<ul>
+<li><code class="code"><span class="constructor">Q</span></code> is a set of state identifiers</li>
+<li><code class="code"><span class="constructor">L</span></code> is a set of transition labels</li>
+<li><code class="code"><span class="constructor">A</span></code> is a set of state attributes</li>
+<li><code class="code"><span class="constructor">I</span></code> is a subset of <code class="code"><span class="constructor">Q</span></code> giving the initial states</li>
+<li><code class="code">a</code> is function from <code class="code"><span class="constructor">Q</span></code> to <code class="code"><span class="constructor">A</span></code> associating a state to its attribute</li>
+<li><code class="code"><span class="constructor">R</span></code> is the transition relation, defined as a subset of <code class="code"><span class="constructor">QxLxQ</span></code></li>
+</ul>
+<br>
+</div>
+<hr width="100%">
+<pre><code><span class="keyword">type</span> <code class="type"></code>Utils.Dot.graph_style += </code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="EXTENSIONNoLabel">NoLabel</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="EXTENSIONNoAttr">NoAttr</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="EXTENSIONCircular">Circular</span></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Circular layout (circo); default is layered<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+
+<div class="info ">
+Extension to the <code class="code"><span class="constructor">Dot</span>.graph_style</code> type for drawing LTSAs<br>
+</div>
+
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.STATE.html">STATE</a> = <code class="type">Utils.OrderedTypeExt.T</code></pre><div class="info">
+Signature of the module describing state identifiers
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.LABEL.html">LABEL</a> = <code class="type">Utils.OrderedTypeExt.T</code></pre><div class="info">
+Signature of the module describing transition labels
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.ATTR.html">ATTR</a> = <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.ATTR.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Signature of the module describing state attributes
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.T.html">T</a> = <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.T.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Output signature of the functor <a href="Ltsa.Make.html"><code class="code"><span class="constructor">Ltsa</span>.<span class="constructor">Make</span></code></a>.
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.Make.html">Make</a> <code class="code">(</code><code class="code"><span class="constructor">S</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.STATE.html">STATE</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">L</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.LABEL.html">LABEL</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">A</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.ATTR.html">ATTR</a></code><code class="code">) </code>: <code class="type"><a href="Ltsa.T.html">T</a></code><code class="type">  with type state = S.t and type label = L.t and type attr = A.t</code></pre><div class="info">
+Functor building an implementation of the LTSA structure given an implementation of
+   state identifiers, transition labels and state attributes
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.Trans.html">Trans</a> <code class="code">(</code><code class="code"><span class="constructor">S1</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">S2</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.Trans.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor for converting a LTSA, with a given implementation of state identifiers, transition labels and state attributes
+   into another one with different respective implementations
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.Product.html">Product</a> <code class="code">(</code><code class="code"><span class="constructor">S1</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">S2</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.Product.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor for computing the external product, in different flavors, of two LTSA
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.Product3.html">Product3</a> <code class="code">(</code><code class="code"><span class="constructor">S1</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">S2</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">S3</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.Product3.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor for computing the external product, in different flavors, of three LTSA
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.Merge.html">Merge</a> = <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.Merge.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Signature of the second argument for the <a href="Ltsa.IProduct.html"><code class="code"><span class="constructor">Ltsa</span>.<span class="constructor">IProduct</span></code></a> functor
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.IProduct.html">IProduct</a> <code class="code">(</code><code class="code"><span class="constructor">S</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">M</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.Merge.html">Merge</a></code><code class="type">  with type state=S.state and type label=S.label and type attr=S.attr</code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.IProduct.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor for computing the internal product, in different flavors, of two LTSA
+</div>
+
+<pre><span class="keyword">module type</span> <a href="Ltsa.Merge3.html">Merge3</a> = <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.Merge3.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Signature of the second argument for the <a href="Ltsa.IProduct3.html"><code class="code"><span class="constructor">Ltsa</span>.<span class="constructor">IProduct3</span></code></a> functor
+</div>
+
+<pre><span class="keyword">module</span> <a href="Ltsa.IProduct3.html">IProduct3</a> <code class="code">(</code><code class="code"><span class="constructor">S</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.T.html">T</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">M</span></code><code class="code"> : </code><code class="type"><a href="Ltsa.Merge3.html">Merge3</a></code><code class="type">  with type state=S.state and type label=S.label and type attr=S.attr</code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="Ltsa.IProduct3.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor for computing the "internal" product, in different flavors, of three LTSA
+</div>
+</body></html>

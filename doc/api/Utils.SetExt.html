@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Utils.OrderedTypeExt.html">
+<link rel="Up" href="Utils.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of extensions" rel=Appendix href="index_extensions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Utils" rel="Chapter" href="Utils.html">
+<link title="Misc" rel="Chapter" href="Misc.html">
+<link title="Dot" rel="Chapter" href="Dot.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Option" rel="Chapter" href="Option.html">
+<link title="Stringable" rel="Chapter" href="Stringable.html">
+<link title="StringExt" rel="Chapter" href="StringExt.html">
+<link title="FilenameExt" rel="Chapter" href="FilenameExt.html">
+<link title="ListExt" rel="Chapter" href="ListExt.html">
+<link title="OrderedTypeExt" rel="Chapter" href="OrderedTypeExt.html">
+<link title="SetExt" rel="Chapter" href="SetExt.html"><title>Utils.SetExt</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Utils.OrderedTypeExt.html" title="Utils.OrderedTypeExt">Previous</a>
+&nbsp;<a class="up" href="Utils.html" title="Utils">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Utils.SetExt.html">Utils.SetExt</a></h1>
+
+<pre><span class="keyword">module</span> SetExt: <code class="type"><a href="SetExt.html">SetExt</a></code></pre><hr width="100%">
+<br>
+Input signature of the <a href="SetExt.Make.html"><code class="code"><span class="constructor">SetExt</span>.<span class="constructor">Make</span></code></a> functor.<br>
+
+<pre><span class="keyword">module type</span> <a href="SetExt.S.html">S</a> = <code class="code"><span class="keyword">sig</span></code> <a href="SetExt.S.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Output signature of the <a href="SetExt.Make.html"><code class="code"><span class="constructor">SetExt</span>.<span class="constructor">Make</span></code></a> functor.
+</div>
+
+<pre><span class="keyword">module</span> <a href="SetExt.Make.html">Make</a> <code class="code">(</code><code class="code"><span class="constructor">E</span></code><code class="code"> : </code><code class="type"><a href="OrderedTypeExt.T.html">OrderedTypeExt.T</a></code><code class="code">) </code>: <code class="type"><a href="SetExt.S.html">S</a></code><code class="type">  with type elt = E.t</code></pre><div class="info">
+Functor building an implementation of the set structure given a totally ordered, stringable type.
+</div>
+<br>
+Functor for pairing structures describing elements for computing set products<br>
+
+<pre><span class="keyword">module</span> <a href="SetExt.Product.html">Product</a> <code class="code">(</code><code class="code"><span class="constructor">S1</span></code><code class="code"> : </code><code class="type"><a href="SetExt.S.html">S</a></code><code class="code">) </code> <code class="code">(</code><code class="code"><span class="constructor">S2</span></code><code class="code"> : </code><code class="type"><a href="SetExt.S.html">S</a></code><code class="code">) </code>: <code class="code"><span class="keyword">sig</span></code> <a href="SetExt.Product.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info">
+Functor building an implementation of a set product given the implementation of two sets
+</div>
+</body></html>

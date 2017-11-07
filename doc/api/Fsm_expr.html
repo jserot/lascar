@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Moore.html">
+<link rel="next" href="Fsm.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of extensions" rel=Appendix href="index_extensions.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Ltsa" rel="Chapter" href="Ltsa.html">
+<link title="Lts" rel="Chapter" href="Lts.html">
+<link title="Nfa" rel="Chapter" href="Nfa.html">
+<link title="Dfa" rel="Chapter" href="Dfa.html">
+<link title="Valuation" rel="Chapter" href="Valuation.html">
+<link title="Mealy" rel="Chapter" href="Mealy.html">
+<link title="Moore" rel="Chapter" href="Moore.html">
+<link title="Fsm_expr" rel="Chapter" href="Fsm_expr.html">
+<link title="Fsm" rel="Chapter" href="Fsm.html">
+<link title="Conv" rel="Chapter" href="Conv.html"><title>Fsm_expr</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Moore.html" title="Moore">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Fsm.html" title="Fsm">Next</a>
+</div>
+<h1>Module <a href="type_Fsm_expr.html">Fsm_expr</a></h1>
+
+<pre><span class="keyword">module</span> Fsm_expr: <code class="code"><span class="keyword">sig</span></code> <a href="Fsm_expr.html">..</a> <code class="code"><span class="keyword">end</span></code></pre><div class="info module top">
+Simple (int) expressions for FSMs<br>
+</div>
+<hr width="100%">
+
+<pre><span id="TYPEident"><span class="keyword">type</span> <code class="type"></code>ident</span> = <code class="type">string</code> </pre>
+<div class="info ">
+The type of identifiers occuring in expressions<br>
+</div>
+
+
+<pre><span id="TYPEvalue"><span class="keyword">type</span> <code class="type"></code>value</span> = <code class="type">int</code> </pre>
+<div class="info ">
+The type of expression values<br>
+</div>
+
+
+<pre><code><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> = </code></pre><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTt.EConst"><span class="constructor">EConst</span></span> <span class="keyword">of</span> <code class="type"><a href="Fsm_expr.html#TYPEvalue">value</a></code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Constants<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTt.EVar"><span class="constructor">EVar</span></span> <span class="keyword">of</span> <code class="type"><a href="Fsm_expr.html#TYPEident">ident</a></code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Input, output or local variable<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span id="TYPEELTt.EBinop"><span class="constructor">EBinop</span></span> <span class="keyword">of</span> <code class="type">string * <a href="Fsm_expr.html#TYPEt">t</a> * <a href="Fsm_expr.html#TYPEt">t</a></code></code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" ><div class="info ">
+Binary operation (<code class="code"><span class="string">"+"</span></code>, <code class="code"><span class="string">"-"</span></code>, <code class="code"><span class="string">"*"</span></code> or <code class="code"><span class="string">"/"</span></code>)<br>
+</div>
+</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+
+<div class="info ">
+The type of expressions<br>
+</div>
+
+
+<pre><span id="TYPEenv"><span class="keyword">type</span> <code class="type"></code>env</span> = <code class="type">(<a href="Fsm_expr.html#TYPEident">ident</a> * <a href="Fsm_expr.html#TYPEvalue">value</a> option) list</code> </pre>
+
+
+<pre><span id="EXCEPTIONUnknown"><span class="keyword">exception</span> Unknown</span> <span class="keyword">of</span> <code class="type"><a href="Fsm_expr.html#TYPEident">ident</a></code></pre>
+
+<pre><span id="EXCEPTIONUnbound"><span class="keyword">exception</span> Unbound</span> <span class="keyword">of</span> <code class="type"><a href="Fsm_expr.html#TYPEident">ident</a></code></pre>
+
+<pre><span id="EXCEPTIONIllegal_expr"><span class="keyword">exception</span> Illegal_expr</span></pre>
+
+<pre><span id="VALto_string"><span class="keyword">val</span> to_string</span> : <code class="type"><a href="Fsm_expr.html#TYPEt">t</a> -> string</code></pre>
+<pre><span id="VALof_string"><span class="keyword">val</span> of_string</span> : <code class="type">string -> <a href="Fsm_expr.html#TYPEt">t</a></code></pre>
+<pre><span id="VALlookup"><span class="keyword">val</span> lookup</span> : <code class="type"><a href="Fsm_expr.html#TYPEenv">env</a> -> <a href="Fsm_expr.html#TYPEident">ident</a> -> <a href="Fsm_expr.html#TYPEvalue">value</a></code></pre>
+<pre><span id="VALeval"><span class="keyword">val</span> eval</span> : <code class="type"><a href="Fsm_expr.html#TYPEenv">env</a> -> <a href="Fsm_expr.html#TYPEt">t</a> -> <a href="Fsm_expr.html#TYPEvalue">value</a></code></pre>
+<pre><span id="VALlexer"><span class="keyword">val</span> lexer</span> : <code class="type">string -> Genlex.token Stream.t</code></pre>
+<pre><span id="VALparse"><span class="keyword">val</span> parse</span> : <code class="type">Genlex.token Stream.t -> <a href="Fsm_expr.html#TYPEt">t</a></code></pre></body></html>
