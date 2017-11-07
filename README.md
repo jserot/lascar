@@ -31,8 +31,8 @@ Some annotated code snippets can be found [here][example-slides].
 
 Other examples are provided in a dedicated [directory][examples].
 
-[api]: https://github.com/jserot/lascar/tree/master/doc/api/lascar.html
-[example-slides]: https://github.com/jserot/lascar/tree/master/doc/examples/examples.html
+[api]: http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/api/lascar.html
+[example-slides]: http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/examples/examples.html
 [examples]: https://github.com/jserot/lascar/tree/master/examples
 
 Building LASCAr
