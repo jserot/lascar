@@ -1,6 +1,6 @@
 include ./config
 
-COPYDIR=cp -r
+CP=cp
 
 all:
 	(cd src/utils; make all)
@@ -9,18 +9,18 @@ all:
 test:
 	(cd examples; make)
 
+.PHONY: doc
+doc:
+	(cd src/utils; make doc)
+	(cd src/lib; make doc)
+
 install:
 	(cd src/utils; make install)
 	(cd src/lib; make install)
 
 install-doc:
-	(cd src/utils; make install-doc)
-	(cd src/lib; make install-doc)
-
-dist:
-	(cd src/utils; make dist)
-	(cd src/lib; make dist)
-	make clobber
+	$(INSTALL) $(INSTALLDIR)/doc
+	$(CP) doc/api/* $(INSTALLDIR)/doc
 
 clean:
 	(cd src/utils; make clean)

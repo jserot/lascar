@@ -3,7 +3,7 @@ include ../../config
 CAMLDEP_OPTS=-pp camlp4o
 CAMLC_OPTS=#-annot
 CAMLOPT_OPTS=
-CAMLDOC_OPTS=-short-functors -colorize-code -d ./doc
+CAMLDOC_OPTS=-short-functors -colorize-code
 
 CP=cp
 MV=mv
@@ -14,6 +14,8 @@ OBJS=$(SRCS:.ml=.cmo)
 NATOBJS=$(SRCS:.ml=.cmx)
 DOCSRCS=utils.mli misc.mli dot.mli tree.mli option.mli stringable.mli stringExt.mli filenameExt.mli  listExt.mli orderedTypeExt.mli setExt.mli
 
+APIDOCDIR=../../doc/api
+
 all:
 	make lib.byte
 ifeq ($(BUILD_NATIVE),yes)
@@ -22,16 +24,11 @@ endif
 
 install: 
 	$(INSTALL) -d $(INSTALLDIR)/lib
-	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)
+	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)/lib
 	$(INSTALL) utils.cma $(INSTALLDIR)/lib
 ifeq ($(BUILD_NATIVE),yes)
 	$(INSTALL) utils.cmxa $(INSTALLDIR)/lib
 endif
-
-install-doc: 
-	$(INSTALL) -d $(INSTALLDIR)/doc
-	$(CP) ./doc/* $(INSTALLDIR)/doc
-	$(MV) $(INSTALLDIR)/doc/index.html $(INSTALLDIR)/doc/utils.html
 
 dist: lib.byte doc 
 	$(CP) ./doc/* ../../doc/api
@@ -42,6 +39,12 @@ lib.byte: $(OBJS)
 
 lib.native: $(NATOBJS)
 	$(CAMLOPT) $(CAMLOPT_OPTS) -a -o utils.cmxa $(NATOBJS)
+
+doc: doc.html
+	$(MV) $(APIDOCDIR)/index.html $(APIDOCDIR)/utils.html
+
+doc.html: $(DOCSRCS)
+	$(CAMLDOC) -d $(APIDOCDIR) -html $(CAMLDOC_OPTS) $(DOCSRCS)
 
 .ml.cmx:
 	$(CAMLOPT) $(CAMLOPT_OPTS) -c $<
@@ -57,11 +60,6 @@ listExt.cmo: listExt.ml
 
 listExt.cmx: listExt.ml
 	$(CAMLOPT) $(CAMLOPT_OPTS) -c -pp camlp4o $<
-
-doc: doc.html
-
-doc.html: $(DOCSRCS)
-	$(CAMLDOC) -html $(CAMLDOC_OPTS) $(DOCSRCS)
 
 clean:
 	\rm -f *.cmi *.cmo *.cmx *.o *.a

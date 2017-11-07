@@ -1,2 +1,11 @@
 /config
 /config-stamp
+src/lib/*.cmi
+src/lib/*.cmo
+src/lib/*.cma
+src/lib/*.cmxa
+src/utils/*.cmi
+src/utils/*.cmo
+src/utils/cma
+src/utils/*.cma
+src/utils/cmxa

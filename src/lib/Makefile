@@ -3,7 +3,7 @@ include ../../config
 CAMLC_OPTS=-I ../utils #-annot
 CAMLOPT_OPTS=-I ../utils 
 CAMLDEP_OPTS=-pp camlp4o
-CAMLDOC_OPTS=-I ../utils -short-functors -colorize-code -d ./doc
+CAMLDOC_OPTS=-short-functors -colorize-code
 CP=cp
 MV=mv
 
@@ -13,6 +13,8 @@ OBJS=$(SRCS:.ml=.cmo)
 NATOBJS=$(SRCS:.ml=.cmx)
 DOCSRCS=$(INTFS)
 
+APIDOCDIR=../../doc/api
+
 all:
 	make lib.byte
 ifeq ($(BUILD_NATIVE),yes)
@@ -21,27 +23,23 @@ endif
 
 install: 
 	$(INSTALL) -d $(INSTALLDIR)/lib
-	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)
+	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)/lib
 	$(INSTALL) lascar.cma $(INSTALLDIR)/lib
 ifeq ($(BUILD_NATIVE),yes)
 	$(INSTALL) lascar.cmxa $(INSTALLDIR)/lib
 endif
-
-install-doc:
-	$(INSTALL) -d $(INSTALLDIR)/doc
-	$(CP) ./doc/* $(INSTALLDIR)/doc
-	$(MV) $(INSTALLDIR)/doc/index.html $(INSTALLDIR)/doc/lascar.html
-
-dist: lib.byte doc 
-	$(CP) ./doc/* ../../doc/api
-	$(MV) ../../doc/api/index.html ../../doc/api/lascar.html
-
 
 lib.byte: $(OBJS)
 	$(CAMLC) $(CAMLC_OPTS) -a -o lascar.cma $(OBJS)
 
 lib.native: $(NATOBJS)
 	$(CAMLOPT) $(CAMLOPT_OPTS) -a -o lascar.cmxa $(NATOBJS)
+
+doc: doc.html
+	$(MV) $(APIDOCDIR)/index.html $(APIDOCDIR)/lascar.html
+
+doc.html: $(DOCSRCS)
+	$(CAMLDOC) -d $(APIDOCDIR) -I ../utils -html $(CAMLDOC_OPTS) $(DOCSRCS)
 
 .ml.cmx:
 	$(CAMLOPT) $(CAMLOPT_OPTS) -c $<
@@ -63,11 +61,6 @@ fsm.cmo: fsm.ml
 
 fsm.cmx: fsm.ml
 	$(CAMLOPT) $(CAMLOPT_OPTS) -c -pp camlp4o $<
-
-doc: doc.html
-
-doc.html: $(DOCSRCS)
-	$(CAMLDOC) $(CAMLDOC_OPTS) -html $(DOCSRCS)
 
 clean:
 	\rm -f *.cmi *.cmo *.cmx *.o *.a
