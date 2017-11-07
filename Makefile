@@ -19,7 +19,7 @@ install:
 	(cd src/lib; make install)
 
 install-doc:
-	$(INSTALL) $(INSTALLDIR)/doc
+	$(INSTALL) -d $(INSTALLDIR)/doc
 	$(CP) doc/api/* $(INSTALLDIR)/doc
 
 clean:
