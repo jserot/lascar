@@ -1,8 +1,8 @@
 LASCAr 
 ======
 
-***LASCAr*** is a library for manipulating `Labeled Transition Systems` (LTS) in OCaml.
-***LASCAr*** provides functions for
+LASCAr is a library for manipulating `Labeled Transition Systems` (LTS) in OCaml.
+LASCAr provides functions for
 
 * building and inspecting models of such systems
 
@@ -12,7 +12,7 @@ LASCAr
 
 * computing the product (in various flavors) of such systems
 
-***LASCAr*** provides implementations both for "generic" LTS (with or without state attributes) and for "specialized" versions :
+LASCAr provides implementations both for "generic" LTS (with or without state attributes) and for "specialized" versions :
 
 * deterministic and non-deterministic finite automata (DFA, NFA),
 

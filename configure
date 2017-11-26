@@ -188,7 +188,6 @@ echo
 echo "Directory where the distribution will be installed:"
 echo "        library.................   $libdir"
 echo "        documentation............. $docdir"
-echo "        examples.................. $exampledir"
 if [ -n "$dotviewer" ]; then
 echo "Program for viewing .dot files: \"$dotviewer\""
 fi

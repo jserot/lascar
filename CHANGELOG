@@ -1,2 +1,5 @@
+0.2 (Nov 27, 2107)
+    * Added [ListExt.update_assoc]
+	
 0.1 (Nov 6, 2107)
     * First public version
