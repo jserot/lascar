@@ -114,11 +114,22 @@ let mem_assoc ?(cmp=Pervasives.compare) k l =
   | (k',_)::l -> cmp k k' = 0 || h l in
   h l
 
-let replace_assoc ?(cmp=Pervasives.compare) k v l =
-  let rec h = function
-    [] -> []
-  | (k',v')::l -> if cmp k k' = 0 then (k,v) :: h l else (k',v') :: h l in
+let update_assoc ?(cmp=Pervasives.compare) f k v l =
+  let rec h = function 
+  | [] -> []
+  | (k',v')::rest -> let v'' = if cmp k k' = 0 then f v' v else v' in (k',v'') :: h rest  in
   h l
+
+let replace_assoc ?(cmp=Pervasives.compare) k v l = update_assoc ~cmp:cmp (fun _ v -> v) k v l 
+
+let partition ?(cmp=Pervasives.compare) l =
+  List.fold_left
+    (fun acc (x,y) ->
+      if List.mem_assoc x acc
+      then update_assoc ~cmp:cmp (fun vs v -> v::vs) x y acc
+      else (x,[y])::acc)
+    []
+    l 
 
 let scatter p l = 
   let m = List.fold_left (fun acc x -> max acc (p x)) 0 l in

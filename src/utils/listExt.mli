@@ -89,15 +89,26 @@ val mem_assoc: ?cmp:('a -> 'a -> int) -> 'a -> ('a * 'c) list -> bool
         the comparison function used for comparing keys can be passed as an optional argument. By default,
         {!Pervasive.compare} is used. *)
 
-val replace_assoc: ?cmp:('a -> 'a -> int) -> 'a -> 'c -> ('a * 'c) list -> ('a * 'c) list
-    (** [replace_assoc k v l] replaces the value associated to each occurrence of key [k] by [v] in 
-        the association list [l]. If [k] does not occur, [l] is unchanged. As for {!assoc} and {!mem_assoc},
+val update_assoc: ?cmp:('k -> 'k -> int) -> ('v -> 'a -> 'v) -> 'k -> 'a -> ('k * 'v) list -> ('k * 'v) list
+    (** [update_assoc f k v l] replaces the value [v'] associated to each occurrence of key [k] in
+        the association list [l] by [f v' v]. If [k] does not occur, [l] is unchanged. As for {!assoc} and {!mem_assoc},
         the comparison function can be specified with the optional argument [cmp]. *)
+
+val replace_assoc: ?cmp:('k -> 'k -> int) -> 'k -> 'v -> ('k * 'v) list -> ('k * 'v) list
+    (** [replace_assoc k v l] is [update_assoc (fun _ v -> v) v k]. It replaces the value associated to each occurrence of
+        key [k] by [v] in the association list [l]. If [k] does not occur, [l] is unchanged. As for {!assoc} and {!mem_assoc},
+        the comparison function can be specified with the optional argument [cmp]. *)
+
+val partition: ?cmp:('a -> 'a -> int) -> ('a * 'b) list -> ('a * 'b list) list
+    (** [partition [(x1,y1);...;(xn;yn)]] returns the list [[k1,ys1; ...;km,ysm]] where [k1],...,[km] are
+        all the distinct values occuring in [[x1;...;xn]] and [ysi] the list of values [yj] paired with [ki] in 
+        the input list. For example [partition [(1,"a");(3,"b");(1,"c");(3,"d")]] is [[3,["d";"b"];1,["b";"a"]]]. *)
 
 val scatter: ('a -> int) -> 'a list -> 'a list array
     (** [scatter h l] returns an array [a] in which [a.(i)] is the list of all elements [x] of [l] such that [h x = i].
         The length of the array is computed from the maximum value of [h] on [l].
-        Example: [scatter String.length ["a";"bc";"de";"fghi"]] is [[|[];["a"];["bc;de"];[];["fghi"]|]]. *)
+        Example: [scatter String.length ["a";"bc";"de";"fghi"]] is [[|[];["a"];["bc;de"];[];["fghi"]|]].
+        As for {!assoc} and {!mem_assoc}, the comparison function can be specified with the optional argument [cmp]. *)
 
 val parse: string -> (Genlex.token Stream.t -> 'a) -> Genlex.token Stream.t -> 'a list
     (** Higher-order parser for lists *)
