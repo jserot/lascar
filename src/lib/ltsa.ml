@@ -99,6 +99,9 @@ module type T = sig
   val fold_preds: t -> state -> (state -> label -> 'a -> 'a) -> 'a -> 'a
   val iter_preds: t -> state -> (state -> label -> unit) -> unit
 
+  val map_state: (state -> state) -> t -> t
+  val map_attr: (attr -> attr) -> t -> t
+  val map_label: (label -> label) -> t -> t
   val clean: t -> t
   val unwind: int -> t -> Tree.t list
 
@@ -123,6 +126,8 @@ module type T = sig
   val dot_output_execs: string -> ?fname:string -> ?options:Dot.graph_style list -> int -> t -> unit
 
   val tex_output: string -> ?fname:string -> ?listed_transitions:label list option -> t -> unit
+
+  (* val dump: t -> unit  (\* for debug only *\) *)
 end
 
 
@@ -159,7 +164,7 @@ struct
     let to_string (q1,l,q2) = "(" ^ State.to_string q1 ^ "," ^ Label.to_string l ^ "," ^ State.to_string q2 ^ ")"
   end
 
-  module D = Set.Make(Transition)
+  module D = SetExt.Make(Transition)
   module Q = States
   module H = Attrs
 
@@ -247,6 +252,19 @@ struct
 
   let is_reachable s q = Q.mem q (reachable_states s)
 
+  let map_state f s =
+    { states = Q.map f s.states;
+      attrs = H.fold (fun q a acc -> H.add (f q) a acc) s.attrs H.empty;
+      rel = D.map (function (q1,l,q2) -> f q1, l, f q2) s.rel;
+      irel = H.fold (fun q l acc -> H.add (f q) l acc) s.irel H.empty }
+
+  let map_attr f s =
+    { s with attrs = H.map f s.attrs }
+
+  let map_label f s =
+    { s with rel = D.map (function (q1,l,q2) -> q1, f l, q2) s.rel;
+             irel = H.map f s.irel }
+      
   let clean s =
     let rs = reachable_states s in
     { states = rs;
@@ -263,6 +281,14 @@ struct
     in
     List.map (unwind 0) (Q.elements (istates s))
 
+  let dump m = (* For debug only *)
+    Printf.printf "states=%s\n" (Q.to_string m.states);
+    Printf.printf "attrs=%s\n"
+      (ListExt.to_string (function (q,a) -> State.to_string q ^ "->" ^ Attr.to_string a) "," (H.bindings m.attrs));
+    Printf.printf "rel=%s\n" (D.to_string m.rel);
+    Printf.printf "irel=%s\n"
+      (ListExt.to_string (function (q,l) -> Label.to_string l ^ "->" ^ State.to_string q) "," (H.bindings m.irel))
+    
   let dot_output_oc name oc ?(options=[]) ?(marked_states=[]) ?(extra_nodes=[]) ?(implicit_transitions=[]) m = 
     let rankdir = if List.mem Dot.RankdirLR options then "LR" else "UD" in
     let module K = Map.Make (State) in

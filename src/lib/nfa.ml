@@ -209,6 +209,10 @@ struct
   let succs_hat s q = LTSA.succs_hat s.lts q
   let preds_hat s q = LTSA.preds_hat s.lts q
 
+  let map_state f s = { s with lts = LTSA.map_state f s.lts }
+  let map_attr f s = { s with lts = LTSA.map_attr f s.lts }
+  let map_label f s = { s with lts = LTSA.map_label f s.lts }
+                    
   let clean s =
     let lts' = LTSA.clean s.lts in
     { s with lts = lts';
@@ -289,6 +293,7 @@ struct
   let dot_output_execs name ?(fname="") ?(options=[]) depth a =
     LTSA.dot_output_execs name ~fname:fname ~options:options depth a.lts
 
+  (* let dump a = LTSA.dump a.lts *)
 end
 
 module Trans (S1: T) (S2: T) =

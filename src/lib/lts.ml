@@ -157,8 +157,8 @@ module type T = sig
 
   (** {6 Global transformations} *)
 
+  val map_label: (label -> label) -> t -> t
   val clean: t -> t
-      (** Removes unreachable nodes and associated transitions *)
 
   (** {6 Output functions} *)
 
@@ -278,6 +278,7 @@ struct
   let succs_hat s q = Repr.succs_hat s q
   let preds_hat s q = Repr.preds_hat s q
 
+  let map_label = Repr.map_label
   let clean = Repr.clean
 
   let is_reachable = Repr.is_reachable

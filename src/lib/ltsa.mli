@@ -187,6 +187,16 @@ module type T = sig
 
   (** {6 Global transformations} *)
 
+  val map_state: (state -> state) -> t -> t
+      (** [map_state f s] returns the LTSA obtained by replacing each state [q] by [f q] in [s].
+          Result is undefined if [f] is not injective. *)
+
+  val map_attr: (attr -> attr) -> t -> t
+      (** [map_attr f s] returns the LTSA obtained by replacing each state attribute [a] by [f a] in [s]. *)
+
+  val map_label: (label -> label) -> t -> t
+      (** [map_label f s] returns the LTSA obtained by replacing each transition label [l] by [f l] in [s]. *)
+
   val clean: t -> t
       (** Removes unreachable nodes and associated transitions *)
 
@@ -233,6 +243,7 @@ module type T = sig
         When the optional argument [listed_transitions] is [Some l], only transitions listed in [l] are written, otherwise 
         all transitions of [s] are written. *)
         
+  (* val dump: t -> unit  (\* for debug only *\) *)
 end
 
 (** Functor building an implementation of the LTSA structure given an implementation of

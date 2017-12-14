@@ -170,6 +170,9 @@ module type T = sig
 
   (** {6 Global transformations} *)
 
+  val map_label: (label -> label) -> t -> t
+      (** [map_states f s] returns the LTS obtained by replacing each transition label [l] by [f l] in [s]. *)
+
   val clean: t -> t
       (** Removes unreachable nodes and associated transitions *)
 

@@ -4,5 +4,6 @@ doc/api/
 *.cmi
 *.cmo
 *.cma
+*.annot
 *.cmxa
 *~

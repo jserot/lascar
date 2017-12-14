@@ -255,6 +255,10 @@ module Make (S: Ltsa.STATE) = struct
   let succs_hat s q = M.succs_hat s.lts q
   let preds_hat s q = M.preds_hat s.lts q
 
+  let map_state f s = { s with lts = M.map_state f s.lts }
+  let map_attr f s = { s with lts = M.map_attr f s.lts }
+  let map_label f s = { s with lts = M.map_label f s.lts }
+
   let clean s = { s with lts = M.clean s.lts }
 
   let unwind depth a = failwith "Fsm.unwind: not implemented"
@@ -281,4 +285,5 @@ module Make (S: Ltsa.STATE) = struct
   let dot_output_execs name ?(fname="") ?(options=[]) depth a =
     M.dot_output_execs name ~fname:fname ~options:options depth a.lts
 
+  (* let dump a = M.dump a.lts *)
 end

@@ -1,6 +1,6 @@
 include ../../config
 
-CAMLC_OPTS=-I ../utils #-annot
+CAMLC_OPTS=-I ../utils -annot
 CAMLOPT_OPTS=-I ../utils 
 CAMLDEP_OPTS=-pp camlp4o
 CAMLDOC_OPTS=-short-functors -colorize-code
