@@ -1,9 +1,6 @@
 (* Internal and external product of LTSAs *)
 
-module String = struct type t = string let compare = compare let to_string x = x end
-module Int = struct type t = int let compare = compare let to_string = string_of_int end
-
-module S = Ltsa.Make(String)(Int)(String)
+module S = Ltsa.Make(Builtins.String)(Builtins.Int)(Builtins.String)
 
 let a1 = S.create ~states:["A","";"B",""] ~trans:["A",1,"B"; "B",2,"A"] ~itrans:[0,"A"]
 let a2 = S.create ~states:["u","";"v",""] ~trans:["u",3,"v"; "v",4,"u"; "v",5,"v"] ~itrans:[0,"u"] 

@@ -1,7 +1,7 @@
 (* Conversion from NFA to DFA *)
 
-module Int = struct type t = int let compare = compare let to_string = string_of_int let epsilon = 0 end
-module String = struct type t = string let compare = compare let to_string x = x let epsilon = "" end
+module Int = struct include Builtins.Int let epsilon = 0 end
+module String = struct include Builtins.String let epsilon = "" end
 
 module N1 = Nfa.Make (Int) (String)
 

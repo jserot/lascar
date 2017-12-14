@@ -1,5 +1,6 @@
-0.3 (Dec, xx, 2017)
+0.3 (Dec, 14, 2017)
 	* Added functions [map_state], [map_attr] and [map_label]
+	* Added modules [Builtins.{Int,String,Bool}]. Rewrote some examples accordingly
 	
 0.2 (Nov 27, 2107)
     * Added [ListExt.update_assoc]

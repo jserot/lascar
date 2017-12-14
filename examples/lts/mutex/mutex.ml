@@ -1,9 +1,6 @@
 (* Mutual exclusion protocal modelized as a synchronized product of three automata *)
 
-module S =
-  Lts.Make 
-    (struct type t = int let compare = compare let to_string = string_of_int end)
-    (struct type t = string let compare = compare let to_string x = x end)
+module S = Lts.Make (Builtins.Int) (Builtins.String)
 
 let proc_a = S.create
     ~states:[1;2;3]

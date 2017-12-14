@@ -2,9 +2,7 @@
    one for the hours, the other for the minutes *)
 
 module H =
-  Lts.Make 
-    (struct type t = int let compare = compare let to_string = string_of_int end)
-    (struct type t = string let compare = compare let to_string x = x end)
+  Lts.Make (Builtins.Int) (Builtins.String)
 
 module M = H
 
@@ -37,7 +35,7 @@ open Misc
 
 let clock =
   Clock.synchronized_product
-      (ListExt.range (function i -> Some (mk_label "m" i), None) 0 (minutes_per_hour-2)
+    (ListExt.range (function i -> Some (mk_label "m" i), None) 0 (minutes_per_hour-2)
      @ ListExt.range (function i -> Some (mk_label "m" (minutes_per_hour-1)), Some (mk_label "h" i)) 0 (hours_per_day-1))
     mn
     hr

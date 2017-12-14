@@ -6,11 +6,7 @@ module State = struct
   let to_string = function S0 -> "S0" | S1 -> "S1" | S2 -> "S2"
 end
 
-module Label = struct
-  type t = string
-  let compare = Pervasives.compare
-  let to_string x = x
-end
+module Label = Builtins.String
 
 module S = Lts.Make (State) (Label) 
 
@@ -27,11 +23,7 @@ let s = S.create
     
 let _ = S.dot_output "simple" ~options:[Dot.RankdirUD] s
 
-module State' = struct
-  type t = int
-  let compare = Pervasives.compare
-  let to_string = string_of_int
-end
+module State' = Builtins.Int
 
 module S' = Lts.Make (State') (Label) 
 

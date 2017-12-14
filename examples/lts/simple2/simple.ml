@@ -9,17 +9,9 @@ module State = struct
     | S2 -> "S2"
 end
 
-module Attr = struct
-  type t = bool
-  let compare = Pervasives.compare
-  let to_string = string_of_bool
-end
+module Attr = Builtins.Bool
 
-module Label = struct
-  type t = string
-  let compare = Pervasives.compare
-  let to_string x = x
-end
+module Label = Builtins.String
 
 module S = Ltsa.Make(State)(Label)(Attr)
 

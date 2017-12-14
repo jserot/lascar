@@ -1,26 +1,6 @@
 (* Using the [map_xxx] functions for transforming a LTS *)
 
-module State = struct
-  type t = int 
-  let compare = Pervasives.compare
-  let to_string = string_of_int
-end
-
-module Label = struct
-  type t = string
-  let compare = Pervasives.compare
-  let to_string x = x
-end
-
-module Attr = struct
-  type t = bool
-  let compare = Pervasives.compare
-  let to_string = string_of_bool
-end
-
-module S = Ltsa.Make (State) (Label) (Attr)
-
-open State
+module S = Ltsa.Make (Builtins.Int) (Builtins.String) (Builtins.Bool)
 
 let s = S.create
    ~states:[0,true; 1,false; 2,false]

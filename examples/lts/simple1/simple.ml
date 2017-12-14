@@ -6,11 +6,7 @@ module State = struct
   let to_string = function S0 -> "S0" | S1 -> "S1" | S2 -> "S2"
 end
 
-module Label = struct
-  type t = string
-  let compare = Pervasives.compare
-  let to_string x = x
-end
+module Label = Builtins.String
 
 module S = Lts.Make (State) (Label) 
 

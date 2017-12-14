@@ -1,9 +1,6 @@
 (* A modulo-4 counter defined as the synchronized product of two modulo-2 counters *)
 
-module Bit =
-  Lts.Make 
-    (struct type t = int let compare = compare let to_string = string_of_int end)
-    (struct type t = string let compare = compare let to_string x = x end)
+module Bit = Lts.Make (Builtins.Int) (Builtins.String)
 
 let a0 = Bit.create ~states:[0;1] ~itrans:["",0] ~trans:[0,"u",1; 1,"d",0]
 let a1 = Bit.create ~states:[0;1] ~itrans:["",0] ~trans:[0,"u",1; 1,"d",0]

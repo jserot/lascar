@@ -7,7 +7,7 @@ CAMLDOC_OPTS=-short-functors -colorize-code
 CP=cp
 MV=mv
 
-SRCS=ltsa.ml lts.ml nfa.ml dfa.ml valuation.ml mealy.ml moore.ml fsm_expr.ml fsm.ml conv.ml
+SRCS=ltsa.ml lts.ml nfa.ml dfa.ml valuation.ml mealy.ml moore.ml fsm_expr.ml fsm.ml conv.ml builtins.ml
 INTFS=$(SRCS:.ml=.mli)
 OBJS=$(SRCS:.ml=.cmo)
 NATOBJS=$(SRCS:.ml=.cmx)

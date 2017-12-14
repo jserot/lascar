@@ -1,7 +1,7 @@
 (* Deterministic finite automata (DFA) *)
 
-module Int = struct type t = int let compare = compare let to_string = string_of_int let epsilon = 0 end
-module String = struct type t = string let compare = compare let to_string x = x let epsilon = "" end
+module Int = struct include Builtins.Int let epsilon = 0 end
+module String = struct include Builtins.String let epsilon = "" end
 
 module A = Dfa.Make (Int) (String)
 
@@ -37,7 +37,7 @@ let _ = A.dot_output "a1b"  a1b
 let trans a q s =
   try A.trans a q s
   with A.Stuck (q,s) ->
-    Printf.printf "** a1: no transition from %s with %s\n" (Int.to_string q) (ListExt.to_string Misc.id "," s);
+    Printf.printf "** a1: no transition from %s with %s\n" (Builtins.Int.to_string q) (ListExt.to_string Misc.id "," s);
     0
 
 let _  = trans a1 0 "a"
