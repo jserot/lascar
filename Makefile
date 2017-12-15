@@ -31,4 +31,5 @@ clobber:
 	(cd src/utils; make clobber)
 	(cd src/lib; make clobber)
 	(cd examples; make clobber)
+	rm doc/api/*
 	\rm -f *~
