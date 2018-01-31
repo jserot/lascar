@@ -28,6 +28,7 @@ install:
 	$(INSTALL) utils.cma $(INSTALLDIR)/lib
 ifeq ($(BUILD_NATIVE),yes)
 	$(INSTALL) utils.cmxa $(INSTALLDIR)/lib
+	$(INSTALL) utils.a $(INSTALLDIR)/lib
 	$(INSTALL) *.cmx $(INSTALLDIR)/lib
 endif
 
