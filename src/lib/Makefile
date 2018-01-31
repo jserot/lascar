@@ -27,6 +27,7 @@ install:
 	$(INSTALL) lascar.cma $(INSTALLDIR)/lib
 ifeq ($(BUILD_NATIVE),yes)
 	$(INSTALL) lascar.cmxa $(INSTALLDIR)/lib
+	$(INSTALL) *.cmx $(INSTALLDIR)/lib
 endif
 
 lib.byte: $(OBJS)
