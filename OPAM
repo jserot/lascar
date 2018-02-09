@@ -1,0 +1,28 @@
+opam-version: "1.2"
+name: "lascar"
+version: "0.4"
+maintainer: "jocelyn.serot@uca.fr"
+authors: [
+  "Jocelyn Sérot <jocelyn.serot@uca.fr>"
+]
+homepage: "http://cloud.ip.univ-bpclermont.fr/~serot/lascar/"
+dev-repo: "https://github.com/jserot/lascar.git"
+Bug-reports: "jocelyn.serot@uca.fr"
+build: [
+  [./configure]
+  [make]
+  [make "doc"]
+]
+install: [
+  [make "install"]
+  [make "install-doc"]
+]
+remove: [
+  [make "uninstall"]
+  [make "uninstall-doc"]
+]
+depends: [
+  "ocamlp4"
+  "ocamlfind"
+]
+available: [ ocaml-version >= "4.03" ]

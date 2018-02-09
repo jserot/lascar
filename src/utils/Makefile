@@ -1,79 +1,72 @@
 include ../../config
 
-CAMLDEP_OPTS=-pp camlp4o
-CAMLC_OPTS=#-annot
+OCAMLC   = ocamlfind ocamlc
+OCAMLOPT = ocamlfind ocamlopt
+OCAMLDEP = ocamlfind ocamldep
+OCAMLDOC = ocamlfind ocamldoc
+OCFLAGS =
 CAMLOPT_OPTS=
 CAMLDOC_OPTS=-short-functors -colorize-code
 
-CP=cp
-MV=mv
+LIBNAME = utils
+SRCS=misc.ml dot.ml tree.ml option.ml orderedTypeExt.ml stringable.ml listExt.ml stringExt.ml filenameExt.ml setExt.ml
 
-SRCS=misc.ml dot.ml tree.ml option.ml orderedTypeExt.ml stringable.ml listExt.ml stringExt.ml filenameExt.ml setExt.ml utils.ml
-INTFS=$(SRCS:.ml=.mli)
-OBJS=$(SRCS:.ml=.cmo)
-NATOBJS=$(SRCS:.ml=.cmx)
-DOCSRCS=utils.mli misc.mli dot.mli tree.mli option.mli stringable.mli stringExt.mli filenameExt.mli  listExt.mli orderedTypeExt.mli setExt.mli
+CMOS  = $(SRCS:.ml=.cmo)
+CMXS  = $(SRCS:.ml=.cmx)
+INTFS = $(SRCS:.ml=.mli)
 
-APIDOCDIR=../../doc/api
+CMA  = $(LIBNAME).cma
+CMXA = $(LIBNAME).cmxa
+TOPCMO = $(LIBNAME).cmo
+TOPCMX = $(LIBNAME).cmx
 
-all:
-	make lib.byte
 ifeq ($(BUILD_NATIVE),yes)
-	make lib.native
+	LIBS=$(CMA) $(CMXA)
+else
+	LIBS=$(CMA)
 endif
 
-install: 
-	$(INSTALL) -d $(INSTALLDIR)/lib
-	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)/lib
-	$(INSTALL) utils.cma $(INSTALLDIR)/lib
-ifeq ($(BUILD_NATIVE),yes)
-	$(INSTALL) utils.cmxa $(INSTALLDIR)/lib
-	$(INSTALL) utils.a $(INSTALLDIR)/lib
-	$(INSTALL) *.cmx $(INSTALLDIR)/lib
-endif
+.PHONY: lib.byte lib.native clean
 
-dist: lib.byte doc 
-	$(CP) ./doc/* ../../doc/api
-	$(MV) ../../doc/api/index.html ../../doc/api/utils.html
+all: $(LIBS)
 
-lib.byte: $(OBJS)
-	$(CAMLC) $(CAMLC_OPTS) -a -o utils.cma $(OBJS)
+$(TOPCMO): $(CMOS)
+	$(OCAMLC) -pack -o $(TOPCMO) $(CMOS)
 
-lib.native: $(NATOBJS)
-	$(CAMLOPT) $(CAMLOPT_OPTS) -a -o utils.cmxa $(NATOBJS)
+$(TOPCMX): $(CMXS)
+	$(OCAMLOPT) -pack -o $(TOPCMX) $(CMXS)
 
-doc: doc.html
-	$(MV) $(APIDOCDIR)/index.html $(APIDOCDIR)/utils.html
+$(CMA): $(TOPCMO)
+	$(OCAMLC) -a -o $(CMA) $(TOPCMO)
 
-doc.html: $(DOCSRCS)
-	$(CAMLDOC) -d $(APIDOCDIR) -html $(CAMLDOC_OPTS) $(DOCSRCS)
+$(CMXA): $(TOPCMX)
+	$(OCAMLOPT) -a -o $(CMXA) $(TOPCMX)
 
-.ml.cmx:
-	$(CAMLOPT) $(CAMLOPT_OPTS) -c $<
+.SUFFIXES: .cmo .cmi .cmx .ml .mli
 
 .ml.cmo:
-	$(CAMLC) $(CAMLC_OPTS) -c $<
-
+	$(OCAMLC) $(OCFLAGS) -for-pack Utils -c $<
 .mli.cmi:
-	$(CAMLC) $(CAMLC_OPTS) -c $<
+	$(OCAMLC) $(OCFLAGS) -for-pack Utils -c $<
+.ml.cmx:
+	$(OCAMLOPT) $(OCFLAGS) -for-pack Utils -c $<
 
 listExt.cmo: listExt.ml
-	$(CAMLC) $(CAMLC_OPTS) -c -pp camlp4o $<
-
+	$(OCAMLC) $(OCFLAGS) -for-pack Utils -package camlp4 -syntax camlp4o -c $< 
 listExt.cmx: listExt.ml
-	$(CAMLOPT) $(CAMLOPT_OPTS) -c -pp camlp4o $<
+	$(OCAMLOPT) $(OCFLAGS) -for-pack Utils -package camlp4 -syntax camlp4o -c $<
+
+doc: _doc/index.html
+
+_doc/index.html: $(SRCS)
+	$(OCAMLDOC) -d ./_doc -html $(CAMLDOC_OPTS) $(INTFS)
+
+depend: *.ml *.mli
+	$(OCAMLDEP) *.ml *.mli -package camlp4 -syntax camlp4o > .depend
+include .depend
 
 clean:
-	\rm -f *.cmi *.cmo *.cmx *.o *.a
-	\rm -f doc/*
-
-clobber: clean
-	\rm -f *~ *.annot *.dot *.cma *.cmxa
-
-.SUFFIXES :
-.SUFFIXES : .mli .ml .cmi .cmo .cmx
-
-depend:
-	$(CAMLDEP) $(CAMLDEP_OPTS) $(SRCS) $(INTFS) > .depend
-
-include .depend
+	@rm -f *.cmi *.cmo *.cmx *.cma *.cmxa *.o *.a
+	@rm -f *~
+	@rm -f *.annot
+	@rm -f _doc/*

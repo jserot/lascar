@@ -131,13 +131,13 @@ module type T = sig
 
   val dot_output: string
                -> ?fname:string
-               -> ?options:Dot.graph_style list
+               -> ?options:Utils.Dot.graph_style list
                -> t
                -> unit
 
   val dot_output_oc: string
                -> out_channel
-               -> ?options:Dot.graph_style list
+               -> ?options:Utils.Dot.graph_style list
                -> t
                -> unit
 end

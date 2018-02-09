@@ -31,55 +31,39 @@ Some annotated code snippets can be found [here][example-slides].
 
 Other examples are provided in a dedicated [directory][examples].
 
-[api]: http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/api/lascar.html
-[example-slides]: http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/examples/examples.html
+[api]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/doc/api/index.html
+[example-slides]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/doc/examples/examples.html
 [examples]: https://github.com/jserot/lascar/tree/master/examples
 
-Building LASCAr
----------------
+Installation
+------------
 
-### Requirements
+The source code for the latest release is [here][]. Compiling and installing requires GNU make and
+OCaml (version 4.03 or latter, with OCamlP4 support).
 
-To build ***LASCAr***, you will need
+[here]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz
 
-* [OCaml][] >= 4.03
-* GNU make
+LASCAr is also available 
 
-For displaying the generated `.dot` files, you will need to install the [Graphviz][] suite of tools.
+* through [opam][]. Once you have installed opam, just type `opam install lascar`.
 
-[OCaml]: http://caml.inria.fr/ocaml/release.en.html
-[Graphviz]: http://www.graphviz.org
+* via [github][] (`git clone https://github.com/jserot/lascar`)
 
-### Configuration and Installation
+[opam]: https://opam.ocaml.org
+[github]: https://github.com/jserot/lascar
 
-To build and install the library, execute
-
-    $ configure -prefix <install_dir>
-    $ make all
-    $ make test               [ optional ]
-    $ sudo make install       [ sudo optional ]
-
-This will install the library in `<install_dir>/lascar-<version>/lib` directory.
-
-To build and install the documentation (in HTML format), execute
-
-    $ make doc
-    $ sudo make install-doc 
-
-This will install the HTML documentation in `<install_dir>/lascar-<version>/doc` directory.
-
-### Using
+Usage
+-----
 
 To use compile a program `foo.ml` making use of the library, simply execute
 
     $ ocamlc -I <install_dir> -o foo utils.cma lascar.cma foo.ml
     
-or
+or, better, if the package has been installed with `ocamlfind` or `opam` 
 
-    $ ocamlopt -I <install_dir> -o foo utils.cmxa lascar.cmxa foo.ml
+    $ ocamlfind ocamlc -package lascar -linkpkg -o foo foo.ml
 
-To use the library in interactive mode, after launching the toplevel, execute
+For displaying the generated `.dot` files, you will need to install the [Graphviz][] suite of tools.
 
-    $ #directory <install_dir>
-    $ #load utils.cma
-    $ #load lascar.cma
+[Graphviz]: http://www.graphviz.org
+

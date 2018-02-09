@@ -9,14 +9,12 @@
 (*                                                                    *)
 (**********************************************************************)
 
-
 open Utils
-   
+
 type Dot.graph_style +=
      | Circular   (** Circular layout (circo); default is layered *)
      | NoAttr     (** Do not draw state attributes *)
      | NoLabel    (** Do not draw transition label *)
-
    
 module type STATE = OrderedTypeExt.T
 
@@ -107,23 +105,23 @@ module type T = sig
 
   val dot_output: string
                -> ?fname:string
-               -> ?options:Dot.graph_style list
-               -> ?marked_states:(state * Dot.node_style) list
-               -> ?extra_nodes:(string * Dot.node_style) list
+               -> ?options:Utils.Dot.graph_style list
+               -> ?marked_states:(state * Utils.Dot.node_style) list
+               -> ?extra_nodes:(string * Utils.Dot.node_style) list
                -> ?implicit_transitions:transition list
                -> t
                -> unit
 
   val dot_output_oc: string
                -> out_channel
-               -> ?options:Dot.graph_style list
-               -> ?marked_states:(state * Dot.node_style) list
-               -> ?extra_nodes:(string * Dot.node_style) list
+               -> ?options:Utils.Dot.graph_style list
+               -> ?marked_states:(state * Utils.Dot.node_style) list
+               -> ?extra_nodes:(string * Utils.Dot.node_style) list
                -> ?implicit_transitions:transition list
                -> t
                -> unit
 
-  val dot_output_execs: string -> ?fname:string -> ?options:Dot.graph_style list -> int -> t -> unit
+  val dot_output_execs: string -> ?fname:string -> ?options:Utils.Dot.graph_style list -> int -> t -> unit
 
   val tex_output: string -> ?fname:string -> ?listed_transitions:label list option -> t -> unit
 
@@ -290,9 +288,9 @@ struct
       (ListExt.to_string (function (q,l) -> Label.to_string l ^ "->" ^ State.to_string q) "," (H.bindings m.irel))
     
   let dot_output_oc name oc ?(options=[]) ?(marked_states=[]) ?(extra_nodes=[]) ?(implicit_transitions=[]) m = 
-    let rankdir = if List.mem Dot.RankdirLR options then "LR" else "UD" in
+    let rankdir = if List.mem Utils.Dot.RankdirLR options then "LR" else "UD" in
     let module K = Map.Make (State) in
-    let default_node_style = { Dot.node_shape = "circle"; Dot.node_style = "solid" } in
+    let default_node_style = { Utils.Dot.node_shape = "circle"; Utils.Dot.node_style = "solid" } in
     let node_id i = name ^ "_" ^ string_of_int i in
     let ini_id = name ^ "_ini" in
     let extra_id j = name ^ "_extra" ^ string_of_int j in
@@ -311,11 +309,11 @@ struct
     let ndesc q =
       try K.find q ndescs 
       with Not_found -> failwith ("Ltsa.dot_output: cannot find state " ^ (string_of_state q)) in
-    let dump_extra_node i (lbl, {Dot.node_shape=sh; Dot.node_style=st}) =
+    let dump_extra_node i (lbl, {Utils.Dot.node_shape=sh; Utils.Dot.node_style=st}) =
       Printf.fprintf oc "%s [label = \"%s\", shape = %s, style = %s]\n" (extra_id i) lbl sh st in
     let dump_state q a =
       let id, lbl, style = ndesc q in
-      Printf.fprintf oc "%s [label = \"%s\", shape = %s, style = %s]\n" id lbl (style.Dot.node_shape) (style.Dot.node_style) in
+      Printf.fprintf oc "%s [label = \"%s\", shape = %s, style = %s]\n" id lbl (style.Utils.Dot.node_shape) (style.Utils.Dot.node_style) in
     let dump_itransition (l,q) =
       let id, _, _ = ndesc q in
       if List.mem NoLabel options then
@@ -332,7 +330,7 @@ struct
           Printf.fprintf oc "%s -> %s [label = \"%s\"];\n" id id' (Label.to_string l) in
     let layout, mindist =
       if List.mem Circular options then "circo", 1.5 else "dot", 1.0 in
-    if List.mem Dot.SubGraph options then 
+    if List.mem Utils.Dot.SubGraph options then 
       Printf.fprintf oc "subgraph cluster_%s {\nlabel = %s;\nrankdir = %s;\nsize = \"8.5,11\";\nlabel = \"%s\"\n center = 1;\n nodesep = \"0.350000\"\n ranksep = \"0.400000\"\n fontsize = 14;\nmindist=\"%1.1f\"\n" name name rankdir name mindist
     else
       Printf.fprintf oc "digraph %s {\nlayout = %s;\nrankdir = %s;\nsize = \"8.5,11\";\nlabel = \"\"\n center = 1;\n nodesep = \"0.350000\"\n ranksep = \"0.400000\"\n fontsize = 14;\nmindist=\"%1.1f\"\n" name layout rankdir mindist;

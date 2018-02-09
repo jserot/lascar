@@ -1,35 +1,49 @@
 include ./config
 
-CP=cp
+PACKNAME=lascar
+
+INSTALLED = src/{utils,lib}/*.{mli,cmi,cma} 
+ifeq ($(BUILD_NATIVE),yes)
+	INSTALLED += src/{utils,lib}/*.cmxa
+endif
+
+.PHONY: doc install install-doc uninstall test
 
 all:
-	(cd src/utils; make all)
-	(cd src/lib; make all)
+	(cd src/utils; make)
+	(cd src/lib; make)
 
-test:
-	(cd examples; make)
+install: src/utils/utils.cma src/lib/ltsa.cma
+	@echo "Installing $(PACKNAME) in $(LIBDIR)"
+	rm -rf $(LIBDIR)/$(PACKNAME)
+	ocamlfind install -destdir $(LIBDIR) $(PACKNAME) META $(INSTALLED)
 
-.PHONY: doc
 doc:
 	(cd src/utils; make doc)
 	(cd src/lib; make doc)
 
-install:
-	(cd src/utils; make install)
-	(cd src/lib; make install)
+install-doc: src/utils/_doc/index.html src/utils/_doc/index.html
+	@echo "Installing $(PACKNAME) documentation in $(DOCDIR)"
+	rm -rf $(DOCDIR)/$(PACKNAME)
+	mkdir $(DOCDIR)/$(PACKNAME)
+	cp -r src/utils/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
+	mv $(DOCDIR)/$(PACKNAME)/index.html $(DOCDIR)/$(PACKNAME)/utils.html
+	cp -r src/lib/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
 
-install-doc:
-	$(INSTALL) -d $(INSTALLDIR)/doc
-	$(CP) doc/api/* $(INSTALLDIR)/doc
+uninstall: uninstall-doc
+	@echo "Removing $(PACKNAME) from $(LIBDIR)"
+	rm -rf $(LIBDIR)/$(PACKNAME)
+
+uninstall-doc:
+	@echo "Removing $(PACKNAME) doc from $(DOCDIR)"
+	rm -rf $(DOCDIR)/$(PACKNAME)
+
+test:
+	(cd examples; make)
 
 clean:
 	(cd src/utils; make clean)
 	(cd src/lib; make clean)
 	(cd examples; make clean)
-
-clobber:
-	(cd src/utils; make clobber)
-	(cd src/lib; make clobber)
-	(cd examples; make clobber)
-	rm doc/api/*
+	\rm -f README.html
 	\rm -f *~

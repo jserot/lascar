@@ -1,80 +1,71 @@
 include ../../config
 
-CAMLC_OPTS=-I ../utils -annot
-CAMLOPT_OPTS=-I ../utils 
-CAMLDEP_OPTS=-pp camlp4o
+OCAMLC   = ocamlfind ocamlc
+OCAMLOPT = ocamlfind ocamlopt
+OCAMLDEP = ocamlfind ocamldep
+OCAMLDOC = ocamlfind ocamldoc
+OCFLAGS = -I ../utils
+CAMLOPT_OPTS=
 CAMLDOC_OPTS=-short-functors -colorize-code
-CP=cp
-MV=mv
 
+LIBNAME = ltsa
 SRCS=ltsa.ml lts.ml nfa.ml dfa.ml valuation.ml mealy.ml moore.ml fsm_expr.ml fsm.ml conv.ml builtins.ml
-INTFS=$(SRCS:.ml=.mli)
-OBJS=$(SRCS:.ml=.cmo)
-NATOBJS=$(SRCS:.ml=.cmx)
-DOCSRCS=$(INTFS)
 
-APIDOCDIR=../../doc/api
+CMOS  = $(SRCS:.ml=.cmo)
+CMXS  = $(SRCS:.ml=.cmx)
+INTFS = $(SRCS:.ml=.mli)
 
-all:
-	make lib.byte
+CMA  = $(LIBNAME).cma
+CMXA = $(LIBNAME).cmxa
+TOPCMO = $(LIBNAME).cmo
+TOPCMX = $(LIBNAME).cmx
+
 ifeq ($(BUILD_NATIVE),yes)
-	make lib.native
+	LIBS=$(CMA) $(CMXA)
+else
+	LIBS=$(CMA)
 endif
 
-install: 
-	$(INSTALL) -d $(INSTALLDIR)/lib
-	$(INSTALL) $(INTFS) $(INTFS:.mli=.cmi) $(INSTALLDIR)/lib
-	$(INSTALL) lascar.cma $(INSTALLDIR)/lib
-ifeq ($(BUILD_NATIVE),yes)
-	$(INSTALL) lascar.cmxa $(INSTALLDIR)/lib
-	$(INSTALL) lascar.a $(INSTALLDIR)/lib
-	$(INSTALL) *.cmx $(INSTALLDIR)/lib
-endif
+.PHONY: lib.byte lib.native clean doc
 
-lib.byte: $(OBJS)
-	$(CAMLC) $(CAMLC_OPTS) -a -o lascar.cma $(OBJS)
+all: $(LIBS)
 
-lib.native: $(NATOBJS)
-	$(CAMLOPT) $(CAMLOPT_OPTS) -a -o lascar.cmxa $(NATOBJS)
+$(CMA): $(CMOS)
+	$(OCAMLC) $(OCFLAGS) -a -o $(CMA) $(CMOS)
 
-doc: doc.html
-	$(MV) $(APIDOCDIR)/index.html $(APIDOCDIR)/lascar.html
+$(CMXA): $(CMXS)
+	$(OCAMLOPT) $(OCFLAGS) -a -o $(CMXA) $(CMXS)
 
-doc.html: $(DOCSRCS)
-	$(CAMLDOC) -d $(APIDOCDIR) -I ../utils -html $(CAMLDOC_OPTS) $(DOCSRCS)
-
-.ml.cmx:
-	$(CAMLOPT) $(CAMLOPT_OPTS) -c $<
+.SUFFIXES: .cmo .cmi .cmx .ml .mli
 
 .ml.cmo:
-	$(CAMLC) $(CAMLC_OPTS) -c $<
-
+	$(OCAMLC) $(OCFLAGS)  -c $<
 .mli.cmi:
-	$(CAMLC) $(CAMLC_OPTS) -c $<
+	$(OCAMLC) $(OCFLAGS)  -c $<
+.ml.cmx:
+	$(OCAMLOPT) $(OCFLAGS)  -c $<
 
 fsm_expr.cmo: fsm_expr.ml
-	$(CAMLC) $(CAMLC_OPTS) -c -pp camlp4o $<
-
+	$(OCAMLC) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $< 
 fsm_expr.cmx: fsm_expr.ml
-	$(CAMLOPT) $(CAMLOPT_OPTS) -c -pp camlp4o $<
+	$(OCAMLOPT) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $<
 
 fsm.cmo: fsm.ml
-	$(CAMLC) $(CAMLC_OPTS) -c -pp camlp4o $<
-
+	$(OCAMLC) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $< 
 fsm.cmx: fsm.ml
-	$(CAMLOPT) $(CAMLOPT_OPTS) -c -pp camlp4o $<
+	$(OCAMLOPT) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $<
+
+doc: _doc/index.html
+
+_doc/index.html: $(SRCS)
+	$(OCAMLDOC) -d ./_doc -I . -I ../utils -html $(CAMLDOC_OPTS) $(INTFS)
+
+depend: *.ml *.mli
+	$(OCAMLDEP) *.ml *.mli -package camlp4 -syntax camlp4o > .depend
+include .depend
 
 clean:
-	\rm -f *.cmi *.cmo *.cmx *.o *.a
-	\rm -f doc/*
-
-clobber: clean
-	\rm -f *~ *.annot *.dot *.cma *.cmxa
-
-.SUFFIXES :
-.SUFFIXES : .mli .ml .cmi .cmo .cmx
-
-depend:
-	$(CAMLDEP) $(CAMLDEP_OPTS) $(SRCS) $(INTFS) > .depend
-
-include .depend
+	@rm -f *.cmi *.cmo *.cmx *.cma *.cmxa *.o *.a
+	@rm -f *~
+	@rm -f *.annot
+	@rm -f _doc/*

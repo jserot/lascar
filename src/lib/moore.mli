@@ -9,6 +9,8 @@
 (*                                                                    *)
 (**********************************************************************)
 
+open Utils
+   
 (** Moore machines.
 
     A Moore machine M is a LTSA for which

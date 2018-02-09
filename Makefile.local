@@ -1,0 +1,37 @@
+include ./config
+
+TMPDIR=/tmp
+DISTNAME=lascar-$(VERSION)
+DISTDIR=$(TMPDIR)/lascar-$(VERSION)
+EXCLUDES=--exclude .git --exclude .gitignore --exclude META --exclude OPAM --exclude .DS_Store --exclude Makefile.local
+TARBALL=$(DISTNAME).tar
+
+# Creating a tarball for distribution.
+
+dist: 
+	@make -f Makefile clean
+	@rm -rf $(DISTDIR)
+	@mkdir $(DISTDIR)
+	@echo "** Copying files into $(DISTDIR)"
+	(rsync --quiet -avz $(EXCLUDES) . $(DISTDIR))
+	@ echo "** Creating tarball"
+	@(cd $(TMPDIR); tar cf $(TARBALL) $(DISTNAME); gzip $(TARBALL))
+	@ echo "** File $(TARBALL).gz is ready."
+
+html-doc: README.md
+	pandoc README.md -f markdown -t html -s -o README.html
+
+# dist-doc:
+# 	(cd src/lib; make; make doc)
+# 	mkdir $(DOCDIR)/$(PACKNAME)
+# 	cp -r src/utils/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
+# 	mv $(DOCDIR)/$(PACKNAME)/index.html $(DOCDIR)/$(PACKNAME)/utils.html
+# 	cp -r src/lib/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
+
+# Copying the tarball to Web site.
+
+SCP   := scp -p -C
+TARGET  := cloud.ip.univ-bpclermont.fr:/home/www/lascar/src
+
+export:
+	$(SCP) $(TARBALL) $(TARGET)

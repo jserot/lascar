@@ -90,7 +90,7 @@ module type T = sig
 
   val dot_output: string
                -> ?fname:string
-               -> ?options:Dot.graph_style list
+               -> ?options:Utils.Dot.graph_style list
                -> t
                -> unit
     (** [dot_output name fname s] writes a .dot representation of [s] with name [name] in file [fname].
@@ -98,7 +98,7 @@ module type T = sig
 
   val dot_output_oc: string
                -> out_channel
-               -> ?options:Dot.graph_style list
+               -> ?options:Utils.Dot.graph_style list
                -> t
                -> unit
     (** [dot_output_oc name oc s] is a variant of [dot_output] in which the description of [s]

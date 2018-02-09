@@ -4,9 +4,3 @@ test:
 
 clean:
 	@for i in [a-z]*/[a-z0-9]*; do (cd $$i; make clean); done
-
-clobber:
-	@for i in [a-z]*/[a-z0-9]*; do (cd $$i; make clobber); done
-	\rm -f *~
-
-realclean: clobber

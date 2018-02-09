@@ -12,7 +12,5 @@ a.out: $(SRCS)
 
 clean:
 	@\rm -f a.out *.cmi *.cmo
-
-clobber: clean
 	@\rm -f *.dot *.tex
 	@\rm -f *~

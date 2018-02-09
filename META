@@ -1,0 +1,5 @@
+version = "0.4"
+description = "Lascar: A package for manipulating Labeled Transition Systems" 
+requires="camlp4"
+archive(byte) = "utils.cma ltsa.cma"
+archive(native) = "utils.cma ltsa.cmxa"
