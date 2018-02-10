@@ -8,6 +8,8 @@ TARBALL=$(DISTNAME).tar
 
 # Creating a tarball for distribution.
 
+.PHONY: dist html-doc url
+
 dist: 
 	@make -f Makefile clean
 	@rm -rf $(DISTDIR)
@@ -20,6 +22,11 @@ dist:
 
 html-doc: README.md
 	pandoc README.md -f markdown -t html -s -o README.html
+
+url:
+	echo "archive: \"http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz\"" > url
+	echo "checksum: \""`curl -s -L http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz | md5`"\"" >> url
+	@echo "Created file ./url"
 
 # dist-doc:
 # 	(cd src/lib; make; make doc)
