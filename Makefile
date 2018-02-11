@@ -4,7 +4,7 @@ PACKNAME=lascar
 
 INSTALLED = src/{utils,lib}/*.{mli,cmi,cma} 
 ifeq ($(BUILD_NATIVE),yes)
-	INSTALLED += src/{utils,lib}/*.cmxa
+	INSTALLED += src/{utils,lib}/*.{cmx,cmxa,a}
 endif
 
 .PHONY: doc install install-doc uninstall test

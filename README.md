@@ -45,9 +45,9 @@ OCaml (version 4.03 or latter, with OCamlP4 support).
 
 LASCAr is also available 
 
-* through [opam][]. Once you have installed opam, just type `opam install lascar`.
-
 * via [github][] (`git clone https://github.com/jserot/lascar`)
+
+An [opam][] version should be available soon.
 
 [opam]: https://opam.ocaml.org
 [github]: https://github.com/jserot/lascar
