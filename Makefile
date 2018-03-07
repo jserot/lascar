@@ -2,7 +2,7 @@ include ./config
 
 PACKNAME=lascar
 
-INSTALLED = src/{utils,lib}/*.{mli,cmi,cma} 
+INSTALLED = src/{utils,lib}/*.{mli,cmi,cmo,cma} 
 ifeq ($(BUILD_NATIVE),yes)
 	INSTALLED += src/{utils,lib}/*.{cmx,cmxa,a}
 endif

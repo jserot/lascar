@@ -60,7 +60,7 @@ module ToDfa (N : Nfa.T) = struct
     let add_transition dfa (qs,s) =
        D.add_transition (qs, s, delta qs s) dfa in
     let add_transitions dfa =
-      List.fold_left add_transition dfa (ListExt.cart_prod2 states' (N.symbols' nfa)) in
+      List.fold_left add_transition dfa (Utils.ListExt.cart_prod2 states' (N.symbols' nfa)) in
     D.empty (N.symbols' nfa) |> add_states |> add_transitions |> D.clean
 end
 
@@ -99,7 +99,7 @@ module ToMoore (ME: Mealy.T) = struct
   let conv ?(init=None) me =
     let ovs = (* The set of all possible output valuations *)
       let names = ME.outps me in
-      let vs = ListExt.cart_prodn (List.map (function _ -> [false;true]) names) in
+      let vs = Utils.ListExt.cart_prodn (List.map (function _ -> [false;true]) names) in
       List.map (List.combine names) vs in
     let add_states mm =
       let add_sub_states q mm =
@@ -137,7 +137,7 @@ module Fsm (F: Fsm.T) = struct
     type t = F.state * Valuation.Int.t
     let compare = compare
     let to_string (q,vs) =
-      let string_of_val vs = ListExt.to_string string_of_int "" (List.map snd vs) in
+      let string_of_val vs = Utils.ListExt.to_string string_of_int "" (List.map snd vs) in
       F.string_of_state q ^ string_of_val vs
   end
 
@@ -184,7 +184,7 @@ module Fsm (F: Fsm.T) = struct
       FF.fold_states (fun q ov m -> add_sub_states q ov m) m mm in
     let add_transitions mm =
       let add_sub_transitions ((q,ov),(conds,acts),(q',ov')) mm =
-        let d2v = List.filter (filter_domain (conds,acts)) (ListExt.cart_prod2 dom_v dom_v) in
+        let d2v = List.filter (filter_domain (conds,acts)) (Utils.ListExt.cart_prod2 dom_v dom_v) in
         let conds' = remove_cond conds in
         let acts' = remove_act acts in
         List.fold_left
@@ -201,7 +201,7 @@ module Fsm (F: Fsm.T) = struct
           FF.add_itransition' (acts,q) mm
       | None ->
          let add_sub_itransitions ((conds,acts),(q,ov)) mm =
-           let d2v = List.filter (filter_domain ([],acts)) (ListExt.cart_prod2 dom_v dom_v) in
+           let d2v = List.filter (filter_domain ([],acts)) (Utils.ListExt.cart_prod2 dom_v dom_v) in
            List.fold_left
              (fun m (_,u') -> 
                 let ov' = Valuation.Int.add var u' ov in 

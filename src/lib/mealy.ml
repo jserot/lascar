@@ -224,8 +224,8 @@ module Make (S: Lts.STATE) = struct
   let var_node a =
       let string_of_var pfx n = pfx ^ n in
       let txt = 
-        ListExt.to_string (string_of_var "In: ") "\\n" a.ivs ^ "\\n"
-      ^ ListExt.to_string (string_of_var "Out: ") "\\n" a.ovs  in
+        Utils.ListExt.to_string (string_of_var "In: ") "\\n" a.ivs ^ "\\n"
+      ^ Utils.ListExt.to_string (string_of_var "Out: ") "\\n" a.ovs  in
       txt, { Dot.node_shape = "rect"; Dot.node_style = "regular" }
 
   let dot_output name ?(fname="") ?(options=[]) a =

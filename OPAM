@@ -7,7 +7,7 @@ authors: [
 ]
 homepage: "http://cloud.ip.univ-bpclermont.fr/~serot/lascar/"
 dev-repo: "https://github.com/jserot/lascar.git"
-Bug-reports: "jocelyn.serot@uca.fr"
+bug-reports: "jocelyn.serot@uca.fr"
 build: [
   ["./configure"]
   [make]
@@ -22,7 +22,7 @@ remove: [
   [make "uninstall-doc"]
 ]
 depends: [
-  "ocamlp4"
+  "camlp4"
   "ocamlfind"
 ]
 available: [ ocaml-version >= "4.03" ]

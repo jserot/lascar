@@ -56,7 +56,7 @@ struct
   let of_list l = l
   let to_list l = l
 
-  let to_string vs = ListExt.to_string (function (n,v) -> n ^ "=" ^ V.to_string v) "," vs
+  let to_string vs = Utils.ListExt.to_string (function (n,v) -> n ^ "=" ^ V.to_string v) "," vs
 
   exception Invalid_valuation of t
 
