@@ -1,5 +1,8 @@
 (* Internal and external product of LTSAs *)
 
+open Utils
+open Lascar
+
 module S = Ltsa.Make(Builtins.String)(Builtins.Int)(Builtins.String)
 
 let a1 = S.create ~states:["A","";"B",""] ~trans:["A",1,"B"; "B",2,"A"] ~itrans:[0,"A"]

@@ -3,6 +3,9 @@
 
 (* First model : three states and no variable *)
 
+open Utils
+open Lascar
+
 module S1 =
     struct
       type t = Init | E0 | E1

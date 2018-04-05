@@ -1,5 +1,8 @@
 (* Mutual exclusion protocal modelized as a synchronized product of three automata *)
 
+open Utils
+open Lascar
+
 module S = Lts.Make (Builtins.Int) (Builtins.String)
 
 let proc_a = S.create

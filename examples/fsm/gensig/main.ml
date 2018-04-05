@@ -1,6 +1,9 @@
 (* FSM model of a signal generator.
    Output [s] goes to 1 with input [start] and stays to 1 for [n] "cycles" *)
    
+open Utils
+open Lascar
+
 module S =
     struct
       type t = E0 | E1

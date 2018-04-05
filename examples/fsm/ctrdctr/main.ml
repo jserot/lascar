@@ -2,6 +2,9 @@
    
 (* The most "intuitive" model, with two states and one variable  *)
    
+open Utils
+open Lascar
+
 module S1 =
     struct
       type t = Inc | Dec

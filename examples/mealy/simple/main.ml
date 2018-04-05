@@ -1,5 +1,8 @@
 (* Building a Mealy automata and converting it to Moore automata *)
 
+open Utils
+open Lascar
+
 module S =
     struct
       type t = A | B

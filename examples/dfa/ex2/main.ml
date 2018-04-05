@@ -1,5 +1,8 @@
 (* Conversion from NFA to DFA *)
 
+open Utils
+open Lascar
+
 module Int = struct include Builtins.Int let epsilon = 0 end
 module String = struct include Builtins.String let epsilon = "" end
 

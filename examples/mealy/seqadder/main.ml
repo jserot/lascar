@@ -1,5 +1,8 @@
 (* A sequential adder described as a Mealy automata *)
 
+open Utils
+open Lascar
+
 module S =
     struct
       type t = C0 | C1

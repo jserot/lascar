@@ -8,7 +8,7 @@ OCFLAGS = -I ../utils
 CAMLOPT_OPTS=
 CAMLDOC_OPTS=-short-functors -colorize-code
 
-LIBNAME = ltsa
+LIBNAME = lascar
 SRCS=ltsa.ml lts.ml nfa.ml dfa.ml valuation.ml mealy.ml moore.ml fsm_expr.ml fsm.ml conv.ml builtins.ml
 
 CMOS  = $(SRCS:.ml=.cmo)
@@ -30,30 +30,36 @@ endif
 
 all: $(LIBS)
 
-$(CMA): $(CMOS)
-	$(OCAMLC) $(OCFLAGS) -a -o $(CMA) $(CMOS)
+$(TOPCMO): $(CMOS)
+	$(OCAMLC) $(OCFLAGS) -pack -o $(TOPCMO) $(CMOS)
 
-$(CMXA): $(CMXS)
-	$(OCAMLOPT) $(OCFLAGS) -a -o $(CMXA) $(CMXS)
+$(TOPCMX): $(CMXS)
+	$(OCAMLOPT) $(OCFLAGS) -pack -o $(TOPCMX) $(CMXS)
+
+$(CMA): $(TOPCMO)
+	$(OCAMLC) $(OCFLAGS) -a -o $(CMA) $(TOPCMO)
+
+$(CMXA): $(TOPCMX)
+	$(OCAMLOPT) $(OCFLAGS) -a -o $(CMXA) $(TOPCMX)
 
 .SUFFIXES: .cmo .cmi .cmx .ml .mli
 
 .ml.cmo:
-	$(OCAMLC) $(OCFLAGS)  -c $<
+	$(OCAMLC) $(OCFLAGS)  -for-pack Lascar -c $<
 .mli.cmi:
-	$(OCAMLC) $(OCFLAGS)  -c $<
+	$(OCAMLC) $(OCFLAGS)  -for-pack Lascar -c $<
 .ml.cmx:
-	$(OCAMLOPT) $(OCFLAGS)  -c $<
+	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -c $<
 
 fsm_expr.cmo: fsm_expr.ml
-	$(OCAMLC) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $< 
+	$(OCAMLC) $(OCFLAGS)  -for-pack Lascar -package camlp4 -syntax camlp4o -c $< 
 fsm_expr.cmx: fsm_expr.ml
-	$(OCAMLOPT) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $<
+	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $<
 
 fsm.cmo: fsm.ml
-	$(OCAMLC) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $< 
+	$(OCAMLC) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $< 
 fsm.cmx: fsm.ml
-	$(OCAMLOPT) $(OCFLAGS)  -package camlp4 -syntax camlp4o -c $<
+	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $<
 
 doc: _doc/index.html
 

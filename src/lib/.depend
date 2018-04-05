@@ -20,6 +20,8 @@ conv.cmo : valuation.cmi nfa.cmi moore.cmi mealy.cmi ltsa.cmi lts.cmi \
     fsm_expr.cmi fsm.cmi dfa.cmi conv.cmi
 conv.cmx : valuation.cmx nfa.cmx moore.cmx mealy.cmx ltsa.cmx lts.cmx \
     fsm_expr.cmx fsm.cmx dfa.cmx conv.cmi
+builtins.cmo : builtins.cmi
+builtins.cmx : builtins.cmi
 ltsa.cmi :
 lts.cmi : ltsa.cmi
 nfa.cmi : ltsa.cmi
@@ -31,3 +33,4 @@ fsm_expr.cmi :
 fsm.cmi : valuation.cmi ltsa.cmi fsm_expr.cmi
 conv.cmi : valuation.cmi nfa.cmi moore.cmi mealy.cmi ltsa.cmi lts.cmi \
     fsm.cmi dfa.cmi
+builtins.cmi :

@@ -1,5 +1,8 @@
 (* Using the [Trans] functor for converting btw LTS *)
 
+open Utils
+open Lascar
+
 module State = struct
   type t = S0 | S1 | S2
   let compare = Pervasives.compare

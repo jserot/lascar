@@ -1,6 +1,9 @@
 (* A clock described as a synchronized product of two automata :
    one for the hours, the other for the minutes *)
 
+open Utils
+open Lascar
+
 module H =
   Lts.Make (Builtins.Int) (Builtins.String)
 

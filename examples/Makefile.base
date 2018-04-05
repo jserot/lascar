@@ -1,3 +1,6 @@
+OCAMLC   = ocamlfind ocamlc
+OCAMLOPT = ocamlfind ocamlopt
+
 include ../../../config
 
 DOTVIEW=open -a Graphviz
@@ -8,7 +11,7 @@ run: a.out
 	./a.out
 
 a.out: $(SRCS)
-	$(CAMLC) -I ../../../src/utils -I ../../../src/lib utils.cma lascar.cma $<
+	$(OCAMLC) -I ../../../src/utils -I ../../../src/lib utils.cma lascar.cma $<
 
 clean:
 	@\rm -f a.out *.cmi *.cmo

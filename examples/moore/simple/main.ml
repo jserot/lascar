@@ -1,5 +1,8 @@
 (* Building a Moore automata and converting it to Mealy automata *)
 
+open Utils
+open Lascar
+
 module S =
     struct
       type t = Q0 | Q1 | Q2 | Q3

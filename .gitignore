@@ -7,3 +7,5 @@ doc/api/
 *.annot
 *.cmxa
 *~
+.depend
+HOWTO

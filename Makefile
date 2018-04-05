@@ -13,7 +13,7 @@ all:
 	(cd src/utils; make)
 	(cd src/lib; make)
 
-install: src/utils/utils.cma src/lib/ltsa.cma
+install: src/utils/utils.cma src/lib/lascar.cma
 	@echo "Installing $(PACKNAME) in $(LIBDIR)"
 	rm -rf $(LIBDIR)/$(PACKNAME)
 	ocamlfind install -destdir $(LIBDIR) $(PACKNAME) META $(INSTALLED)

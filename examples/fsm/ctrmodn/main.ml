@@ -1,5 +1,8 @@
 (* FSM model of a modulo-n counter *)
    
+open Utils
+open Lascar
+
 module S =
     struct
       type t = E

@@ -1,5 +1,8 @@
 (* Product, in different flavors, of LTSs *)
 
+open Utils
+open Lascar
+
 module S = Lts.Make (Builtins.String) (Builtins.Int)
 
 let a1 = S.create ~states:["A";"B"] ~trans:["A",1,"B"; "B",2,"A"] ~itrans:[0,"A"]

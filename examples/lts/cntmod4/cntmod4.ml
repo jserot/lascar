@@ -1,5 +1,8 @@
 (* A modulo-4 counter defined as the synchronized product of two modulo-2 counters *)
 
+open Utils
+open Lascar
+
 module Bit = Lts.Make (Builtins.Int) (Builtins.String)
 
 let a0 = Bit.create ~states:[0;1] ~itrans:["",0] ~trans:[0,"u",1; 1,"d",0]

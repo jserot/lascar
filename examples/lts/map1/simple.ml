@@ -1,5 +1,8 @@
 (* Using the [map_xxx] functions for transforming a LTS *)
 
+open Utils
+open Lascar
+
 module S = Ltsa.Make (Builtins.Int) (Builtins.String) (Builtins.Bool)
 
 let s = S.create
