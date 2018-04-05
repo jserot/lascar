@@ -2,9 +2,9 @@ include ./config
 
 PACKNAME=lascar
 
-INSTALLED = src/{utils,lib}/*.{mli,cmi,cmo,cma} 
+INSTALLED = src/utils/*.mli src/utils/utils.{cma,cmo,cmi} src/lib/*.mli src/lib/lascar.{cma,cmi,cmo}
 ifeq ($(BUILD_NATIVE),yes)
-	INSTALLED += src/{utils,lib}/*.{cmx,cmxa,a}
+	INSTALLED += src/utils/utils.{cmx,cmxa,a} src/lib/lascar.{cmx,cmxa,a}
 endif
 
 .PHONY: doc install install-doc uninstall test
