@@ -41,6 +41,9 @@ uninstall-doc:
 test:
 	(cd examples; make)
 
+html: README.md
+	pandoc -t html -o doc/index.html README.md
+
 clean:
 	(cd src/utils; make clean)
 	(cd src/lib; make clean)
