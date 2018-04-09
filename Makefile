@@ -15,8 +15,8 @@ all:
 
 install: src/utils/utils.cma src/lib/lascar.cma
 	@echo "Installing $(PACKNAME) in $(LIBDIR)"
-	rm -rf $(LIBDIR)/$(PACKNAME)
-	ocamlfind install -destdir $(LIBDIR) $(PACKNAME) META $(INSTALLED)
+	mkdir -p $(LIBDIR)/$(PACKNAME)
+	cp -f $(INSTALLED) $(LIBDIR)/$(PACKNAME)
 
 doc:
 	(cd src/utils; make doc)
@@ -24,8 +24,7 @@ doc:
 
 install-doc: src/utils/_doc/index.html src/utils/_doc/index.html
 	@echo "Installing $(PACKNAME) documentation in $(DOCDIR)"
-	rm -rf $(DOCDIR)/$(PACKNAME)
-	mkdir $(DOCDIR)/$(PACKNAME)
+	mkdir -p $(DOCDIR)/$(PACKNAME)
 	cp -r src/utils/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
 	mv $(DOCDIR)/$(PACKNAME)/index.html $(DOCDIR)/$(PACKNAME)/utils.html
 	cp -r src/lib/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)

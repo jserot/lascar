@@ -1,9 +1,10 @@
 include ./config
 
 TMPDIR=/tmp
-DISTNAME=lascar-$(VERSION)
-DISTDIR=$(TMPDIR)/lascar-$(VERSION)
-EXCLUDES=--exclude .git --exclude .gitignore --exclude META --exclude OPAM --exclude .DS_Store --exclude Makefile.local
+#DISTNAME=lascar-$(VERSION)
+DISTNAME=lascar
+DISTDIR=$(TMPDIR)/lascar
+EXCLUDES=--exclude .git --exclude .gitignore --exclude .DS_Store --exclude Makefile.local
 TARBALL=$(DISTNAME).tar
 
 # Creating a tarball for distribution.
