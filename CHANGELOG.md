@@ -1,5 +1,8 @@
 # Changes
 
+# 0.5 (Apr, 9, 2018)
+	* Library is now packed under Lascar module to prevent name clash
+    
 # 0.4 (Feb, 5, 2018)
 	* OPAMification
 	* Home page and documentation moved to separate web site

@@ -2,12 +2,26 @@ include ./config
 
 PACKNAME=lascar
 
-INSTALLED = src/utils/*.mli src/utils/utils.{cma,cmo,cmi} src/lib/*.mli src/lib/lascar.{cma,cmi,cmo}
+INSTALLED = \
+  src/utils/*.mli \
+  src/utils/utils.cma \
+  src/utils/utils.cmo \
+  src/utils/utils.cmi \
+  src/lib/*.mli \
+  src/lib/lascar.cma \
+  src/lib/lascar.cmi \
+  src/lib/lascar.cmo
 ifeq ($(BUILD_NATIVE),yes)
-	INSTALLED += src/utils/utils.{cmx,cmxa,a} src/lib/lascar.{cmx,cmxa,a}
+INSTALLED += \
+  src/utils/utils.cmx \
+  src/utils/utils.cma \
+  src/utils/utils.a \
+  src/lib/lascar.cmx \
+  src/lib/lascar.cma \
+  src/lib/lascar.a
 endif
 
-.PHONY: doc install install-doc uninstall test
+.PHONY: doc install install-doc uninstall test dist html-doc url
 
 all:
 	(cd src/utils; make)
@@ -42,6 +56,37 @@ test:
 
 html: README.md
 	pandoc -t html -o doc/index.html README.md
+
+# Targets for building and deploying distribution
+
+TMPDIR=/tmp
+#DISTNAME=lascar-$(VERSION)
+DISTNAME=lascar
+DISTDIR=$(TMPDIR)/lascar
+EXCLUDES=--exclude .git --exclude .gitignore --exclude .DS_Store
+TARBALL=$(DISTNAME).tar
+
+dist: 
+	@make -f Makefile clean
+	@rm -rf $(DISTDIR)
+	@mkdir $(DISTDIR)
+	@echo "** Copying files into $(DISTDIR)"
+	(rsync --quiet -avz $(EXCLUDES) . $(DISTDIR))
+	@ echo "** Creating tarball"
+	@(cd $(TMPDIR); tar cf $(TARBALL) $(DISTNAME); gzip -f $(TARBALL))
+	@ echo "** File $(TMPDIR)/$(TARBALL).gz is ready."
+	echo "archive: \"http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz\"" > url
+	echo "checksum: \""`md5 -q $(TMPDIR)/$(TARBALL).gz`"\"" >> url
+	@echo "Created file ./url"
+
+html-doc: README.md
+	pandoc README.md -f markdown -t html -s -o README.html
+
+SCP   := scp -p -C
+TARGET  := cloud.ip.univ-bpclermont.fr:/home/www/lascar/src
+
+export:
+	$(SCP) $(TARBALL) $(TARGET)
 
 clean:
 	(cd src/utils; make clean)
