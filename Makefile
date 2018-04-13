@@ -14,10 +14,8 @@ INSTALLED = \
 ifeq ($(BUILD_NATIVE),yes)
 INSTALLED += \
   src/utils/utils.cmx \
-  src/utils/utils.cma \
   src/utils/utils.a \
   src/lib/lascar.cmx \
-  src/lib/lascar.cma \
   src/lib/lascar.a
 endif
 
@@ -39,9 +37,9 @@ doc:
 install-doc: src/utils/_doc/index.html src/utils/_doc/index.html
 	@echo "Installing $(PACKNAME) documentation in $(DOCDIR)"
 	mkdir -p $(DOCDIR)/$(PACKNAME)
-	cp -r src/utils/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
+	cp src/utils/_doc/*.html src/utils/_doc/*.css $(DOCDIR)/$(PACKNAME)
 	mv $(DOCDIR)/$(PACKNAME)/index.html $(DOCDIR)/$(PACKNAME)/utils.html
-	cp -r src/lib/_doc/*.{html,css} $(DOCDIR)/$(PACKNAME)
+	cp -r src/lib/_doc/*.html src/lib/_doc/*.css $(DOCDIR)/$(PACKNAME)
 
 uninstall: uninstall-doc
 	@echo "Removing $(PACKNAME) from $(LIBDIR)"

@@ -47,10 +47,10 @@ LASCAr is also available
 
 * via [github][] (`git clone https://github.com/jserot/lascar`)
 
-An [opam][] version should be available soon.
+* as an [opam][] package
 
-[opam]: https://opam.ocaml.org
 [github]: https://github.com/jserot/lascar
+[opam]: https://opam.ocaml.org/packages/lascar
 
 Usage
 -----
