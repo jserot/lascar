@@ -29,6 +29,7 @@ install: src/utils/utils.cma src/lib/lascar.cma
 	@echo "Installing $(PACKNAME) in $(LIBDIR)"
 	mkdir -p $(LIBDIR)/$(PACKNAME)
 	cp -f $(INSTALLED) $(LIBDIR)/$(PACKNAME)
+	cp -f META $(LIBDIR)/$(PACKNAME)
 
 doc:
 	(cd src/utils; make doc)
@@ -80,11 +81,9 @@ dist:
 html-doc: README.md
 	pandoc README.md -f markdown -t html -s -o README.html
 
-SCP   := scp -p -C
-TARGET  := cloud.ip.univ-bpclermont.fr:/home/www/lascar/src
-
 export:
-	$(SCP) $(TARBALL) $(TARGET)
+	ncftpput -u serot ftp.ip.uca.fr /home/www/lascar/src $(TMPDIR)/$(TARBALL).gz
+
 
 clean:
 	(cd src/utils; make clean)
