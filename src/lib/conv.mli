@@ -54,11 +54,13 @@ module ToMoore (ME: Mealy.T) : sig
 
   include Moore.T with type state = ME.state * Valuation.Bool.t
 
-  val conv: ?init:state option -> ME.t -> t
+  val conv: ?init:state option -> ?clean:bool -> ME.t -> t
     (** Convert a Mealy automata into a Moore automata, by turning each transition
        [q,(i/o'),q'] into a set of transitions [(q,o),i,(q',o')] for each possible output valuation [o].
        If [init] is not specified, all states [(q,o)] where [q] is an init state of the Mealy structure and [o]
-       an output configuration are marked as init states. Otherwise, the designated state is used. *)
+       an output configuration are marked as init states. Otherwise, the designated state is used.
+       Unreachable states are removed from the resulting automata unlesse the optional argument [clean]
+       is set to false *)
 end
 
 (** Functor for transforming FSMs *)

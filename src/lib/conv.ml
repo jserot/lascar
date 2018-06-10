@@ -96,7 +96,7 @@ module ToMoore (ME: Mealy.T) = struct
 
   include MM
 
-  let conv ?(init=None) me =
+  let conv ?(init=None) ?(clean=true) me =
     let ovs = (* The set of all possible output valuations *)
       let names = ME.outps me in
       let vs = Utils.ListExt.cart_prodn (List.map (function _ -> [false;true]) names) in
@@ -126,7 +126,8 @@ module ToMoore (ME: Mealy.T) = struct
               mm
               ovs in
           ME.fold_itransitions (fun t m -> add_sub_itransitions t m) me mm in
-    MM.empty (ME.inps me) (ME.outps me) |> add_states |> add_transitions |> add_itransitions |> MM.clean
+    let r = MM.empty (ME.inps me) (ME.outps me) |> add_states |> add_transitions |> add_itransitions in
+    if clean then r |> MM.clean else r
 end
 
 open Utils
