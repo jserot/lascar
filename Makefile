@@ -14,8 +14,10 @@ INSTALLED = \
 ifeq ($(BUILD_NATIVE),yes)
 INSTALLED += \
   src/utils/utils.cmx \
+  src/utils/utils.cmxa \
   src/utils/utils.a \
   src/lib/lascar.cmx \
+  src/lib/lascar.cmxa \
   src/lib/lascar.a
 endif
 
