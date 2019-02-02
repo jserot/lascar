@@ -60,10 +60,10 @@ html: README.md
 
 # Targets for building and deploying distribution
 
-TMPDIR=/tmp
+TEMPDIR=/tmp
 #DISTNAME=lascar-$(VERSION)
 DISTNAME=lascar
-DISTDIR=$(TMPDIR)/lascar
+DISTDIR=$(TEMPDIR)/lascar
 EXCLUDES=--exclude .git --exclude .gitignore --exclude .DS_Store
 TARBALL=$(DISTNAME).tar
 
@@ -74,17 +74,17 @@ dist:
 	@echo "** Copying files into $(DISTDIR)"
 	(rsync --quiet -avz $(EXCLUDES) . $(DISTDIR))
 	@ echo "** Creating tarball"
-	@(cd $(TMPDIR); tar cf $(TARBALL) $(DISTNAME); gzip -f $(TARBALL))
-	@ echo "** File $(TMPDIR)/$(TARBALL).gz is ready."
+	@(cd $(TEMPDIR); tar cf $(TARBALL) $(DISTNAME); gzip -f $(TARBALL))
+	@ echo "** File $(TEMPDIR)/$(TARBALL).gz is ready."
 	echo "archive: \"http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz\"" > url
-	echo "checksum: \""`md5 -q $(TMPDIR)/$(TARBALL).gz`"\"" >> url
+	echo "checksum: \""`md5 -q $(TEMPDIR)/$(TARBALL).gz`"\"" >> url
 	@echo "Created file ./url"
 
 html-doc: README.md
 	pandoc README.md -f markdown -t html -s -o README.html
 
 export:
-	ncftpput -u serot ftp.ip.uca.fr /home/www/lascar/src $(TMPDIR)/$(TARBALL).gz
+	ncftpput -u serot ftp.ip.uca.fr /home/www/lascar/src $(TEMPDIR)/$(TARBALL).gz
 
 
 clean:
