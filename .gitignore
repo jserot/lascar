@@ -3,6 +3,8 @@ config-stamp
 doc/api/
 src/lib/_doc/*
 src/utils/_doc/*
+!src/utils/_doc/.keep
+!src/lib/_doc/.keep
 *.cmi
 *.cmo
 *.cma
