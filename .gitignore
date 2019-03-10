@@ -1,8 +1,8 @@
 config
 config-stamp
 doc/api/
-src/lib/_doc
-src/utils/_doc
+src/lib/_doc/*
+src/utils/_doc/*
 *.cmi
 *.cmo
 *.cma

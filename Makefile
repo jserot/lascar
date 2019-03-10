@@ -76,9 +76,9 @@ dist:
 	@ echo "** Creating tarball"
 	@(cd $(TEMPDIR); tar cf $(TARBALL) $(DISTNAME); gzip -f $(TARBALL))
 	@ echo "** File $(TEMPDIR)/$(TARBALL).gz is ready."
-	echo "archive: \"http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz\"" > url
-	echo "checksum: \""`md5 -q $(TEMPDIR)/$(TARBALL).gz`"\"" >> url
-	@echo "Created file ./url"
+	echo "archive: \"http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz\"" # > url
+	echo "checksum: \""`md5 -q $(TEMPDIR)/$(TARBALL).gz`"\"" # >> url
+#	@echo "Created file ./url"
 
 html-doc: README.md
 	pandoc README.md -f markdown -t html -s -o README.html
