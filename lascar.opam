@@ -8,7 +8,11 @@ license: "MIT"
 homepage: "http://cloud.ip.univ-bpclermont.fr/~serot/lascar/"
 bug-reports: "jocelyn.serot@uca.fr"
 dev-repo: "git+https://github.com/jserot/lascar.git"
-depends: [ "camlp4" "ocamlfind" {build} ]
+depends: [
+  "ocaml" {>= "4.03"}
+  "camlp4"
+  "ocamlfind" {build}
+]
 build: [
   ["./configure"]
   [make]
