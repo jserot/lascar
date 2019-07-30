@@ -1,0 +1,9 @@
+(env
+  (dev
+    (flags (:standard -annot) (:standard -w -27-32-34-50))))
+
+(library
+  (name lascar)
+  (public_name lascar.lascar)
+  (libraries utils))
+

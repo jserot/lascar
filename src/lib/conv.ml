@@ -78,13 +78,13 @@ module ToMealy (MM: Moore.T) = struct
         (fun (q,iv,q') m -> ME.add_transition (q, (iv, MM.attr_of mm q'), q') m)
         mm
         m in
-    ME.empty (MM.inps mm) (MM.outps mm) |> add_states |> add_transitions
+    ME.empty ~inps:(MM.inps mm) ~outps:(MM.outps mm) |> add_states |> add_transitions
 
 end
 
 module ToMoore (ME: Mealy.T) = struct
 
-  open Utils
+  (* open Utils *)
 
   module S = struct
     type t = ME.state * Valuation.Bool.t
@@ -126,11 +126,11 @@ module ToMoore (ME: Mealy.T) = struct
               mm
               ovs in
           ME.fold_itransitions (fun t m -> add_sub_itransitions t m) me mm in
-    let r = MM.empty (ME.inps me) (ME.outps me) |> add_states |> add_transitions |> add_itransitions in
+    let r = MM.empty ~inps:(ME.inps me) ~outps:(ME.outps me) |> add_states |> add_transitions |> add_itransitions in
     if clean then r |> MM.clean else r
 end
 
-open Utils
+(* open Utils *)
    
 module Fsm (F: Fsm.T) = struct
 
@@ -150,7 +150,7 @@ module Fsm (F: Fsm.T) = struct
     let add_states mm = F.fold_states (fun q ov m -> FF.add_state ((q,[]),ov) m) m mm in
     let add_transitions mm = F.fold_transitions (fun (q,(conds,acts),q') m -> FF.add_transition ((q,[]),(conds,acts),(q',[])) m) m mm in
     let add_itransitions mm = F.fold_itransitions (fun ((conds,acts),q) m -> FF.add_itransition (acts,(q,[])) m) m mm in
-    FF.empty (F.inps m) (F.outps m) (F.vars m) |> add_states |> add_transitions |> add_itransitions
+    FF.empty ~inps:(F.inps m) ~outps:(F.outps m) ~lvars:(F.vars m) |> add_states |> add_transitions |> add_itransitions
 
   let defact ?(init=None) ?(clean=true) var m =
     let dom_v = List.assoc var (FF.vars m) in
@@ -211,7 +211,7 @@ module Fsm (F: Fsm.T) = struct
              mm
              d2v in
         FF.fold_itransitions (fun t m -> add_sub_itransitions t m) m mm in
-    let r = FF.empty (FF.inps m) (FF.outps m) (FF.vars m) |> add_states |> add_transitions |> add_itransitions in
+    let r = FF.empty ~inps:(FF.inps m) ~outps:(FF.outps m) ~lvars:(FF.vars m) |> add_states |> add_transitions |> add_itransitions in
     if clean then FF.clean r else r
 
   let defactorize ?(init=None) ?(clean=true) vars m =

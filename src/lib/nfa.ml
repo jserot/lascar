@@ -247,7 +247,7 @@ struct
     Some q0 -> not (States.is_empty (States.inter (trans_hat a q0 ss) a.astates))
   | None -> failwith "Nfa.accept: no initial state to start from"
 
-  exception Cycle
+  (* exception Cycle *)
 
   let rec dfs a src visited tosee = 
     if States.is_empty tosee

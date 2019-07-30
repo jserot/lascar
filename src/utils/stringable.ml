@@ -24,7 +24,6 @@ end
 module Triplet (M1: T) (M2: T) (M3: T) =
 struct 
   type t = M1.t * M2.t * M3.t
-  let compare = compare 
   let to_string (e1,e2,e3) = M1.to_string e1 ^ "," ^ M2.to_string e2 ^ "," ^ M3.to_string e3
   let mk e1 e2 e3 = e1,e2,e3
 end

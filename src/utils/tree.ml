@@ -62,7 +62,7 @@ struct
 
   let rec fold f z = function
       Empty -> z
-    | Node (a, ts) -> List.fold_left (fun z (t,l) -> f z (fold f z t)) a ts
+    | Node (a, ts) -> List.fold_left (fun z (t,_) -> f z (fold f z t)) a ts
 
   let output name oc options t =
   let rankdir = if List.mem Dot.RankdirLR options then "LR" else "UD" in

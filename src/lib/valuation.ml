@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-module type VALUE = OrderedTypeExt.T
+module type VALUE = Utils.OrderedTypeExt.T
 
 module type T = sig
     type name = string

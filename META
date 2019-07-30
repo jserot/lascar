@@ -1,4 +1,0 @@
-version = "0.5"
-description = "Lascar: A package for manipulating Labeled Transition Systems" 
-archive(byte) = "utils.cma lascar.cma"
-archive(native) = "utils.cmxa lascar.cmxa"

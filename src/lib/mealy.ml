@@ -150,13 +150,13 @@ module Make (S: Lts.STATE) = struct
 
   let attr_of a q = M.attr_of a.lts q
 
-  exception Invalid_valuation of Valuation.Bool.t
+  (* exception Invalid_valuation of Valuation.Bool.t *)
 
   let create ~inps:ivs ~outps:ovs ~states:qs ~istate:q0 ~trans:ts =
     if not (List.mem q0 qs) then failwith "Mealy.create: the initial state is not listed in the set of states";
     let add_states qs s = List.fold_left (fun s q -> add_state q s) s qs in
     let add_transitions ts s = List.fold_left (fun s t -> add_transition t s) s ts in
-    empty ivs ovs |> add_states qs |> add_transitions ts |> add_itransition q0
+    empty ~inps:ivs ~outps:ovs |> add_states qs |> add_transitions ts |> add_itransition q0
 
   let states s = M.states s.lts
   let states' s = M.states' s.lts

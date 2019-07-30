@@ -229,7 +229,7 @@ module Make (S: Ltsa.STATE) = struct
     if not (List.mem q0 (List.map fst qs)) then failwith "Mealy.create: the initial state is not listed in the set of states";
     let add_states qs s = List.fold_left (fun s q -> add_state q s) s qs in
     let add_transitions ts s = List.fold_left (fun s (q,(conds,acts),q') -> add_transition' (q,(conds,acts),q') s) s ts in
-    empty ivs ovs lvs |> add_states qs |> add_transitions ts |> add_itransition' (acts,q0)
+    empty ~inps:ivs ~outps:ovs ~lvars:lvs |> add_states qs |> add_transitions ts |> add_itransition' (acts,q0)
 
   let states s = M.states s.lts
   let states' s = M.states' s.lts

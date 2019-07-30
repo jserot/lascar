@@ -11,6 +11,8 @@
 
 (** A [valuation] is a collection of [(name,value)] associations *)
 
+open Utils
+   
 module type VALUE = OrderedTypeExt.T
 (** Values must have an ordered type and must be stringable. *)
 

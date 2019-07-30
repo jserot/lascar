@@ -11,8 +11,8 @@
 
 (** Pre-defined modules to be used as functor arguments *)
 
-module Int : OrderedTypeExt.T with type t=int
 
-module String : OrderedTypeExt.T with type t=string
 
-module Bool : OrderedTypeExt.T with type t=bool
+module String : Utils.OrderedTypeExt.T with type t=string
+
+module Bool : Utils.OrderedTypeExt.T with type t=bool

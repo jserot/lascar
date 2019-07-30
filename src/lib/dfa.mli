@@ -15,7 +15,7 @@
     This condition will be enforced by the [create] and [add_transition] functions.
     *)
 
-open Utils
+(* open Utils *)
 
 module type T = sig
 

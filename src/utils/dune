@@ -1,0 +1,7 @@
+(env
+  (dev
+    (flags (:standard -annot) (:standard -w -27-50))))
+
+(library
+  (name utils)
+  (public_name lascar.utils))

@@ -139,7 +139,7 @@ module Make (S: Ltsa.STATE) = struct
     if not (List.mem q0 (List.map fst qs)) then failwith "Moore.create: the initial state is not listed in the set of states";
     let add_states qs s = List.fold_left (fun s q -> add_state q s) s qs in
     let add_transitions ts s = List.fold_left (fun s t -> add_transition t s) s ts in
-    empty ivs ovs |> add_states qs |> add_transitions ts |> add_itransition q0
+    empty ~inps:ivs ~outps:ovs |> add_states qs |> add_transitions ts |> add_itransition q0
 
   let states s = M.states s.lts
   let states' s = M.states' s.lts

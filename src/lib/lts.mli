@@ -73,7 +73,7 @@ module type T = sig
     (** A synonym of {!Label.to_string} *)
   val string_of_transition: transition -> string
 
-  (** {6 Inspectors} *)
+  (** {1 Inspectors} *)
 
   val is_state: t -> state -> bool
       (** [is_state s q] returns true iff [q] is a state in [s] *)
@@ -107,7 +107,7 @@ module type T = sig
     (** Transitive closure of [preds]. 
         [preds_hat s q] returns all the predecessors (immediate or not) of [q] in [s] *)
 
-  (** {6 Building functions} *)
+  (** {1 Building functions} *)
 
   val empty: t
       (** The empty LTS (no state, no transition) *)
@@ -138,7 +138,7 @@ module type T = sig
       (** [remove_state q s] returns the LTS obtained by removing state [q], and all attached transitions, from [s].
          Raises [Invalid_state] is [q] is not a state in [s] *)
   
-  (** {6 Global iterators} *)
+  (** {1 Global iterators} *)
 
   val iter_states: (state -> unit) -> t -> unit
     (** [iter_states f s] applies function [f] to all states (with associated attribute) of [s] *)
@@ -153,7 +153,7 @@ module type T = sig
   val fold_itransitions: (itransition -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_itransitions f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the initial transitions of [s] *)
 
-  (** {6 State iterators} *)
+  (** {1 State iterators} *)
 
   val fold_succs: t -> state -> (state -> label -> 'a -> 'a) -> 'a -> 'a
     (** [fold_succs s x f z] computes [f xN lN ... (f x2 (f x1 l1 z) l2)...], where [x1], ..., [xN] are all the
@@ -168,7 +168,7 @@ module type T = sig
     (** [iter_preds s x f z] computes [f x1 l1; ... ;f xN lN], where [x1], ..., [xN] are all the
        predecessors of state [x] in LTS [s], and [l1], ..., [lN] the associated transitions labels *)
 
-  (** {6 Global transformations} *)
+  (** {1 Global transformations} *)
 
   val map_label: (label -> label) -> t -> t
       (** [map_states f s] returns the LTS obtained by replacing each transition label [l] by [f l] in [s]. *)
@@ -176,7 +176,7 @@ module type T = sig
   val clean: t -> t
       (** Removes unreachable nodes and associated transitions *)
 
-  (** {6 Output functions} *)
+  (** {1 Output functions} *)
 
   val dot_output: string
                -> ?fname:string

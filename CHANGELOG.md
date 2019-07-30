@@ -2,6 +2,7 @@
 
 # 0.6 (Jul, 30, 2019)
     * removed dependency on camlp4 by rewriting the Fsm_expr, Fsm and ListExt parsers
+    * dunified build and install process
     
 # 0.5 (Apr, 9, 2018)
 	* Library is now packed under Lascar module to prevent name clash

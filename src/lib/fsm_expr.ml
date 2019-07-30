@@ -58,16 +58,14 @@ let rec eval env exp =
   | EVar id -> lookup env id 
   | EBinop (op, exp1, exp2) -> binary_op op (eval env exp1) (eval env exp2)
 
-let subst_vars vars exp =
-  let rec subst e = match e with
-      EConst _ -> e
-    | EVar v -> if List.mem_assoc v vars then EConst (List.assoc v vars) else e
-    | EBinop (op, exp1, exp2) -> EBinop (op, subst exp1, subst exp2) in
-  subst exp
+(* let subst_vars vars exp =
+ *   let rec subst e = match e with
+ *       EConst _ -> e
+ *     | EVar v -> if List.mem_assoc v vars then EConst (List.assoc v vars) else e
+ *     | EBinop (op, exp1, exp2) -> EBinop (op, subst exp1, subst exp2) in
+ *   subst exp *)
 
 (* Parsing *)
-
-open Genlex
 
 (* BNF :
    <exp>  ::= INT
@@ -84,7 +82,7 @@ let mk_binary_minus s = s |> String.split_on_char '-' |> String.concat " - "
 let lexer s = s |> mk_binary_minus |> Stream.of_string |> Genlex.make_lexer keywords 
 
 open Genlex
-
+   
 let rec p_exp0 s =
   match Stream.next s with
     | Int n -> EConst n

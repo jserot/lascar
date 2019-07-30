@@ -87,7 +87,7 @@ module type T = sig
   val string_of_attr: attr -> string
     (** A synonym of {!Attr.to_string} *)
 
-  (** {6 Inspectors} *)
+  (** {1 Inspectors} *)
 
   val is_state: t -> state -> bool
       (** [is_state s q] returns true iff [q] is a state in [s] *)
@@ -125,7 +125,7 @@ module type T = sig
       (** [attr_of s q] returns the attribute of state [q] in [s].
           Raise [Not_found] if there is no state [q] in [s] *)
 
-  (** {6 Building functions} *)
+  (** {1 Building functions} *)
 
   val empty: t
       (** The empty LTSA (no state, no transition) *)
@@ -156,7 +156,7 @@ module type T = sig
       (** [remove_state q s] returns the LTSA obtained by removing state [q], and all attached transitions, from [s].
          Raises [Invalid_state] is [q] is not a state in [s] *)
   
-  (** {6 Global iterators} *)
+  (** {1 Global iterators} *)
 
   val iter_states: (state -> attr -> unit) -> t -> unit
     (** [iter_states f s] applies function [f] to all states (with associated attribute) of [s] *)
@@ -171,7 +171,7 @@ module type T = sig
   val fold_itransitions: (itransition -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_itransitions f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the initial transitions of [s] *)
 
-  (** {6 State iterators} *)
+  (** {1 State iterators} *)
 
   val fold_succs: t -> state -> (state -> label -> 'a -> 'a) -> 'a -> 'a
     (** [fold_succs s x f z] computes [f xN lN ... (f x2 (f x1 l1 z) l2)...], where [x1], ..., [xN] are all the
@@ -186,7 +186,7 @@ module type T = sig
     (** [iter_preds s x f z] computes [f x1 l1; ... ;f xN lN], where [x1], ..., [xN] are all the
        predecessors of state [x] in LTSA [s], and [l1], ..., [lN] the associated transitions labels *)
 
-  (** {6 Global transformations} *)
+  (** {1 Global transformations} *)
 
   val map_state: (state -> state) -> t -> t
       (** [map_state f s] returns the LTSA obtained by replacing each state [q] by [f q] in [s].
@@ -205,7 +205,7 @@ module type T = sig
       (** [unwind depth s] unwinds LTSA system [s] to produce a list of execution trees (rooted at
          initial states) up to the specified depth *)
 
-  (** {6 Output functions} *)
+  (** {1 Output functions} *)
 
   val dot_output: string
                -> ?fname:string
@@ -243,16 +243,16 @@ module type T = sig
         The name of the output file is [name.dot] or specified with the [fname] optional argument.
         When the optional argument [listed_transitions] is [Some l], only transitions listed in [l] are written, otherwise 
         all transitions of [s] are written. *)
-        
-  (* val dump: t -> unit  (\* for debug only *\) *)
 end
 
 (** Functor building an implementation of the LTSA structure given an implementation of
    state identifiers, transition labels and state attributes *)
+
 module Make (S: STATE) (L: LABEL) (A: ATTR) : T with type state = S.t and type label = L.t and type attr = A.t
 
 (** Functor for converting a LTSA, with a given implementation of state identifiers, transition labels and state attributes
    into another one with different respective implementations *)
+
 module Trans (S1: T) (S2: T) :
 sig
   val map: (S1.state -> S2.state) -> (S1.label -> S2.label) -> (S1.attr -> S2.attr) -> S1.t -> S2.t
@@ -267,7 +267,6 @@ sig
     and type attr = S1.attr * S2.attr
   val free_product: S1.t -> S2.t -> t
     (** [free_product s1 s2] computes the free product of the two LTSA [s1] and [s2].
-
         If [s1=<Q1,L1,A1,a1,I1,R1>] and [s2=<Q2,L2,A2,a2,I2,R2>], then the [free_product s1 s2] is [<Q,L,A,a,I,R>] where
         {ul {- [Q = Q1xQ2]}
         {- [L = L1 U L2 U L1xL2]}
@@ -275,8 +274,7 @@ sig
         {- [a(q1,q2) = a1(q1),a2(q2)]}
         {- [I = I1xI2]}
         {- [R], subset of [QxLxQ], is
-        [{((q1,q2),l1,(q1',q2)) | (q1,l1,q1') in R1, q2 in Q2} U {((q1,q2),l2,(q1,q2')) | q1 in Q1, (q2,l2,q2') in R2} U {((q1,q2),(l2,l2),(q1',q2')) | (q1,l1,q1') in R1, (q2,l2,q2') in R2}]}}.
-        In the result, transition labels
+        [{((q1,q2),l1,(q1',q2)) | (q1,l1,q1') in R1, q2 in Q2} U {((q1,q2),l2,(q1,q2')) | q1 in Q1, (q2,l2,q2') in R2} U {((q1,q2),(l2,l2),(q1',q2')) | (q1,l1,q1') in R1, (q2,l2,q2') in R2}]}}. In the result, transition labels
         {ul {- [l1] are encoded as [(Some l1, None)]}
             {- [l2] as [(None, Some l2)]}
             {- [(l1,l2)] as [(Some l1, Some l2)]}}.
