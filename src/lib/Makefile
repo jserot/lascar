@@ -51,23 +51,13 @@ $(CMXA): $(TOPCMX)
 .ml.cmx:
 	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -c $<
 
-fsm_expr.cmo: fsm_expr.ml
-	$(OCAMLC) $(OCFLAGS)  -for-pack Lascar -package camlp4 -syntax camlp4o -c $< 
-fsm_expr.cmx: fsm_expr.ml
-	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $<
-
-fsm.cmo: fsm.ml
-	$(OCAMLC) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $< 
-fsm.cmx: fsm.ml
-	$(OCAMLOPT) $(OCFLAGS) -for-pack Lascar  -package camlp4 -syntax camlp4o -c $<
-
 doc: _doc/index.html
 
 _doc/index.html: $(SRCS)
 	$(OCAMLDOC) -d ./_doc -I . -I ../utils -html $(CAMLDOC_OPTS) $(INTFS)
 
 depend: *.ml *.mli
-	$(OCAMLDEP) *.ml *.mli -package camlp4 -syntax camlp4o > .depend
+	$(OCAMLDEP) *.ml *.mli > .depend
 include .depend
 
 clean:

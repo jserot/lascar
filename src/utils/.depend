@@ -1,36 +1,30 @@
-misc.cmo : misc.cmi
-misc.cmx : misc.cmi
 dot.cmo : dot.cmi
 dot.cmx : dot.cmi
-tree.cmo : dot.cmi tree.cmi
-tree.cmx : dot.cmx tree.cmi
-option.cmo : option.cmi
-option.cmx : option.cmi
-orderedTypeExt.cmo : orderedTypeExt.cmi
-orderedTypeExt.cmx : orderedTypeExt.cmi
-stringable.cmo : stringable.cmi
-stringable.cmx : stringable.cmi
-listExt.cmo : listExt.cmi
-listExt.cmx : listExt.cmi
-stringExt.cmo : stringExt.cmi
-stringExt.cmx : stringExt.cmi
+dot.cmi :
 filenameExt.cmo : filenameExt.cmi
 filenameExt.cmx : filenameExt.cmi
+filenameExt.cmi :
+listExt.cmo : listExt.cmi
+listExt.cmx : listExt.cmi
+listExt.cmi :
+misc.cmo : misc.cmi
+misc.cmx : misc.cmi
+misc.cmi :
+option.cmo : option.cmi
+option.cmx : option.cmi
+option.cmi :
+orderedTypeExt.cmo : orderedTypeExt.cmi
+orderedTypeExt.cmx : orderedTypeExt.cmi
+orderedTypeExt.cmi :
 setExt.cmo : orderedTypeExt.cmi listExt.cmi setExt.cmi
 setExt.cmx : orderedTypeExt.cmx listExt.cmx setExt.cmi
-utils.cmo : tree.cmi stringExt.cmi setExt.cmi orderedTypeExt.cmi option.cmi \
-    misc.cmi listExt.cmi filenameExt.cmi dot.cmi utils.cmi
-utils.cmx : tree.cmx stringExt.cmx setExt.cmx orderedTypeExt.cmx option.cmx \
-    misc.cmx listExt.cmx filenameExt.cmx dot.cmx utils.cmi
-misc.cmi :
-dot.cmi :
-tree.cmi : dot.cmi
-option.cmi :
-orderedTypeExt.cmi :
-stringable.cmi :
-listExt.cmi :
-stringExt.cmi :
-filenameExt.cmi :
 setExt.cmi : orderedTypeExt.cmi
-utils.cmi : tree.cmi stringExt.cmi setExt.cmi orderedTypeExt.cmi option.cmi \
-    misc.cmi listExt.cmi filenameExt.cmi dot.cmi
+stringExt.cmo : stringExt.cmi
+stringExt.cmx : stringExt.cmi
+stringExt.cmi :
+stringable.cmo : stringable.cmi
+stringable.cmx : stringable.cmi
+stringable.cmi :
+tree.cmo : dot.cmi tree.cmi
+tree.cmx : dot.cmx tree.cmi
+tree.cmi : dot.cmi

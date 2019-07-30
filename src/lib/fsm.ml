@@ -34,8 +34,15 @@ module Condition = struct
     ">=", (>=)
   ]
   exception Unknown_op of string
-  let rec p_cond  = parser
-      [< 'Genlex.Ident v; 'Genlex.Kwd op when List.mem_assoc op test_ops; e = Fsm_expr.parse >] -> Test (v, op, e)
+  let p_cond s = 
+    let open Genlex in
+    match Stream.next s with
+    | Ident v ->
+       begin match Stream.next s with
+       | Kwd op when List.mem_assoc op test_ops -> let e = Fsm_expr.parse s in Test (v, op, e)
+       | _ -> raise Stream.Failure 
+       end
+    | _ -> raise Stream.Failure
   let of_string s = p_cond (Fsm_expr.lexer s)
   let list_of_string s = ListExt.parse ";" p_cond (Fsm_expr.lexer s)
   let lookup op =
@@ -58,10 +65,12 @@ module Action = struct
     | Assign of Fsm_expr.ident * Fsm_expr.t        (* variable, value *)
   let to_string a = match a with
     | Assign (id, expr) -> id ^ ":=" ^ Fsm_expr.to_string expr
-  let rec p_act  = parser
-      [< 'Genlex.Ident e1; rest >] -> p_act1 e1 rest
-  and p_act1  e1 = parser
-      [< 'Genlex.Kwd ":="; e2=Fsm_expr.parse >] -> Assign (e1, e2)
+  let rec p_act s = match Stream.next s with
+    | Genlex.Ident e1 -> p_act1 e1 s
+    | _ -> raise Stream.Failure
+  and p_act1 e1 s = match Stream.next s with
+    | Genlex.Kwd ":=" -> let e2 = Fsm_expr.parse s in Assign (e1, e2)
+    | _ -> raise Stream.Failure
   let of_string s = p_act (Fsm_expr.lexer s)
   let list_of_string s = ListExt.parse ";" p_act (Fsm_expr.lexer s)
 end

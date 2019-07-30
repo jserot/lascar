@@ -39,7 +39,7 @@ Installation
 ------------
 
 The source code for the latest release is [here][]. Compiling and installing requires GNU make and
-OCaml (version 4.03 or latter, with OCamlP4 support).
+OCaml (version 4.03 or latter)
 
 [here]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz
 

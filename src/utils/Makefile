@@ -51,18 +51,13 @@ $(CMXA): $(TOPCMX)
 .ml.cmx:
 	$(OCAMLOPT) $(OCFLAGS) -for-pack Utils -c $<
 
-listExt.cmo: listExt.ml
-	$(OCAMLC) $(OCFLAGS) -for-pack Utils -package camlp4 -syntax camlp4o -c $< 
-listExt.cmx: listExt.ml
-	$(OCAMLOPT) $(OCFLAGS) -for-pack Utils -package camlp4 -syntax camlp4o -c $<
-
 doc: _doc/index.html
 
 _doc/index.html: $(SRCS)
 	$(OCAMLDOC) -d ./_doc -html $(CAMLDOC_OPTS) $(INTFS)
 
 depend: *.ml *.mli
-	$(OCAMLDEP) *.ml *.mli -package camlp4 -syntax camlp4o > .depend
+	$(OCAMLDEP) *.ml *.mli > .depend
 include .depend
 
 clean:

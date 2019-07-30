@@ -79,40 +79,48 @@ open Genlex
 
 let keywords = List.map fst binary_ops @ List.map fst test_ops @ [":="; "("; ")"; ";"]
 
-let lexer s =
-  let rec aux = parser
-              | [< 'Int n when n<0; t=aux >] -> [< 'Kwd "-"; 'Int (-n); t >]
-              | [< 'h; t=aux >] -> [< 'h; t >]
-              | [< >] -> [< >] in
-  aux (Genlex.make_lexer keywords (Stream.of_string s))
+let mk_binary_minus s = s |> String.split_on_char '-' |> String.concat " - "
+                      
+let lexer s = s |> mk_binary_minus |> Stream.of_string |> Genlex.make_lexer keywords 
 
-let rec p_exp0  = parser
-                | [< 'Int n >] -> EConst n
-                | [< 'Ident i >] -> EVar i
-                | [< 'Kwd "("; e=p_exp ; 'Kwd ")" >] -> e
+open Genlex
 
-and p_exp1  = parser
-            | [< e1=p_exp0 ; rest >] -> p_exp2  e1 rest
+let rec p_exp0 s =
+  match Stream.next s with
+    | Int n -> EConst n
+    | Ident i -> EVar i
+    | Kwd "(" ->
+       let e = p_exp s in
+       begin match Stream.peek s with
+       | Some (Kwd ")") -> Stream.junk s; e
+       | _ -> raise Stream.Failure
+       end
+    | _ -> raise Stream.Failure
 
-and p_exp2  e1 = parser
-               | [< 'Kwd "*"; e2=p_exp1  >] -> EBinop("*", e1, e2)
-               | [< 'Kwd "/"; e2=p_exp1  >] -> EBinop("/", e1, e2)
-               | [< >] -> e1
-
-and p_exp  = parser
-           | [< e1=p_exp1 ; rest >] -> p_exp3  e1 rest
-
-and p_exp3  e1 = parser
-               | [< 'Kwd "+"; e2=p_exp  >] -> EBinop("+", e1, e2)
-               | [< 'Kwd "-"; e2=p_exp  >] -> EBinop("-", e1, e2)
-               | [< >] -> e1
+and p_exp1 s =
+  let e1 = p_exp0 s in
+  p_exp2 e1 s
+  
+and p_exp2 e1 s =
+  match Stream.peek s with
+  | Some (Kwd "*") -> Stream.junk s; let e2 = p_exp1 s in EBinop("*", e1, e2)
+  | Some (Kwd "/") -> Stream.junk s; let e2 = p_exp1 s in EBinop("/", e1, e2)
+  | _ -> e1
+  
+and p_exp s =
+  let e1 = p_exp1 s in p_exp3 e1 s
+                     
+and p_exp3 e1 s =
+  match Stream.peek s with
+  | Some (Kwd "+") -> Stream.junk s; let e2 = p_exp s in EBinop("+", e1, e2)
+  | Some (Kwd "-") -> Stream.junk s; let e2 = p_exp s in EBinop("-", e1, e2)
+  | _ -> e1
 
 let parse = p_exp
 
-let of_string s = p_exp (lexer s)
+let of_string s = s |> lexer |> p_exp
 
 let rec to_string e = match e with
     EConst c -> string_of_int c
   | EVar n ->  n
   | EBinop (op,e1,e2) -> to_string e1 ^ op ^ to_string e2 (* TODO : add parens *)
-

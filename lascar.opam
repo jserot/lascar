@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "lascar"
-version: "0.5"
+version: "0.6"
 synopsis: "A library for manipulating Labeled Transition Systems in OCaml"
 maintainer: "Jocelyn Sérot <jocelyn.serot@uca.fr>"
 authors: "Jocelyn Sérot <jocelyn.serot@uca.fr>"
@@ -10,7 +10,6 @@ bug-reports: "jocelyn.serot@uca.fr"
 dev-repo: "git+https://github.com/jserot/lascar.git"
 depends: [
   "ocaml" {>= "4.03"}
-  "camlp4"
   "ocamlfind" {build}
 ]
 build: [
