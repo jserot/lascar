@@ -17,6 +17,12 @@ install:
 
 doc:
 	dune build @doc
+	\rm -rf doc/html
+	cp -r _build/default/_doc/_html doc/html
+
+html: README.md
+	pandoc -t html -o README.html README.md
+	pandoc -t html -o CHANGELOG.html CHANGELOG.md
 
 test:
 	(cd examples; make)

@@ -1,4 +1,6 @@
 _build/
+doc/tutorial.key/
+doc/tutorial.bak.key/
 config
 config-stamp
 doc/api/
@@ -15,4 +17,8 @@ src/utils/_doc/*
 .depend
 .merlin
 HOWTO
+CHANGELOG.html
+README.html
 lascar.html
+lascar.install
+lascar.opam.bak
