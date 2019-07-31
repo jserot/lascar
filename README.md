@@ -25,9 +25,10 @@ The library makes a heavy use of functors to support genericity and to maximise 
 Documentation
 -------------
 
-The library API is documented [here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/doc/html/lascar/index.html).
+The library API is documented
+[here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/html/lascar/index.html).
 
-Some annotated code snippets can be found [here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/tutorial/tutorial.html).
+Some annotated code snippets can be found [here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/tutorial/tutorial.html).
 
 Other examples are provided in a dedicated [directory](https://github.com/jserot/lascar/tree/master/examples).
 
