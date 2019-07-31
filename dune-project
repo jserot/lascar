@@ -5,7 +5,7 @@
 (authors "Jocelyn Sérot <jocelyn.serot@uca.fr>")
 (maintainers "Jocelyn Sérot <jocelyn.serot@uca.fr>")
 (bug_reports "jocelyn.serot@uca.fr")
-(version 0.6)
+(version 0.6a)
 
 (package
   (name lascar)
