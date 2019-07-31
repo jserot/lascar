@@ -9,6 +9,8 @@ homepage: "https://github.com/jserot/lascar"
 bug-reports: "jocelyn.serot@uca.fr"
 depends: [
   "dune" {build & >= "1.11"}
+  "ocamlfind" {>= "1.8"}
+  "ocaml" {>= "4.06"}
 ]
 build: [
   ["dune" "subst"] {pinned}

@@ -25,45 +25,38 @@ The library makes a heavy use of functors to support genericity and to maximise 
 Documentation
 -------------
 
-The library API is documented [here][api].
+The library API is documented [here](https://github.com/jserot/lascar/doc/html/lascar/index.html).
 
-Some annotated code snippets can be found [here][example-slides].
+Some annotated code snippets can be found [here](https://github.com/jserot/lascar/tutorial/tutorial.html).
 
-Other examples are provided in a dedicated [directory][examples].
-
-[api]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/doc/api/index.html
-[example-slides]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/doc/examples/examples.html
-[examples]: https://github.com/jserot/lascar/tree/master/examples
+Other examples are provided in a dedicated [directory](https://github.com/jserot/lascar/tree/master/examples).
 
 Installation
 ------------
 
-The source code for the latest release is [here][]. Compiling and installing requires GNU make and
-OCaml (version 4.03 or latter)
+* The latest stable version is provided as a ready-to-install OPAM
+[package](https://opam.ocaml.org/packages/lascar). 
 
-[here]: http://cloud.ip.univ-bpclermont.fr/~serot/lascar/src/lascar.tar.gz
-
-LASCAr is also available 
-
-* via [github][] (`git clone https://github.com/jserot/lascar`)
-
-* as an [opam][] package
-
-[github]: https://github.com/jserot/lascar
-[opam]: https://opam.ocaml.org/packages/lascar
+* Installation can also be carried by downloading compiling the source code from
+[github](https://github.com/jserot/lascar) :
+  * `git clone https://github.com/jserot/lascar`
+  * `cd lascar`
+  * `./configure` (type `./configure --help` for options)
+  * `make`
+  * `make install`
 
 Usage
 -----
 
-To use compile a program `foo.ml` making use of the library, simply execute
+To compile a program `foo.ml` making use of the library, simply execute
 
-    $ ocamlc -I <install_dir> -o foo utils.cma lascar.cma foo.ml
-    
-or, better, if the package has been installed with `ocamlfind` or `opam` 
+    $ ocamlfind ocamlc -I <install_dir>/lib/lascar -o foo foo.ml
+
+Or, if the package has been installed using OPAM :
 
     $ ocamlfind ocamlc -package lascar -linkpkg -o foo foo.ml
 
-For displaying the generated `.dot` files, you will need to install the [Graphviz][] suite of tools.
-
-[Graphviz]: http://www.graphviz.org
+For displaying the generated `.dot` files, you will need to install the
+[Graphviz](http://www.graphviz.org) suite of tools. The name of the `.dot` viewer program can be
+passed to the `configure` script with the `-dotviewer` option.
 

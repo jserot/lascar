@@ -1,7 +1,4 @@
 SRCS=main.ml
 CFLAGS=-g
 
-include ../../Makefile.base
-
-all: run
-	$(DOTVIEW) m1.dot m2.dot m2_execs.dot
+include ../../Makefile.app
