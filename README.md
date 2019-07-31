@@ -28,7 +28,8 @@ Documentation
 The library API is documented
 [here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/html/lascar/index.html).
 
-Some annotated code snippets can be found [here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/tutorial/tutorial.html).
+Some annotated code snippets can be found
+[here](http://htmlpreview.github.io/?https://github.com/jserot/lascar/blob/master/doc/tutorial/tutorial.html).
 
 Other examples are provided in a dedicated [directory](https://github.com/jserot/lascar/tree/master/examples).
 
