@@ -4,10 +4,6 @@ doc/tutorial.bak.key/
 config
 config-stamp
 doc/api/
-src/lib/_doc/*
-src/utils/_doc/*
-!src/utils/_doc/.keep
-!src/lib/_doc/.keep
 *.cmi
 *.cmo
 *.cma
@@ -19,6 +15,5 @@ src/utils/_doc/*
 HOWTO
 CHANGELOG.html
 README.html
-lascar.html
 lascar.install
-lascar.opam.bak
+lascar.opam
