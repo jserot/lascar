@@ -45,6 +45,7 @@ test:
 
 clean:
 	dune clean
+	(cd examples; make clean)
 	\rm -f README.html
 
 clobber: clean

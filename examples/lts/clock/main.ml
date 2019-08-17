@@ -33,9 +33,6 @@ let _ = M.dot_output "minutes" ~options:[Dot.RankdirUD] mn
 
 module Clock = Lts.Product (M) (H)
 
-open Lts
-open Misc
-
 let clock =
   Clock.synchronized_product
     (ListExt.range (function i -> Some (mk_label "m" i), None) 0 (minutes_per_hour-2)

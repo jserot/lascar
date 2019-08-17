@@ -1,5 +1,5 @@
 test:
-	@for i in [a-z]*/[a-z0-9]*; do (echo "** Testing in $$i"; cd $$i; make); done
+	@for i in [a-z]*/[a-z0-9]*; do (echo "** Testing in $$i"; cd $$i; make test); done
 
 
 clean:
