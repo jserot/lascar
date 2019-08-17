@@ -1,3 +1,5 @@
+- use dune watermarking for VERSION, HOMEPAGE, etc..
+- rewrite for ocaml 4.08 (revise Utils)
 - put html docs on a gh page instead of using htmlpreview
 - "classical" operations (product, union, ...) for NFAs and DFAs
 - Kripke structures

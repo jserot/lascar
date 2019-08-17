@@ -4,6 +4,6 @@
 
 (library
   (name lascar)
-  (public_name lascar.lascar)
+  (public_name lascar)
   (libraries utils))
 
