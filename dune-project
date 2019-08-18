@@ -1,6 +1,5 @@
 (lang dune 1.11)
 (name lascar)
-(version 0.6)
 (source (github jserot/lascar))
 (license MIT)
 (authors "Jocelyn Sérot <jocelyn.serot@uca.fr>")
