@@ -1,6 +1,6 @@
 # Changes
 
-## 0.6 (Jul, 31, 2019)
+## 0.6 (Aug, 18, 2019)
     * removed dependency on camlp4 by rewriting the Fsm_expr, Fsm and ListExt parsers
     * dunified build and install process
     
