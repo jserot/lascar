@@ -43,22 +43,23 @@ Installation
 [github](https://github.com/jserot/lascar) :
   * `git clone https://github.com/jserot/lascar`
   * `cd lascar`
-  * `./configure` (type `./configure --help` for options)
   * `make`
   * `make install`
 
-Usage
------
+* For displaying the generated `.dot` files, you will need to install the
+[Graphviz](http://www.graphviz.org) suite of tools. 
 
-To compile a program `foo.ml` making use of the library, simply execute
+Compiling and running the examples
+----------------------------------
 
-    $ ocamlfind ocamlc -I <install_dir>/lib/lascar -o foo foo.ml
+Each example directory contains both a `Makefile` and a `dune` file to simplify building and running
+the example.
 
-Or, if the package has been installed using OPAM :
+* To build the executable, type `make build`
 
-    $ ocamlfind ocamlc -package lascar -linkpkg -o foo foo.ml
+* To run the generated executable, type `make run` (or simply `make`)
 
-For displaying the generated `.dot` files, you will need to install the
-[Graphviz](http://www.graphviz.org) suite of tools. The name of the `.dot` viewer program can be
-passed to the `configure` script with the `-dotviewer` option.
+The latest command will also invoke the `.dot` file viewer to display the generated graphical
+representations of the systems. The name of this viewer is specified in the supplied `Makefile` and
+will probably have to be adjusted according to your `Graphviz` installation.
 

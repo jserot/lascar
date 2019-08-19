@@ -36,7 +36,7 @@ doc:
 
 html: README.md
 	pandoc -t html -o README.html README.md
-	pandoc -t html -o CHANGELOG.html CHANGELOG.md
+	pandoc -t html -o CHANGES.html CHANGES.md
 
 test:
 	(cd examples; make)
