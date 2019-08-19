@@ -1,5 +1,4 @@
 - check build and use on Win32 (required for building RFSM) and update HOWTO
-- replace doc/tutorial by ../github.io/lascar-tutorial
 - use dune watermarking for VERSION, HOMEPAGE, etc..
 - delete ./VERSION ./configure files (not longer used)
 - update README with protocol to run examples
