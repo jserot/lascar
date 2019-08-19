@@ -1,5 +1,3 @@
-include ./config
-
 .PHONY: doc
 
 all: build doc
