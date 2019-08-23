@@ -15,6 +15,4 @@ doc/api/
 HOWTO
 CHANGELOG.html
 README.html
-lascar.install
-lascar.opam
 examples/*/*/*.dot
