@@ -1,6 +1,3 @@
-- check build and use on Win32 (required for building RFSM) and update HOWTO
-- use dune watermarking for VERSION, HOMEPAGE, etc..
-- rewrite for ocaml 4.08 (revise Utils)
 - "classical" operations (product, union, ...) for NFAs and DFAs
 - Kripke structures
 - Buchi automata

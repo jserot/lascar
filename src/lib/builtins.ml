@@ -13,18 +13,18 @@
 
 module Int = struct
   type t = int 
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
   let to_string = string_of_int
 end
 
 module String = struct
   type t = string
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
   let to_string x = x
 end
 
 module Bool = struct
   type t = bool
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
   let to_string = string_of_bool
 end

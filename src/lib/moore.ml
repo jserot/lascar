@@ -15,7 +15,7 @@ module BVal =
   Valuation.Make(
       struct
         type t = bool
-        let compare = Pervasives.compare
+        let compare = Stdlib.compare
         let to_string = function true -> "1" | false -> "0"
       end)
 

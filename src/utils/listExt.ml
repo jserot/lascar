@@ -56,7 +56,7 @@ let rec union l1 l2 = match l1, l2 with
    else if r < 0 then x1 :: union xs1 l2  (* x1 < x2 *)
    else               x2 :: union l1 xs2  (* x1 > x2 *)
 
-let merge ?(cmp=Pervasives.compare) l1 l2  =
+let merge ?(cmp=Stdlib.compare) l1 l2  =
   let rec h l1 l2 = match l1, l2 with
     [], [] -> []
   | l1, [] -> l1
@@ -102,27 +102,27 @@ let rec power n l =
   if n = 0 then [[]]
   else flat_map (function l' -> List.map (function x -> x::l') l) (power (n-1) l)
 
-let assoc ?(cmp=Pervasives.compare) k l =
+let assoc ?(cmp=Stdlib.compare) k l =
   let rec h = function
     [] -> raise Not_found
   | (k',v)::l -> if cmp k k' = 0 then v else h l in
   h l
 
-let mem_assoc ?(cmp=Pervasives.compare) k l = 
+let mem_assoc ?(cmp=Stdlib.compare) k l = 
   let rec h = function
   | [] -> false
   | (k',_)::l -> cmp k k' = 0 || h l in
   h l
 
-let update_assoc ?(cmp=Pervasives.compare) f k v l =
+let update_assoc ?(cmp=Stdlib.compare) f k v l =
   let rec h = function 
   | [] -> []
   | (k',v')::rest -> let v'' = if cmp k k' = 0 then f v' v else v' in (k',v'') :: h rest  in
   h l
 
-let replace_assoc ?(cmp=Pervasives.compare) k v l = update_assoc ~cmp:cmp (fun _ v -> v) k v l 
+let replace_assoc ?(cmp=Stdlib.compare) k v l = update_assoc ~cmp:cmp (fun _ v -> v) k v l 
 
-let partition ?(cmp=Pervasives.compare) l =
+let partition ?(cmp=Stdlib.compare) l =
   List.fold_left
     (fun acc (x,y) ->
       if List.mem_assoc x acc

@@ -14,10 +14,6 @@ type ('a, 'b) either =
   | Snd of 'b
   | Both of 'a * 'b
 
-let flip f x y = f y x
-
-let id x = x
-
 let max x y = if x > y then x else y
 let min x y = if x < y then x else y
 

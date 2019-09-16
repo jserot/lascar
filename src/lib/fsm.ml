@@ -86,7 +86,7 @@ module Transition = struct
 
   type t = Condition.t list * Action.t list
 
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
 
   let to_string (conds,acts) =
     let s1 = ListExt.to_string Condition.to_string ", " conds in

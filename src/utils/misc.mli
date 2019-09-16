@@ -20,12 +20,6 @@ val log2 : int -> int
 
 val time_of_day : unit -> string
 
-val flip: ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
-    (** [flip f x y] is [f y x] *)
-
-val id: 'a -> 'a
-    (** [id x] is [x] *)
-
 val max: 'a -> 'a -> 'a 
 val min: 'a -> 'a -> 'a 
 

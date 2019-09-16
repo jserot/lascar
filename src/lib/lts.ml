@@ -236,9 +236,9 @@ struct
   let attr_of s q = ()
 
   let create ~states:qs ~itrans:ts0 ~trans:ts =
-    empty |> (function s -> List.fold_left (Misc.flip add_state) s qs)
-          |> (function s -> List.fold_left (Misc.flip add_transition) s ts)
-          |> (function s -> List.fold_left (Misc.flip add_itransition) s ts0)
+    empty |> (function s -> List.fold_left (Fun.flip add_state) s qs)
+          |> (function s -> List.fold_left (Fun.flip add_transition) s ts)
+          |> (function s -> List.fold_left (Fun.flip add_itransition) s ts0)
 
   let states s = Repr.states s
   let istates s = Repr.istates s

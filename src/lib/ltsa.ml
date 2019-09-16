@@ -204,9 +204,9 @@ struct
     { s with irel = H.add q l s.irel }
 
   let create ~states:qs ~itrans:ts0 ~trans:ts =
-    empty |> (function s -> List.fold_left (Misc.flip add_state) s qs)
-          |> (function s -> List.fold_left (Misc.flip add_transition) s ts)
-          |> (function s -> List.fold_left (Misc.flip add_itransition) s ts0)
+    empty |> (function s -> List.fold_left (Fun.flip add_state) s qs)
+          |> (function s -> List.fold_left (Fun.flip add_transition) s ts)
+          |> (function s -> List.fold_left (Fun.flip add_itransition) s ts0)
 
   let states s =  s.states 
   let states' s =  H.bindings s.attrs
@@ -294,7 +294,7 @@ struct
     let node_id i = name ^ "_" ^ string_of_int i in
     let ini_id = name ^ "_ini" in
     let extra_id j = name ^ "_extra" ^ string_of_int j in
-    let extra_idxs = ListExt.range Misc.id 0 (List.length extra_nodes -1) in
+    let extra_idxs = ListExt.range Fun.id 0 (List.length extra_nodes -1) in
     let ndescs, nbn = 
       fold_states
         (fun s a (acc,n) ->

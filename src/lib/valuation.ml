@@ -50,7 +50,7 @@ struct
   let assoc n vs = List.assoc n vs
 
   let compare vs1 vs2 =
-    let module S = Set.Make (struct type t = name * value  let compare = Pervasives.compare end) in
+    let module S = Set.Make (struct type t = name * value  let compare = Stdlib.compare end) in
     S.compare (S.of_list vs1) (S.of_list vs2)
 
   let of_list l = l
@@ -63,7 +63,7 @@ struct
   let names_of v = List.map fst v
 
   let check names v =
-    let module S = Set.Make (struct type t = string let compare = Pervasives.compare end) in
+    let module S = Set.Make (struct type t = string let compare = Stdlib.compare end) in
     if not (S.equal (S.of_list names) (S.of_list (names_of v))) then raise (Invalid_valuation v)
  
 end
@@ -72,7 +72,7 @@ module Bool =
   Make(
       struct
         type t = bool
-        let compare = Pervasives.compare
+        let compare = Stdlib.compare
         let to_string = function true -> "1" | false -> "0"
       end)
 
@@ -80,6 +80,6 @@ module Int =
   Make(
       struct
         type t = int
-        let compare = Pervasives.compare
+        let compare = Stdlib.compare
         let to_string = string_of_int
       end)
