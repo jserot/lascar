@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Deterministic Finite Automata (DFA)
+(** {2 Deterministic Finite Automata (DFA)}
  
     A DFA is just a NFA in which there's at most one transition with a given symbol from any state.
     This condition will be enforced by the [create] and [add_transition] functions.
@@ -54,6 +54,7 @@ module type T = sig
          when a sequence of symbols [ss] is given to [a], starting at state [q], or raises [Stuck] *)
 
   val nfa_of: t -> NFA.t  (** For internal use *)
+
   val of_nfa: NFA.t -> t  (** For internal use *)
 
 end

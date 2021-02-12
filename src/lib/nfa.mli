@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Non-deterministic Finite Automata (NFA)
+(** {2 Non-deterministic Finite Automata (NFA)}
 
     A NFA is just a Labeled Transition System (LTSA) for which
            - transition labels are taken from an input {i alphabet}
@@ -69,12 +69,16 @@ module type T = sig
 
   val symbols: t -> Symbols.t
       (** Returns the set of symbols *)
+
   val symbols': t -> symbol list
       (** Returns the set of symbols as a list *)
+
   val acc_states: t -> States.t
       (** Returns the set of accepting states *)
+
   val acc_states': t -> state list
       (** Returns the set of accepting states as a list *)
+
   val istate: t -> state option
       (** Returns the initial state, when specified *)
 
@@ -87,13 +91,16 @@ module type T = sig
   val trans: t -> state -> symbol -> States.t
       (** [trans a q s] returns the set of states [q'] such that [(q,s,q')]
          belongs to the transition relation of [a] *)
+
   val trans': t -> state -> symbol -> state list
       (** [trans'] is like [trans] but returns a list *)
+
 
   val trans_hat: t -> state -> symbol list -> States.t
       (** [trans_hat a q ss] is the transitive generalisation of [trans].
          It returns the set of states which can reached when a sequence of symbols [ss] is given to [a],
          starting at state [q] *)
+
   val trans_hat': t -> state -> symbol list -> state list
       (** [trans_hat'] is like [trans_hat] but returns a list *)
 

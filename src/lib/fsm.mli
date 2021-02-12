@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Finite State Machines.
+(** {2 Finite State Machines}
 
     A FSM is a LTS
     - with an added set of local variables
@@ -87,14 +87,18 @@ module type T = sig
   val add_state: state * Valuation.Int.t -> t -> t
       (** [add_state (s,v) m] returns the FSM obtained by adding state [s], with a valuation of
           local variables [v], to FSM [m] *)
+
   val add_transition: state * Transition.t * state -> t -> t
       (** [add_transition t m] returns the FSM obtained by adding transition [t] to FSM [m] *)
+
   val add_transition': state * (string*string) * state -> t -> t
       (** [add_transition] is a variant of [add_transition] for which the added transition is specified
           using concrete syntax as a pair of strings  *)
+
   val add_itransition: Action.t list * state -> t -> t
       (** [add_itransition (acts,s) m] returns the FSM obtained by adding the initial transition [(acts,s)]
           to FSM [m] *)
+
   val add_itransition': string * state -> t -> t
       (** [add_itransition'] is a variant of [add_itransition] for which the initial actions are specified
           using concrete syntax as a string  *)
@@ -104,10 +108,13 @@ module type T = sig
 
   val istate: t -> state option
       (** Returns the initial state, when specified *)
+
   val inps: t -> var_desc list
       (** Returns the list of inputs variables, with corresponding domains *)
+
   val outps: t -> var_desc list
       (** Returns the list of outputs variables, with corresponding domains *)
+
   val vars: t -> var_desc list
       (** Returns the list of outputs variables, with corresponding domains *)
 

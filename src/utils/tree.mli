@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** A basic implementation of n-ary trees *)
+(** {2 A basic implementation of n-ary trees} *)
 
 (** Input signature of the functor {!Tree.Make}. *)
 module type Arg =

@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Functors for converting various kinds of Labeled Transition Systems *)
+(** {2 Functors for converting various kinds of Labeled Transition Systems} *)
 
 (** Functor for converting a {!Ltsa} into a {!Lts} (by removing state attributes) *)
 module ToLts (M: Ltsa.T) : sig
@@ -36,7 +36,7 @@ module ToDfa (N : Nfa.T) : sig
   val conv: N.t -> t
 end
 
-(** Functor for converting a {!Moore} machine nto an equivalent {!Mealy} one *)
+(** Functor for converting a {!Moore} machine into an equivalent {!Mealy} one *)
 module ToMealy (MM: Moore.T) : sig
 
   include Mealy.T with type state = MM.state

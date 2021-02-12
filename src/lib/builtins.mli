@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Pre-defined modules to be used as functor arguments *)
+(** {2 Pre-defined modules to be used as functor arguments} *)
 
 module Int : Utils.OrderedTypeExt.T with type t=int
 

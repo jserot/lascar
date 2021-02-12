@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Extension to the {!Stdlib.Filename} module *)
+(** {2 Extension to the [Stdlib.Filename] module} *)
 
 val split_suffix: string -> string * string
     (** [split_suffix fname] removes any suffix from [fname] and returns both the resulting name and the removed suffix *)

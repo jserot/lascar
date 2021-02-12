@@ -9,9 +9,8 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Extension to the {!Stdib.Set} module *)
+(** {2 Extension to the [Stdib.Set] module} *)
 
-(** Input signature of the {!SetExt.Make} functor. *)
 (* module type OrderedType = sig *)
 (*   include Set.OrderedType *)
 (*   (\* type t *\) *)
@@ -25,13 +24,16 @@ module type S = sig
   module Elt : OrderedTypeExt.T with type t = elt
   val map: (elt -> elt) -> t -> t
       (** [map f s] applies function [f] to each element of set [s] *)
+
   val power: t -> t list
-      (** [power_set s] computes the power set of [s].
+      (** [power s] computes the power set of [s].
           {b Note}: the result is returned as a {e list} of sets because sets of sets cannot be defined
           easily in a functorial way.. *)
+
   val extract: t -> elt * t
       (** Extract an element from a set, returning the element and the updated set.
           Raise [Not_found] if the set is empty *)
+
   val to_string: t -> string
       (** Returns a string representation *)
 end
@@ -39,7 +41,6 @@ end
 (** Functor building an implementation of the set structure given a totally ordered, stringable type. *)
 module Make (E : OrderedTypeExt.T) : S with type elt = E.t
 
-(** Functor for pairing structures describing elements for computing set products *)
 (* module Pair (E1: OrderedType.T) (E2: OrderedType.T) : *)
 (*     sig *)
 (*       include OrderedType.T with type t = E1.t * E2.t *)

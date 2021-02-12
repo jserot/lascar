@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Types for controling the aspect of .dot output files *)
+(** {2 Types for controling the aspect of .dot output files} *)
 
 type graph_style = ..
 

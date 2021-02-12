@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** String-convertible types *)
+(** {2 String-convertible types} *)
 
 module type T = sig
   type t

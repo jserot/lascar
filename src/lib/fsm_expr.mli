@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Simple (int) expressions for FSMs *)
+(** {2 Simple (int) expressions for FSMs} *)
 
 type ident = string 
   (** The type of identifiers occuring in expressions *)

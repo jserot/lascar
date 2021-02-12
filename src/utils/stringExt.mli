@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Extension to the {!Stdlib.String} module *)
+(** {2 Extension to the [Stdlib.String] module} *)
 
 val is_uppercased: string -> bool
     (** Tests whether the string starts with an uppercase letter *)

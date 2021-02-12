@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Several useful types and functions *)
+(** {2 Several useful types and functions} *)
 
 type ('a, 'b) either =
     Fst of 'a

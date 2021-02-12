@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Labeled Transition Systems
+(** {2 Labeled Transition Systems}
 
     A Labeled Transition System is 4-uple [(Q,L,I,R)] where
     - [Q] is a set of state identifiers
@@ -33,6 +33,7 @@ module type LABEL = OrderedTypeExt.T
 module type T = sig
 
   type state (** The type of state identifiers *)
+
   type label (** The type of transition labels *)
 
   module Repr: Ltsa.T with type state = state and type label = label and type attr = unit
@@ -44,10 +45,11 @@ module type T = sig
   val of_repr: Repr.t -> t
 
   type transition = state * label * state
-        (** The type for transition. A transition is a triplet [(s1,l,s2)], where [s1] is the 
+        (** The type for transitions. A transition is a triplet [(s1,l,s2)], where [s1] is the 
             source state, [s2] the destination state and [l] the transition label *)
+
   type itransition = label * state
-        (** The type for initial transition. An initial transition is a pair [(l,s)], where
+        (** The type for initial transitions. An initial transition is a pair [(l,s)], where
             [s] is the destination state and [l] the transition label *)
 
   module State : STATE with type t = state
@@ -56,32 +58,42 @@ module type T = sig
 
   val states: t -> States.t
       (** Returns the set of states *)
+
   val states': t -> state list
       (** Returns the list of states *)
+
   val istates: t -> States.t
       (** Returns the set of initial states *)
+
   val istates': t -> state list
       (** Returns the list of initial states *)
+
   val transitions: t -> transition list
       (** Returns the list of transitions *)
+
   val itransitions: t -> itransition list
       (** Returns the list of initial transitions *)
 
   val string_of_state: state -> string
     (** A synonym of {!State.to_string} *)
+
   val string_of_label: label -> string
     (** A synonym of {!Label.to_string} *)
+
   val string_of_transition: transition -> string
 
   (** {1 Inspectors} *)
 
   val is_state: t -> state -> bool
       (** [is_state s q] returns true iff [q] is a state in [s] *)
+
   val is_init_state: t -> state -> bool
       (** [is_init s q] returns true iff [q] is an initial state in [s] *)
+
   val is_reachable: t -> state -> bool
       (** [is_reachable s q] returns true iff [q] is a reachable state in [s], {i i.e.} if it 
           can be reached from an initial state using the transitio relation. *)
+
   val is_transition: t -> transition -> bool
       (** [is_transition t q] returns true iff [t] is a transition in [s] *)
 
@@ -89,6 +101,7 @@ module type T = sig
     (** [succs s q] returns the set of immediate successors in [s], {i i.e.} the set of state [q'] such that 
         there exists a transition [(q,l,q')] in [R].
         Raise Invalid_argument if [q] is not in [s]. *)
+
   val succs': t -> state -> (state * label) list
     (** [succs' s q] returns the list of immediate successors, with the associated transition label, of state [q] in [s].
         Raise Invalid_argument if [q] is not in [s]. *)
@@ -97,12 +110,15 @@ module type T = sig
     (** [preds s q] returns the set of immediate predecessors of state [q] in [s], {i i.e.} the set of state [q'] such that 
         there exists a transition [(q',l,q)] in [R].
         Raise Invalid_argument if [q] is not in [s]. *)
+
   val preds': t -> state -> (state * label) list
     (** [preds' s q] returns the list of immediate predecessors, with the associated transition label, of state [q] in [s].
         Raise Invalid_argument if [q] is not in [s]. *)
+
   val succs_hat: t -> state -> States.t
     (** Transitive closure of [succs]. 
         [succs_hat s q] returns all the successors (immediate or not) of [q] in [s] *)
+
   val preds_hat: t -> state -> States.t
     (** Transitive closure of [preds]. 
         [preds_hat s q] returns all the predecessors (immediate or not) of [q] in [s] *)
@@ -142,14 +158,18 @@ module type T = sig
 
   val iter_states: (state -> unit) -> t -> unit
     (** [iter_states f s] applies function [f] to all states (with associated attribute) of [s] *)
+
   val fold_states: (state -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_states f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the states of [s] *)
+
   val iter_transitions: (transition -> unit) -> t -> unit
     (** [iter_transitions f s] applies function [f] to all transitions of [s] *)
+
   val fold_transitions: (transition -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_transitions f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the transitions of [s] *)
   val iter_itransitions: (itransition -> unit) -> t -> unit
     (** [iter_itransitions f s] applies function [f] to all initial transitions of [s] *)
+
   val fold_itransitions: (itransition -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_itransitions f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the initial transitions of [s] *)
 
@@ -158,12 +178,15 @@ module type T = sig
   val fold_succs: t -> state -> (state -> label -> 'a -> 'a) -> 'a -> 'a
     (** [fold_succs s x f z] computes [f xN lN ... (f x2 (f x1 l1 z) l2)...], where [x1], ..., [xN] are all the
        successors of state [x] in LTS [s], and [l1], ..., [lN] the associated transitions labels *)
+
   val iter_succs: t -> state -> (state -> label -> unit) -> unit
     (** [iter_succs s x f z] computes [f x1 l1; ... ;f xN lN], where [x1], ..., [xN] are all the
        successors of state [x] in LTS [s], and [l1], ..., [lN] the associated transitions labels *)
+
   val fold_preds: t -> state -> (state -> label -> 'a -> 'a) -> 'a -> 'a
     (** [fold_preds s x f z] computes [f xN lN ... (f x2 (f x1 l1 z) l2)...], where [x1], ..., [xN] are all the
        predecessors of state [x] in LTS [s], and [l1], ..., [lN] the associated transitions labels *)
+
   val iter_preds: t -> state -> (state -> label -> unit) -> unit
     (** [iter_preds s x f z] computes [f x1 l1; ... ;f xN lN], where [x1], ..., [xN] are all the
        predecessors of state [x] in LTS [s], and [l1], ..., [lN] the associated transitions labels *)
@@ -276,16 +299,21 @@ sig
   include T with
         type state = S1.state * S2.state * S3.state
     and type label = S1.label option * S2.label option * S3.label option
+
   val free_product: S1.t -> S2.t -> S3.t -> t
     (** [free_product s1 s2] computes the free product of the three LTS [s1], [s2] and [s3] *)
+
   val synch_product: (S1.label option * S2.label option * S3.label option -> bool) -> S1.t -> S2.t -> S3.t -> t
-    (** [synch_product p s1 s2 s3] computes the synchronized product of the three LTS [s1], [s2] and [s3] using the synchronisation 
-        predicate [p]. *)
+  (** [synch_product p s1 s2 s3] computes the synchronized product of the three LTS [s1], [s2] and
+     [s3] using the synchronisation predicate [p]. *)
+
   val synchronized_product: (S1.label option * S2.label option * S3.label option) list -> S1.t -> S2.t -> S3.t -> t
     (** [synchronized_product sync s1 s2] computes the synchronized product of the three LTS [s1], [s2] and [s3] using the
         synchronization set [sync] *)
+
   val asynchronous_product: S1.t -> S2.t -> S3.t ->t
     (** [asynchronous_product s1 s2] computes the asynchronous product of the three LTS [s1], [s2] and [s3] *)
+
   val synchronous_product: S1.t -> S2.t -> S3.t ->t
     (** [synchronous_product p s1 s2] computes the synchronous product of the three LTS [s1], [s2] and [s3] *)
 end
@@ -305,16 +333,21 @@ sig
         type state = S.state
     and type label = S.label
     and module Repr = S.Repr
+
   val free_product: t -> t -> t
     (** [free_product s1 s2] computes the free product of the two LTS [s1] and [s2] *)
+
   val synch_product: (label option * label option -> bool) -> t -> t -> t
     (** [synch_product p s1 s2] computes the synchronized product of the two LTS [s1] and [s2] using the synchronisation
         predicate [p]. *)
+
   val synchronized_product: (label option * label option) list -> t -> t -> t
     (** [synchronized_product sync s1 s2] computes the synchronized product of the two LTS [s1] and [s2]using the
         synchronization set [sync] *)
+
   val asynchronous_product: t -> t -> t
     (** [asynchronous_product s1 s2] computes the asynchronous product of the two LTS [s1] and [s2]*)
+
   val synchronous_product: t -> t -> t
     (** [synchronous_product p s1 s2] computes the synchronous product of the two LTS [s1] and [s2]*)
 end
@@ -334,16 +367,21 @@ sig
         type state = S.state
     and type label = S.label
     and module Repr = S.Repr
+
   val free_product: t -> t -> t -> t
     (** [free_product s1 s2 s3] computes the free product of the three LTS [s1], [s2] and [s3] *)
+
   val synch_product: (label option * label option * label option -> bool) -> t -> t -> t -> t
-    (** [synch_product p s1 s2 s3] computes the synchronized product of the three LTS [s1], [s2] and [s3] using the synchronisation
-        predicate [p]. *)
+  (** [synch_product p s1 s2 s3] computes the synchronized product of the three LTS [s1], [s2] and
+     [s3] using the synchronisation predicate [p]. *)
+
   val synchronized_product: (label option * label option * label option) list -> t -> t -> t -> t
     (** [synchronized_product sync s1 s2] computes the synchronized product of the three LTS [s1], [s2] and [s3] using the
         synchronization set [sync] *)
+
   val asynchronous_product: t -> t -> t ->t
     (** [asynchronous_product s1 s2] computes the asynchronous product of the three LTS [s1], [s2] and [s3] *)
+
   val synchronous_product: t -> t -> t ->t
     (** [synchronous_product p s1 s2] computes the synchronous product of the three LTS [s1], [s2] and [s3] *)
 end

@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Extension to the {!Stdlib.List} module *)
+(** {2 Extension to the [Stdlib.List] module} *)
 
 val fold_lefti : ('a -> int -> 'b -> 'a) -> 'a -> 'b list -> 'a
   (** [fold_lefti f a [b1; ...; bn]] is [f (... (f 1 (f 0 a b1) b2) ...) bn]. *)

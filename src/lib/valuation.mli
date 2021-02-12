@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** A [valuation] is a collection of [(name,value)] associations *)
+(** {2 A [valuation] is a collection of [(name,value)] associations} *)
 
 open Utils
    

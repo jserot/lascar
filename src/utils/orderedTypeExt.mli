@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Extension to the {!Stdlib.Set.OrderedType} module *)
+(** {2 Extension to the [Stdlib.Set.OrderedType] module} *)
 
 module type T = sig
   include Set.OrderedType

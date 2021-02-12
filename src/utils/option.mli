@@ -9,7 +9,7 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** Several functions operating on values of type ['a option] *)
+(** {2 Several functions operating on values of type ['a option]} *)
 
 val map: ('a -> 'b) -> 'a option -> 'b option
     (** [apply f v] is [Some (f x)] if [v] is [Some x], [None] if [v] is [None] *)
