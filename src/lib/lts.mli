@@ -157,7 +157,7 @@ module type T = sig
   (** {1 Global iterators} *)
 
   val iter_states: (state -> unit) -> t -> unit
-    (** [iter_states f s] applies function [f] to all states (with associated attribute) of [s] *)
+    (** [iter_states f s] applies function [f] to all states of [s] *)
 
   val fold_states: (state -> 'a -> 'a) -> t -> 'a -> 'a
     (** [fold_states f s z] computes [f xN ... (f x2 (f x1 z))...], where [x1], ..., [xN] are all the states of [s] *)
@@ -193,8 +193,20 @@ module type T = sig
 
   (** {1 Global transformations} *)
 
+  val map_state: (state -> state) -> t -> t
+      (** [map_state f s] returns the LTS obtained by replacing each state [q] by [f q] in [s].
+          Result is undefined if [f] is not injective. *)
+
   val map_label: (label -> label) -> t -> t
       (** [map_states f s] returns the LTS obtained by replacing each transition label [l] by [f l] in [s]. *)
+
+  val map_transition: (state option * label * state -> state option * label * state) -> t -> t
+      (** [map_transition f s] returns the LTS obtained by replacing each transition [t] by [f t] in [s].
+          Each non-initial transition [qs,l,qd] is replaced by [qs',l',qd'], where [(Some qs',l',qd') = f (Some qs,l,qd)].
+          If present, the initial transition [l,qi] is replaced by [l',qi'] where [(None,l',qi') = f (None, l, qi)].
+          Warning: updating the source and/or destination state in a transition may result in a incoherent
+          LTS description. This function should essentially be viewed as a variant of [map_label] in which the
+          transformation function [f] can take the source and destination state into account. *)
 
   val clean: t -> t
       (** Removes unreachable nodes and associated transitions *)

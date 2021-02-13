@@ -216,13 +216,27 @@ module type T = sig
 
   val map_state: (state -> state) -> t -> t
       (** [map_state f s] returns the LTSA obtained by replacing each state [q] by [f q] in [s].
+          State attributes are left unchanged.
           Result is undefined if [f] is not injective. *)
 
   val map_attr: (attr -> attr) -> t -> t
       (** [map_attr f s] returns the LTSA obtained by replacing each state attribute [a] by [f a] in [s]. *)
 
+  val map_state_attr: (state * attr -> state * attr) -> t -> t
+      (** [map_state_attr f s] returns the LTSA obtained by replacing each pair of state and associated
+          attributes [(q,a)] by [f (q,a)] in [s]. As for [map_state], the result is undefined if [f] is not injective
+          its first argument. *)
+
   val map_label: (label -> label) -> t -> t
       (** [map_label f s] returns the LTSA obtained by replacing each transition label [l] by [f l] in [s]. *)
+
+  val map_transition: (state option * label * state -> state option * label * state) -> t -> t
+      (** [map_transition f s] returns the LTSA obtained by replacing each transition [t] by [f t] in [s].
+          Each non-initial transition [qs,l,qd] is replaced by [qs',l',qd'], where [(Some qs',l',qd') = f (Some qs,l,qd)].
+          If present, the initial transition [l,qi] is replaced by [l',qi'] where [(None,l',qi') = f (None, l, qi)].
+          Warning: updating the source and/or destination state in a transition may result in a incoherent
+          LTS description. This function should essentially be viewed as a variant of [map_label] in which the
+          transformation function [f] can take the source and destination state into account. *)
 
   val clean: t -> t
       (** Removes unreachable nodes and associated transitions *)

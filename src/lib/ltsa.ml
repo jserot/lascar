@@ -99,7 +99,9 @@ module type T = sig
 
   val map_state: (state -> state) -> t -> t
   val map_attr: (attr -> attr) -> t -> t
+  val map_state_attr: (state * attr -> state * attr) -> t -> t
   val map_label: (label -> label) -> t -> t
+  val map_transition: (state option * label * state -> state option * label * state) -> t -> t
   val clean: t -> t
   val unwind: int -> t -> Tree.t list
 
@@ -259,9 +261,28 @@ struct
   let map_attr f s =
     { s with attrs = H.map f s.attrs }
 
+  let map_state_attr f s =
+    let fs q = let q', _ = f (q, H.find q s.attrs) in q' in
+    { states = Q.map fs s.states;
+      attrs = H.fold (fun q a acc -> let q',a' = f (q,a) in H.add q' a' acc) s.attrs H.empty;
+      rel = D.map (function (q1,l,q2) -> fs q1, l, fs q2) s.rel;
+      irel = H.fold (fun q l acc -> H.add (fs q) l acc) s.irel H.empty }
+
   let map_label f s =
     { s with rel = D.map (function (q1,l,q2) -> q1, f l, q2) s.rel;
              irel = H.map f s.irel }
+      
+  let map_transition f s =
+    let ft (qs,l,qd) =
+      match f (Some qs, l, qd) with
+      | Some qs', l', qd' -> qs', l', qd' 
+      | _, _, _ -> failwith "Ltsa.map_transition" (* should not happen *) in
+    let fi (q,l) =
+      match f (None, l, q) with
+      | None, l', q' -> q', l' 
+      | _, _, _ -> failwith "Ltsa.map_transition" (* should not happen *) in
+    { s with rel = D.map ft s.rel;
+             irel = H.fold (fun q l acc -> let q', l' = fi (q,l) in H.add q' l' acc) s.irel H.empty }
       
   let clean s =
     let rs = reachable_states s in

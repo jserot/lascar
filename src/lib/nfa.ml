@@ -211,7 +211,9 @@ struct
 
   let map_state f s = { s with lts = LTSA.map_state f s.lts }
   let map_attr f s = { s with lts = LTSA.map_attr f s.lts }
+  let map_state_attr f s = { s with lts = LTSA.map_state_attr f s.lts }
   let map_label f s = { s with lts = LTSA.map_label f s.lts }
+  let map_transition f s = { s with lts = LTSA.map_transition f s.lts }
                     
   let clean s =
     let lts' = LTSA.clean s.lts in

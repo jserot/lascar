@@ -157,7 +157,9 @@ module type T = sig
 
   (** {6 Global transformations} *)
 
+  val map_state: (state -> state) -> t -> t
   val map_label: (label -> label) -> t -> t
+  val map_transition: (state option * label * state -> state option * label * state) -> t -> t
   val clean: t -> t
 
   (** {6 Output functions} *)
@@ -278,7 +280,9 @@ struct
   let succs_hat s q = Repr.succs_hat s q
   let preds_hat s q = Repr.preds_hat s q
 
+  let map_state = Repr.map_state
   let map_label = Repr.map_label
+  let map_transition = Repr.map_transition
   let clean = Repr.clean
 
   let is_reachable = Repr.is_reachable
