@@ -13,7 +13,7 @@
 
     A FSM is a LTS
     - with an added set of local variables
-    - for which state attributes are valuations of outputs and local variables
+    - for which state attributes can include output valuations 
     - for which transition labels are pairs of conditions and actions on inputs, outputs and local variables.
 
    *)
@@ -71,7 +71,7 @@ module type T = sig
            (** [create ivs ovs lvs qs q0 ts] builds an FSM structure from
               - a list of input, output and local variables (each being described by a name and a domain)
               - a list of input and output identifiers
-              - a list [qs] of states, with possible valuations of output and local variables
+              - a list [qs] of states, with possible valuations of outputs
               - an initial state [q0] with the list of initial actions
               - a list of transitions [ts], where each transition is given as [(src_state,(conditions,actions),dst_state)]
 
@@ -87,7 +87,7 @@ module type T = sig
 
   val add_state: state * Valuation.Int.t -> t -> t
       (** [add_state (s,v) m] returns the FSM obtained by adding state [s], with a valuation of
-          output and local variables [v], to FSM [m] *)
+          outputs [v], to FSM [m] *)
 
   val add_transition: state * Transition.t * state -> t -> t
       (** [add_transition t m] returns the FSM obtained by adding transition [t] to FSM [m] *)

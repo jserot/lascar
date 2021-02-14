@@ -196,7 +196,13 @@ struct
 
   exception Invalid_state of state
 
-  let check_state q qs = if not (Q.mem q qs) then raise (Invalid_state q)
+ let check_state q qs =
+   if not (Q.mem q qs) then begin
+        Printf.printf "Ltsa.check_state: %s is not in: %s\n"
+          (State.to_string q)
+          (States.to_string qs);
+       raise (Invalid_state q)
+end
 
   let add_transition ((q1,l,q2) as t) s = 
     check_state q1 s.states;
