@@ -1,3 +1,5 @@
+- use ppx syntax extensions to specify transitions, etc.. in concrete syntax 
+- for FSMs, generalize the domain type of output and variable valuation
 - "classical" operations (product, union, ...) for NFAs and DFAs
 - Kripke structures
 - Buchi automata

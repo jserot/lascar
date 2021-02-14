@@ -211,7 +211,10 @@ module Fsm (F: Fsm.T) = struct
              mm
              d2v in
         FF.fold_itransitions (fun t m -> add_sub_itransitions t m) m mm in
-    let r = FF.empty ~inps:(FF.inps m) ~outps:(FF.outps m) ~lvars:(FF.vars m) |> add_states |> add_transitions |> add_itransitions in
+    let r = 
+      try FF.empty ~inps:(FF.inps m) ~outps:(FF.outps m) ~lvars:(FF.vars m) |> add_states |> add_transitions |> add_itransitions
+      with FF.M.Invalid_state q ->
+        failwith ("defactorize: invalid state: " ^ FF.string_of_state q ^ ". There's no such state in the defactorized version") in
     if clean then FF.clean r else r
 
   let defactorize ?(init=None) ?(clean=true) vars m =

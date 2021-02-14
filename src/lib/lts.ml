@@ -20,6 +20,7 @@ module type ATTR =  Ltsa.ATTR
 module type T = sig
 
   type state (** The type of state identifiers *)
+
   type label (** The type of transition labels *)
 
   module Repr: Ltsa.T with type state = state and type label = label and type attr = unit

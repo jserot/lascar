@@ -13,7 +13,8 @@
 
     A FSM is a LTS
     - with an added set of local variables
-    - for which each transition is a pair of conditions and actions on inputs, outputs and local variables.
+    - for which state attributes are valuations of outputs and local variables
+    - for which transition labels are pairs of conditions and actions on inputs, outputs and local variables.
 
    *)
 
@@ -67,7 +68,7 @@ module type T = sig
       istate:string * state ->
       trans:(state * (string*string) * state) list ->
       t
-           (** [mk ivs ovs lvs qs q0 ts] builds an FSM structure from
+           (** [create ivs ovs lvs qs q0 ts] builds an FSM structure from
               - a list of input, output and local variables (each being described by a name and a domain)
               - a list of input and output identifiers
               - a list [qs] of states, with possible valuations of output and local variables
@@ -78,7 +79,7 @@ module type T = sig
              *)
 
   val empty: inps:var_desc list -> outps:var_desc list -> lvars:var_desc list -> t
-           (** [mk ivs ovs lvs] builds an "empty" FSM structure from
+           (** [empty ivs ovs lvs] builds an "empty" FSM structure from
                 a list of input, output and local variables (each being described by a name and a domain).
                 This empty structure can then be "filled" using the {!add_state}, {!add_transition} and
                 {!add_itransition} functions. 
@@ -86,7 +87,7 @@ module type T = sig
 
   val add_state: state * Valuation.Int.t -> t -> t
       (** [add_state (s,v) m] returns the FSM obtained by adding state [s], with a valuation of
-          local variables [v], to FSM [m] *)
+          output and local variables [v], to FSM [m] *)
 
   val add_transition: state * Transition.t * state -> t -> t
       (** [add_transition t m] returns the FSM obtained by adding transition [t] to FSM [m] *)

@@ -28,7 +28,9 @@ end
 module type T = sig
 
   type state (** The type of state identifiers *)
+
   type label (** The type of transition labels *)
+
   type attr  (** The type of state attributes *)
 
   type transition = state * label * state
