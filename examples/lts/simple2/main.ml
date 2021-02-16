@@ -5,7 +5,7 @@ open Lascar
 
 module State = struct
   type t = S0 | S1 | S2
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
   let to_string = function
       S0 -> "S0"
     | S1 -> "S1"

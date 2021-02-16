@@ -177,7 +177,7 @@ module Fsm (F: Fsm.T) = struct
       let test_conds u = List.for_all (test_cond u) conds in
       let test_act u u' act = match act with
         | Fsm.Action.Assign (v,exp) when v=var ->
-           Fsm_expr.eval [var, Some u] exp = u'  (* TO FIX : enrich eval env here ? *)
+           Fsm.Expr.eval [var, Some u] exp = u'  (* TO FIX : enrich eval env here ? *)
         | _ -> test_conds u' in
       let test_acts u u' =
           match List.find_opt (function Fsm.Action.Assign (v,_) when v=var -> true | _ -> false) acts with

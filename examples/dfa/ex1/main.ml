@@ -40,7 +40,7 @@ let _ = A.dot_output "a1b"  a1b
 let trans a q s =
   try A.trans a q s
   with A.Stuck (q,s) ->
-    Printf.printf "** a1: no transition from %s with %s\n" (Builtins.Int.to_string q) (ListExt.to_string Misc.id "," s);
+    Printf.printf "** a1: no transition from %s with %s\n" (Builtins.Int.to_string q) (ListExt.to_string Fun.id "," s);
     0
 
 let _  = trans a1 0 "a"

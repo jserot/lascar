@@ -10,51 +10,45 @@
 (**********************************************************************)
 
 open Utils
-   
+
+module Expr = Fsm_expr.Int 
+
 module type CONDITION = sig
-  type t =
-    | Test of Fsm_expr.ident * string * Fsm_expr.t (* var, op, expr *)
+  type t = 
+    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
   val to_string: t -> string
   val of_string: string -> t
   val list_of_string: string -> t list
-  val eval: Fsm_expr.env -> t -> bool
+  val eval: Expr.env -> t -> bool
 end
-
+   
 module Condition = struct
   type t = 
-    | Test of Fsm_expr.ident * string * Fsm_expr.t (* var, op, expr *)
+    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
   let to_string c = match c with
-  | Test (v,op,e) -> v ^ op ^ Fsm_expr.to_string e
-  let test_ops = [
-    "=", (=);
-    "!=", (<>);
-    "<", (<);
-    ">", (>);
-    "<=", (<=);
-    ">=", (>=)
-  ]
+  | Test (v,op,e) -> v ^ op ^ Expr.to_string e
   exception Unknown_op of string
   let p_cond s = 
     let open Genlex in
     match Stream.next s with
     | Ident v ->
        begin match Stream.next s with
-       | Kwd op when List.mem_assoc op test_ops -> let e = Fsm_expr.parse s in Test (v, op, e)
+       | Kwd op when List.mem_assoc op Expr.test_ops -> let e = Expr.parse s in Test (v, op, e)
        | _ -> raise Stream.Failure 
        end
     | _ -> raise Stream.Failure
-  let of_string s = p_cond (Fsm_expr.lexer s)
-  let list_of_string s = ListExt.parse ";" p_cond (Fsm_expr.lexer s)
+  let of_string s = p_cond (Expr.lexer s)                   (* BNF : <cond>   ::= ID <test_op> <exp> *)
+  let list_of_string s = ListExt.parse ";" p_cond (Expr.lexer s)
   let lookup op =
-    try List.assoc op test_ops
+    try List.assoc op Expr.test_ops
     with Not_found -> raise (Unknown_op op)
   let eval env texp = match texp with
-  | Test (id, op, exp) -> (lookup op) (Fsm_expr.lookup env id) (Fsm_expr.eval env exp)
+  | Test (id, op, exp) -> (lookup op) (Expr.lookup env id) (Expr.eval env exp)
 end
 
 module type ACTION = sig
   type t =
-  | Assign of Fsm_expr.ident * Fsm_expr.t        (* variable, value *)
+  | Assign of Expr.ident * Expr.t        (* variable, value *)
   val to_string: t -> string
   val of_string: string -> t                   (* BNF : <act>   ::= ID ':=' <exp> *)
   val list_of_string: string -> t list
@@ -62,17 +56,17 @@ end
 
 module Action = struct
   type t = 
-    | Assign of Fsm_expr.ident * Fsm_expr.t        (* variable, value *)
+    | Assign of Expr.ident * Expr.t        (* variable, value *)
   let to_string a = match a with
-    | Assign (id, expr) -> id ^ ":=" ^ Fsm_expr.to_string expr
+    | Assign (id, expr) -> id ^ ":=" ^ Expr.to_string expr
   let rec p_act s = match Stream.next s with
     | Genlex.Ident e1 -> p_act1 e1 s
     | _ -> raise Stream.Failure
   and p_act1 e1 s = match Stream.next s with
-    | Genlex.Kwd ":=" -> let e2 = Fsm_expr.parse s in Assign (e1, e2)
+    | Genlex.Kwd ":=" -> let e2 = Expr.parse s in Assign (e1, e2)
     | _ -> raise Stream.Failure
-  let of_string s = p_act (Fsm_expr.lexer s)
-  let list_of_string s = ListExt.parse ";" p_act (Fsm_expr.lexer s)
+  let of_string s = p_act (Expr.lexer s)
+  let list_of_string s = ListExt.parse ";" p_act (Expr.lexer s)
 end
 
 module type TRANSITION = sig
@@ -103,9 +97,13 @@ module type T = sig
 
   type state
 
-  type var_name = Valuation.Int.name
-  type var_domain = int list
-                  
+  module Val : Valuation.T with type value = int (** for outputs and local variables *)
+
+  type value = Val.value 
+
+  type var_name = Val.name
+  type var_domain = value list
+  
   type var_desc = var_name * var_domain
 
   include Ltsa.T with type state := state and type label := Transition.t and type attr := Valuation.Int.t
@@ -177,8 +175,11 @@ module Make (S: Ltsa.STATE) = struct
   type transition = M.transition
   type itransition = M.itransition
 
-  type var_name = Valuation.Int.name
-  type var_domain = int list
+  module Val = Valuation.Int
+
+  type value = Val.value
+  type var_name = Val.name
+  type var_domain = value list
                   
   type var_desc = var_name * var_domain
 
@@ -277,7 +278,7 @@ module Make (S: Ltsa.STATE) = struct
   let is_reachable s q = M.is_reachable s.lts q
 
   let var_node a =
-      let string_of_var pfx (n,d) = pfx ^ n ^ " : {" ^ ListExt.to_string string_of_int "," d ^ "}" in
+      let string_of_var pfx (n,d) = pfx ^ n ^ " : {" ^ ListExt.to_string Val.string_of_value "," d ^ "}" in
       let txt = StringExt.concat_sep "\\n"
         [ListExt.to_string (string_of_var "In: ") "\\n" a.ivs;
          ListExt.to_string (string_of_var "Out: ") "\\n" a.ovs;

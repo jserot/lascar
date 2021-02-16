@@ -19,24 +19,22 @@ open Utils
 
    *)
 
-module BVal : Valuation.T with type value = bool
-
 module type T = sig 
 
   type state
 
-  include Ltsa.T with type label := BVal.t and type state := state and type attr := BVal.t
+  include Ltsa.T with type label := Valuation.Bool.t and type state := state and type attr := Valuation.Bool.t
 
-  module M : Ltsa.T with type state = state and type label = BVal.t and type attr = BVal.t
+  module M : Ltsa.T with type state = state and type label = Valuation.Bool.t and type attr = Valuation.Bool.t
 
   exception Invalid_transition of transition
 
   val create: 
-      inps:BVal.name list ->
-      outps:BVal.name list ->
-      states:(state * BVal.t) list ->
-      istate:state ->
-      trans:(state * BVal.t * state) list ->
+      inps: Valuation.Bool.name list ->
+      outps: Valuation.Bool.name list ->
+      states: (state * Valuation.Bool.t) list ->
+      istate: state ->
+      trans: (state * Valuation.Bool.t * state) list ->
       t
            (** [mk ivs ovs ss is ts] builds an Moore structure from
               - a list of input and output variables (each being described by a name and a domain)
@@ -46,10 +44,10 @@ module type T = sig
 
               Raises [Invalid_valuation] when appropriate (TBD) *)
 
-  val empty: inps:BVal.name list -> outps:BVal.name list -> t
+  val empty: inps:Valuation.Bool.name list -> outps:Valuation.Bool.name list -> t
 
-  val add_state: state * BVal.t -> t -> t
-  val add_transition: state * BVal.t * state -> t -> t
+  val add_state: state * Valuation.Bool.t -> t -> t
+  val add_transition: state * Valuation.Bool.t * state -> t -> t
   val add_itransition: state -> t -> t
 
   val lts_of: t -> M.t
@@ -57,15 +55,15 @@ module type T = sig
 
   val istate: t -> state option
       (** Returns the initial state, when specified *)
-  val inps: t -> BVal.name list
-      (** Returns the list of inputs variables, with corresponding domains *)
-  val outps: t -> BVal.name list
-      (** Returns the list of outputs variables, with corresponding domains *)
+  val inps: t -> Valuation.Bool.name list
+      (** Returns the list of inputs variables *)
+  val outps: t -> Valuation.Bool.name list
+      (** Returns the list of outputs variables *)
 
-  val trans: t -> state -> BVal.t -> States.t
+  val trans: t -> state -> Valuation.Bool.t -> States.t
       (** [trans a q s] returns the set of states [q'] such that [(q,s,q')]
          belongs to the transition relation of [a] *)
-  val trans': t -> state -> BVal.t -> state list
+  val trans': t -> state -> Valuation.Bool.t -> state list
       (** [trans'] is like [trans] but returns a list *)
 
   val unwind: int -> t -> M.Tree.t

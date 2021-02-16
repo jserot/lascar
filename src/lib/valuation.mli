@@ -50,6 +50,8 @@ module type T = sig
     val mem: name -> t -> bool
 
     val assoc: name -> t -> value
+
+    val string_of_value: value -> string
 end
 
 (** Functor building an implementation of the Valuation structure given an implementation of values *)

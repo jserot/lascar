@@ -17,7 +17,7 @@ module F = Fsm.Make(S)
 let mk n = F.create
   ~inps:[]
   ~outps:[]
-  ~vars:["c", ListExt.range Misc.id 0 (n-1)]
+  ~vars:["c", ListExt.range Fun.id 0 (n-1)]
   ~states:[E,[]]
   ~istate:("c:=0", E)
   ~trans:[

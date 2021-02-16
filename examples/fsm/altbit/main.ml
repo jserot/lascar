@@ -68,6 +68,6 @@ let _ = F2.dot_output "m2"  m2
       
 module FF2 = Conv.Fsm(F2)
 
-let m3 = FF2.defactorize ~init:(Some ("",(Init,["last",0]))) ["last"] m2
+let m3 = FF2.defactorize ~init:(Some ("s:=0",(Init,["last",0]))) ["last"] m2
 
 let _ = FF2.dot_output ~options:[Dot.RankdirUD] "m3" m3

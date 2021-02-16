@@ -11,46 +11,38 @@
 
 open Utils
      
-module BVal =
-  Valuation.Make(
-      struct
-        type t = bool
-        let compare = Stdlib.compare
-        let to_string = function true -> "1" | false -> "0"
-      end)
-
 module type T = sig 
 
   type state
 
-  include Ltsa.T with type label := BVal.t and type state := state and type attr := BVal.t
+  include Ltsa.T with type label := Valuation.Bool.t and type state := state and type attr := Valuation.Bool.t
 
-  module M : Ltsa.T with type state = state and type label = BVal.t and type attr = BVal.t
+  module M : Ltsa.T with type state = state and type label = Valuation.Bool.t and type attr = Valuation.Bool.t
 
   exception Invalid_transition of transition
 
   val create: 
-      inps:BVal.name list ->
-      outps:BVal.name list ->
-      states:(state * BVal.t) list ->
+      inps:Valuation.Bool.name list ->
+      outps:Valuation.Bool.name list ->
+      states:(state * Valuation.Bool.t) list ->
       istate:state ->
-      trans:(state * BVal.t * state) list ->
+      trans:(state * Valuation.Bool.t * state) list ->
       t
 
-  val empty: inps:BVal.name list -> outps:BVal.name list -> t
+  val empty: inps:Valuation.Bool.name list -> outps:Valuation.Bool.name list -> t
 
-  val add_state: state * BVal.t -> t -> t
-  val add_transition: state * BVal.t * state -> t -> t
+  val add_state: state * Valuation.Bool.t -> t -> t
+  val add_transition: state * Valuation.Bool.t * state -> t -> t
   val add_itransition: state -> t -> t
 
   val lts_of: t -> M.t
 
   val istate: t -> state option
-  val inps: t -> BVal.name list
-  val outps: t -> BVal.name list
+  val inps: t -> Valuation.Bool.name list
+  val outps: t -> Valuation.Bool.name list
 
-  val trans: t -> state -> BVal.t -> States.t
-  val trans': t -> state -> BVal.t -> state list
+  val trans: t -> state -> Valuation.Bool.t -> States.t
+  val trans': t -> state -> Valuation.Bool.t -> state list
 
   val unwind: int -> t -> M.Tree.t
 
@@ -70,25 +62,25 @@ end
 
 module Make (S: Ltsa.STATE) = struct 
 
-  module M = Ltsa.Make (S) (BVal) (BVal)
+  module M = Ltsa.Make (S) (Valuation.Bool) (Valuation.Bool)
 
   module Tree =
     Tree.Make(
         struct
           type node = S.t
-          type edge = BVal.t
+          type edge = Valuation.Bool.t
           let string_of_node = S.to_string 
-          let string_of_edge = BVal.to_string 
+          let string_of_edge = Valuation.Bool.to_string 
         end)
 
   type state = M.state
   type label = M.label
-  type attr = BVal.t
+  type attr = Valuation.Bool.t
 
   module State = S
-  module Label = BVal
+  module Label = Valuation.Bool
   module States = M.States
-  module Attr = BVal
+  module Attr = Valuation.Bool
   module Attrs = Map.Make(struct type t = state let compare = compare end)
   
   type transition = M.transition
@@ -96,8 +88,8 @@ module Make (S: Ltsa.STATE) = struct
 
   type t = {
       lts: M.t;                                    (* Internal representation, as a LTS *)
-      ivs: BVal.name list;                          (* Input variables *)
-      ovs: BVal.name list;                          (* Output variables *)
+      ivs: Valuation.Bool.name list;                          (* Input variables *)
+      ovs: Valuation.Bool.name list;                          (* Output variables *)
     }
 
   let lts_of s = s.lts
@@ -120,14 +112,14 @@ module Make (S: Ltsa.STATE) = struct
   exception Invalid_transition of transition
 
   let add_state (q,ov) s =
-    BVal.check s.ovs ov;
+    Valuation.Bool.check s.ovs ov;
     { s with lts = M.add_state (q, ov) s.lts }
 
   let remove_state q s = 
     { s with lts = M.remove_state q s.lts }
 
   let add_transition (q,iv,q') s =
-    BVal.check s.ivs iv;
+    Valuation.Bool.check s.ivs iv;
     { s with lts = M.add_transition (q, iv, q') s.lts }
 
   let add_itransition q s =
@@ -190,7 +182,7 @@ module Make (S: Ltsa.STATE) = struct
 
   let trans a q s =
     M.fold_transitions
-      (fun (q',s',q'') acc -> if S.compare q' q = 0 && BVal.compare s' s = 0 then States.add q'' acc else acc)
+      (fun (q',s',q'') acc -> if S.compare q' q = 0 && Valuation.Bool.compare s' s = 0 then States.add q'' acc else acc)
       a.lts
       States.empty
 

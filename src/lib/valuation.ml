@@ -27,6 +27,7 @@ module type T = sig
     val remove: name -> t -> t
     val mem: name -> t -> bool
     val assoc: name -> t -> value
+    val string_of_value: value -> string
 end
 
 module Make (V: VALUE) =
@@ -66,6 +67,7 @@ struct
     let module S = Set.Make (struct type t = string let compare = Stdlib.compare end) in
     if not (S.equal (S.of_list names) (S.of_list (names_of v))) then raise (Invalid_valuation v)
  
+  let string_of_value v = V.to_string v
 end
 
 module Bool =

@@ -16,4 +16,5 @@ HOWTO
 CHANGELOG.html
 README.html
 examples/*/*/*.dot
+examples/*/*/*.tex
 src/utils/_doc/

@@ -9,35 +9,59 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** {2 Simple (int) expressions for FSMs} *)
+(** {2 Simple expressions for FSMs} *)
 
-type ident = string 
+(** The signature of values that may appear in FSM expressions *)
+module type VALUE = sig
+  type t
+  val binary_ops: (string * ((t -> t -> t) * int)) list (** name, (fun, infix level); ex: +, -, *, ... *)
+  val unary_ops: (char * (t -> t)) list (** name, fun *)
+  val of_int: int -> t
+  val of_string: string -> t
+  val to_string: t -> string
+end
+  
+(** Output signature of the functor {!Fsm_expr.Make}. *)
+module type T = sig
+
+  type ident = string 
   (** The type of identifiers occuring in expressions *)
 
-type value = int 
+  type value
   (** The type of expression values *)
 
-(** The type of expressions *)
-type t = 
-  EConst of value            (** Constants *)   
-| EVar of ident              (** Input, output or local variable *)
-| EBinop of string * t * t   (** Binary operation (["+"], ["-"], ["*"] or ["/"]) *)
+  (** The type of expressions *)
+  type t = 
+    EConst of value            (** Constants *)   
+  | EVar of ident              (** Input, output or local variable *)
+  | EBinop of string * t * t   (** Binary operation *)
+  | EUnop of char * t        (** Unary operation  *)
 
-type env = (ident * value option) list
+  type env = (ident * value option) list
+           
+  exception Unknown of ident
+  exception Unknown_op of string
+  exception Unbound of ident
+  exception Illegal_expr
 
-  
-exception Unknown of ident
-exception Unbound of ident
-exception Illegal_expr
+  val test_ops: (string * (value -> value -> bool)) list (** name, fun *)
 
-val to_string: t -> string
+  val to_string: t -> string
 
-val of_string: string -> t
+  val of_string: string -> t
 
-val lookup: env -> ident -> value
+  val lookup: env -> ident -> value
 
-val eval: env -> t -> value
+  val eval: env -> t -> value
 
-val lexer: string -> Genlex.token Stream.t
-val parse: Genlex.token Stream.t -> t 
+  val lexer: string -> Genlex.token Stream.t
+  val parse: Genlex.token Stream.t -> t 
 
+end
+
+(** Functor building an implementation of the Fsm_expr structure given an implementation of values *)
+module Make (V: VALUE) : T with type value = V.t
+
+(** Some predefined instances *)
+module Int : T with type value = int
+module Bool : T with type value = bool

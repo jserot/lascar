@@ -379,7 +379,8 @@ end
     let fname = match fname with "" -> name ^ ".dot" | _ -> fname in
     let oc = open_out fname in
     dot_output_oc
-      name oc ~options:options ~marked_states:marked_states ~extra_nodes:extra_nodes ~implicit_transitions:implicit_transitions m
+      name oc ~options:options ~marked_states:marked_states ~extra_nodes:extra_nodes ~implicit_transitions:implicit_transitions m;
+    close_out oc
 
 
   let dot_output_execs name ?(fname="") ?(options=[]) depth s = 

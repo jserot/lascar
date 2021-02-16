@@ -13,23 +13,25 @@
 
     A FSM is a LTS
     - with an added set of local variables
-    - for which state attributes can include output valuations 
+    - for which state attributes may include output valuations 
     - for which transition labels are pairs of conditions and actions on inputs, outputs and local variables.
 
    *)
 
+module Expr: Fsm_expr.T with type value=int
+
 module type CONDITION = sig
   type t = 
-    | Test of Fsm_expr.ident * string * Fsm_expr.t (* var, op, expr *)
+    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
   val to_string: t -> string
   val of_string: string -> t
   val list_of_string: string -> t list
-  val eval: Fsm_expr.env -> t -> bool
+  val eval: Expr.env -> t -> bool
 end
 
 module type ACTION = sig
   type t = 
-  | Assign of Fsm_expr.ident * Fsm_expr.t          (* var, value *)
+  | Assign of Expr.ident * Expr.t          (* var, value *)
   val to_string: t -> string
   val of_string: string -> t
   val list_of_string: string -> t list
@@ -51,20 +53,24 @@ module type T = sig
 
   type state
 
-  type var_name = Valuation.Int.name
-  type var_domain = int list
+  module Val : Valuation.T with type value = int (** for outputs and local variables *)
+
+  type value = Val.value 
+
+  type var_name = Val.name
+  type var_domain = value list
                   
   type var_desc = var_name * var_domain
 
-  include Ltsa.T with type state := state and type label := Transition.t and type attr := Valuation.Int.t
+  include Ltsa.T with type state := state and type label := Transition.t and type attr := Val.t
 
-  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Valuation.Int.t
+  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Val.t
 
   val create: 
       inps:var_desc list ->
       outps:var_desc list ->
       vars:var_desc list ->
-      states:(state * Valuation.Int.t) list ->
+      states:(state * Val.t) list ->
       istate:string * state ->
       trans:(state * (string*string) * state) list ->
       t
@@ -85,7 +91,7 @@ module type T = sig
                 {!add_itransition} functions. 
              *)
 
-  val add_state: state * Valuation.Int.t -> t -> t
+  val add_state: state * Val.t -> t -> t
       (** [add_state (s,v) m] returns the FSM obtained by adding state [s], with a valuation of
           outputs [v], to FSM [m] *)
 

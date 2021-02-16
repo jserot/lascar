@@ -19,7 +19,7 @@ module F1 = Fsm.Make(S1)
 let mk1 n = F1.create
   ~inps:[]
   ~outps:[]
-  ~vars:["c", ListExt.range Misc.id 0 (n-1)]
+  ~vars:["c", ListExt.range Fun.id 0 (n-1)]
   ~states:[Inc,[];Dec,[]]
   ~istate:("c:=0", Inc)
   ~trans:[
@@ -33,7 +33,7 @@ let m1 = mk1 4
        
 let _ = F1.dot_output "m1"  m1
 
-module FF1 = Conv.Fsm(F1);;
+module FF1 = Conv.Fsm(F1)
 
 (* By defactorizing [m1] wrt. the [c] variable, we get the classical, variable-less automata *)
 
@@ -60,7 +60,7 @@ let mk2 n = F2.create
   ~outps:[]
   ~states:[E,[]]      
   ~vars:["dir", [0;1];  (* dir=0 => inc; dir=1 => dec *)
-         "c", ListExt.range Misc.id 0 (n-1)] 
+         "c", ListExt.range Fun.id 0 (n-1)] 
   ~istate:("c:=0;dir:=0", E)
   ~trans:[
     E, ("dir=0;c<"^string_of_int (n-1),"c:=c+1"), E;
