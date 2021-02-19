@@ -14,6 +14,6 @@
   (description "A library for manipulating Labeled Transition Systems in OCaml")
   (depends
     (dune (>= 1.11))
-    (ocaml (>= 4.08))))
+    (ocaml (>= 4.10))))
 
 (generate_opam_files true)

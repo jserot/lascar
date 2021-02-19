@@ -1,0 +1,6 @@
+(executable
+ (name lascar_top)
+ (libraries  compiler-libs.toplevel lascar)
+ (link_flags (-linkall))
+ (modes byte))
+

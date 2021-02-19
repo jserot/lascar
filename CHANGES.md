@@ -8,6 +8,10 @@
       states (see for ex `examples/fsm/gensig2`)
     * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules (now parametrized on
       the type of values)
+    * `make` now also builds a custom toplevel (`lascar_top`) embedding the `utils` and `lascar`
+      libraries. The examples provided in `examples/xx/yy` can be executed interactively with this
+      toplevel. For this, each example directory has a link to an `.ocamlinit` file telling where to
+      find the corresponding `.cmi` files.
 
 ## 0.6.0 (Sep, 16, 2019)
     * minor rewritings for ocaml >= 4.08
