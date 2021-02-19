@@ -18,3 +18,4 @@ README.html
 examples/*/*/*.dot
 examples/*/*/*.tex
 src/utils/_doc/
+lascar.opam
