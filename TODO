@@ -1,6 +1,5 @@
 - build a custom toplevel
 - add a .ocamlinit file in all examples subdirs to allow exec under toplevel
-- for FSMs, generalize the domain type of output and variable valuation
 - use ppx syntax extensions to generate S.to_string fn
 - use ppx syntax extensions to specify transitions, etc.. in concrete syntax 
 - "classical" operations (product, union, ...) for NFAs and DFAs

@@ -11,17 +11,6 @@
 
 (** {2 Simple expressions for FSMs} *)
 
-(** The signature of values that may appear in FSM expressions *)
-module type VALUE = sig
-  type t
-  val binary_ops: (string * ((t -> t -> t) * int)) list (** name, (fun, infix level); ex: +, -, *, ... *)
-  val unary_ops: (char * (t -> t)) list (** name, fun *)
-  val of_int: int -> t
-  val of_string: string -> t
-  val to_string: t -> string
-end
-  
-(** Output signature of the functor {!Fsm_expr.Make}. *)
 module type T = sig
 
   type ident = string 
@@ -60,8 +49,11 @@ module type T = sig
 end
 
 (** Functor building an implementation of the Fsm_expr structure given an implementation of values *)
-module Make (V: VALUE) : T with type value = V.t
+module Make (V: Fsm_value.T) : T with type value = V.t
 
-(** Some predefined instances *)
-module Int : T with type value = int
-module Bool : T with type value = bool
+(** Functor for converting a FSM expression, with a given implementation of values
+   into another one with a different implementations *)
+module Trans (E1: T) (E2: T) :
+sig
+  val map: (E1.value -> E2.value) -> E1.t -> E2.t
+end

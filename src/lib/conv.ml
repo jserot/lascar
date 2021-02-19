@@ -135,52 +135,44 @@ end
 module Fsm (F: Fsm.T) = struct
 
   module S = struct
-    type t = F.state * Valuation.Int.t
+    type t = F.state * F.Valuation.t
     (* In the transformed FSM, states identifiers are paired with a valuation of the defactorized variables *)
     let compare = compare
     let to_string (q,vs) =
-      F.string_of_state q ^ Utils.ListExt.to_string (function (n,v) -> string_of_int v) "" vs
+      F.string_of_state q ^ Utils.ListExt.to_string (function (_,v) -> F.Valuation.string_of_value v) "" vs
   end
 
-  module FF = Fsm.Make(S) 
+  module FF = Fsm.Make(S)(F.Value)
+            
+  module H = Fsm.Trans(F)(FF)
 
   include FF
 
   let copy m =
-    (* Add an (empty) valuation to each state of [m] *)
-    let add_states mm =
-      F.fold_states (fun q ov m -> FF.add_state ((q,Valuation.Int.empty),ov) m)
-        m
-        mm in
-    let add_transitions mm =
-      F.fold_transitions
-        (fun (q,(conds,acts),q') m -> FF.add_transition ((q,Valuation.Int.empty),(conds,acts),(q',Valuation.Int.empty)) m)
-        m
-        mm in
-    let add_itransitions mm =
-      F.fold_itransitions (fun ((conds,acts),q) m -> FF.add_itransition (acts,(q,Valuation.Int.empty)) m)
-        m
-        mm in
-    FF.empty ~inps:(F.inps m) ~outps:(F.outps m) ~lvars:(F.vars m) |> add_states |> add_transitions |> add_itransitions
+    H.map  
+      (fun q -> q, FF.Valuation.empty)       (* Add an (empty) valuation to each state *)
+      (Fun.id)                               (* Same values *)
+      m
 
-  let defact ?(init=None) ?(clean=true) var m =
+   let defact ?(init=None) ?(clean=true) var m =
     let dom_v = List.assoc var (FF.vars m) in
-    let remove_cond conds = List.filter (function Fsm.Condition.Test(v,_,_) when v=var -> false | _ -> true) conds in
-    let remove_act acts = List.filter (function Fsm.Action.Assign(v,_) when v=var -> false | _ -> true) acts in
+    let remove_cond conds = List.filter (function FF.Transition.Condition.Test(v,_,_) when v=var -> false | _ -> true) conds in
+    let remove_act acts = List.filter (function FF.Transition.Action.Assign(v,_) when v=var -> false | _ -> true) acts in
     let filter_domain (conds,acts) (u,u') =
       (* Tells whether a pair of valuations [(u,u')] for variable [var] is compatible with the
-         specified transition conditions and actions *)
+       *    specified transition conditions and actions *)
+      let open FF.Transition in
       let test_cond u cond = match cond with
-        | Fsm.Condition.Test (id,op,texp) as c when id = var ->
-            Fsm.Condition.eval [var, Some u] c  (* TO FIX : enrich eval env here ? *)
+        | Condition.Test (id,op,texp) as c when id = var ->
+            Condition.eval [var, Some u] c  (* TO FIX : enrich eval env here ? *)
         | _ -> true in
       let test_conds u = List.for_all (test_cond u) conds in
       let test_act u u' act = match act with
-        | Fsm.Action.Assign (v,exp) when v=var ->
-           Fsm.Expr.eval [var, Some u] exp = u'  (* TO FIX : enrich eval env here ? *)
+        | Action.Assign (v,exp) when v=var ->
+           FF.Expr.eval [var, Some u] exp = u'  (* TO FIX : enrich eval env here ? *)
         | _ -> test_conds u' in
       let test_acts u u' =
-          match List.find_opt (function Fsm.Action.Assign (v,_) when v=var -> true | _ -> false) acts with
+          match List.find_opt (function Action.Assign (v,_) when v=var -> true | _ -> false) acts with
           | Some a -> (* If the list of actions contains an assignment to [var] then it is used to restrict the domain ... *)
              test_act u u' a
           | None -> (* ... else, the domain is restricted by the list of conditions *)
@@ -188,10 +180,10 @@ module Fsm (F: Fsm.T) = struct
       test_conds u && test_acts u u' in
     let add_states mm =
       (* Each state [(q,vv)] in [Q] gives a set of states [{(q,(vv++(v=u)) | u in domain(v)}] in Q'.
-         The state attributes are _not_ affected. *)
+       * The state attributes are _not_ affected. *)
       let add_sub_states (q,vv) attr mm =
         List.fold_left
-          (fun m u -> FF.add_state ((q, Valuation.Int.add var u vv), attr) m)
+          (fun m u -> FF.add_state ((q, FF.Valuation.add var u vv), attr) m)
           mm
           dom_v in
       FF.fold_states
@@ -205,8 +197,8 @@ module Fsm (F: Fsm.T) = struct
         let acts' = remove_act acts in
         List.fold_left
           (fun m (u,u') ->
-             let qq = q, Valuation.Int.add var u vv in
-             let qq' = q', Valuation.Int.add var u' vv' in
+             let qq = q, FF.Valuation.add var u vv in
+             let qq' = q', FF.Valuation.add var u' vv' in
              FF.add_transition (qq,(conds',acts'),qq') m)
           mm
           d2v in
@@ -220,7 +212,7 @@ module Fsm (F: Fsm.T) = struct
            let d2v = List.filter (filter_domain ([],acts)) (Utils.ListExt.cart_prod2 dom_v dom_v) in
            List.fold_left
              (fun m (_,u') -> 
-                let ov' = Valuation.Int.add var u' ov in 
+                let ov' = FF.Valuation.add var u' ov in 
                 try FF.add_itransition (remove_act acts,(q,ov')) m
                 with FF.M.Invalid_state q -> failwith ("add_itrans: q=" ^ (FF.string_of_state q)) )
              mm
@@ -228,9 +220,9 @@ module Fsm (F: Fsm.T) = struct
         FF.fold_itransitions (fun t m -> add_sub_itransitions t m) m mm in
     let r = 
       FF.empty ~inps:(FF.inps m) ~outps:(FF.outps m) ~lvars:(FF.vars m) |> add_states |> add_transitions |> add_itransitions in
-    if clean then FF.clean r else r
+    if clean then FF.clean r else r 
 
-  let defactorize ?(init=None) ?(clean=true) vars m =
+   let defactorize ?(init=None) ?(clean=true) vars m =
     let dvars = match vars with
       [] -> List.map fst (F.vars m) 
     | vs -> vs in

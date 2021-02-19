@@ -18,59 +18,32 @@
 
    *)
 
-module Expr: Fsm_expr.T with type value=int
-
-module type CONDITION = sig
-  type t = 
-    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
-  val to_string: t -> string
-  val of_string: string -> t
-  val list_of_string: string -> t list
-  val eval: Expr.env -> t -> bool
-end
-
-module type ACTION = sig
-  type t = 
-  | Assign of Expr.ident * Expr.t          (* var, value *)
-  val to_string: t -> string
-  val of_string: string -> t
-  val list_of_string: string -> t list
-end
-
-module Condition : CONDITION
-module Action : ACTION
-
-module type TRANSITION = sig
-  type t = Condition.t list * Action.t list
-  val compare: t -> t -> int
-  val to_string: t -> string
-  val of_string: string*string -> t
-end
-
-module Transition : TRANSITION
-
 module type T = sig 
 
   type state
 
-  module Val : Valuation.T with type value = int (** for outputs and local variables *)
+  module Value: Fsm_value.T
+       
+  module Expr: Fsm_expr.T with type value = Value.t
 
-  type value = Val.value 
+  module Transition: Fsm_transition.T with module Expr = Expr and type Condition.Expr.value = Value.t and type Action.Expr.value = Value.t
+       
+  module Valuation : Valuation.T with type value = Value.t (** for outputs and local variables *)
 
-  type var_name = Val.name
-  type var_domain = value list
+  type var_name = Valuation.name
+  type var_domain = Value.t list
                   
   type var_desc = var_name * var_domain
 
-  include Ltsa.T with type state := state and type label := Transition.t and type attr := Val.t
+  include Ltsa.T with type state := state and type label := Transition.t and type attr := Valuation.t
 
-  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Val.t
+  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Valuation.t
 
   val create: 
       inps:var_desc list ->
       outps:var_desc list ->
       vars:var_desc list ->
-      states:(state * Val.t) list ->
+      states:(state * Valuation.t) list ->
       istate:string * state ->
       trans:(state * (string*string) * state) list ->
       t
@@ -91,7 +64,7 @@ module type T = sig
                 {!add_itransition} functions. 
              *)
 
-  val add_state: state * Val.t -> t -> t
+  val add_state: state * Valuation.t -> t -> t
       (** [add_state (s,v) m] returns the FSM obtained by adding state [s], with a valuation of
           outputs [v], to FSM [m] *)
 
@@ -102,7 +75,7 @@ module type T = sig
       (** [add_transition] is a variant of [add_transition] for which the added transition is specified
           using concrete syntax as a pair of strings  *)
 
-  val add_itransition: Action.t list * state -> t -> t
+  val add_itransition: Transition.Action.t list * state -> t -> t
       (** [add_itransition (acts,s) m] returns the FSM obtained by adding the initial transition [(acts,s)]
           to FSM [m] *)
 
@@ -111,7 +84,7 @@ module type T = sig
           using concrete syntax as a string  *)
 
   val lts_of: t -> M.t
-      (** Return the underlying representation of the Moore Machine as a LTS *)
+      (** Return the underlying representation of the LTS as a LTSA *)
 
   val istate: t -> state option
       (** Returns the initial state, when specified *)
@@ -147,4 +120,16 @@ module type T = sig
 
 end
 
-module Make (S: Ltsa.STATE) : T with type state = S.t
+module Make (S: Ltsa.STATE) (V: Fsm_value.T) : T with type state = S.t
+                                                  and module Value = V
+                                                  and type Valuation.value = V.t
+                                                  and type Transition.Condition.Expr.value = V.t
+                                                  and type Transition.Action.Expr.value = V.t
+
+(** Functor for converting a FSM, with a given implementation of state identifiers and values
+   into another one with different respective implementations *)
+module Trans (S1: T) (S2: T) :
+sig
+  val map: (S1.state -> S2.state) -> (S1.Value.t -> S2.Value.t) -> S1.t -> S2.t
+end
+

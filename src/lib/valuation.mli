@@ -11,12 +11,9 @@
 
 (** {2 A [valuation] is a collection of [(name,value)] associations} *)
 
-open Utils
-   
-module type VALUE = OrderedTypeExt.T
+module type VALUE = Utils.OrderedTypeExt.T
 (** Values must have an ordered type and must be stringable. *)
 
-(** The output signature of the [Make] functor *)
 module type T = sig
 
     type name = string

@@ -13,7 +13,7 @@ module S =
 
 open S
 
-module F = Fsm.Make(S)
+module F = Fsm.Make(S)(Fsm_value.Int)
 
 let mk n = F.create
   ~inps:["start",[0;1]]
@@ -31,13 +31,13 @@ let m1 = mk 2
        
 let _ = F.dot_output "m1"  m1
 
-(* module FF = Conv.Fsm(F)
- * 
- * let m2 =
- *   FF.defactorize ~init:(Some ("",(Off,["k",0]))) [] m1
- * 
- * let _ = FF.dot_output ~options:[Dot.RankdirLR] "m2" m2
- * 
- * let _ = FF.dot_output_execs "m2_execs" ~options:[Dot.RankdirLR] 8 m2 *)
+module FF = Conv.Fsm(F)
+
+let m2 =
+  FF.defactorize ~init:(Some ("",(Off,["k",0]))) [] m1
+
+let _ = FF.dot_output ~options:[Dot.RankdirLR] "m2" m2
+
+let _ = FF.dot_output_execs "m2_execs" ~options:[Dot.RankdirLR] 8 m2
 
 

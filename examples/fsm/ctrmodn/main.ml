@@ -12,7 +12,7 @@ module S =
 
 open S
 
-module F = Fsm.Make(S)
+module F = Fsm.Make(S)(Fsm_value.Int)
 
 let mk n = F.create
   ~inps:[]

@@ -14,7 +14,7 @@ module S1 =
 
 open S1
 
-module F1 = Fsm.Make(S1)
+module F1 = Fsm.Make(S1)(Fsm_value.Int)
 
 let mk1 n = F1.create
   ~inps:[]
@@ -53,7 +53,7 @@ module S2 =
 
 open S2
 
-module F2 = Fsm.Make(S2)
+module F2 = Fsm.Make(S2)(Fsm_value.Int)
 
 let mk2 n = F2.create
   ~inps:[]

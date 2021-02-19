@@ -11,120 +11,42 @@
 
 open Utils
 
-module Expr = Fsm_expr.Int 
-
-module type CONDITION = sig
-  type t = 
-    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
-  val to_string: t -> string
-  val of_string: string -> t
-  val list_of_string: string -> t list
-  val eval: Expr.env -> t -> bool
-end
-   
-module Condition = struct
-  type t = 
-    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
-  let to_string c = match c with
-  | Test (v,op,e) -> v ^ op ^ Expr.to_string e
-  exception Unknown_op of string
-  let p_cond s = 
-    let open Genlex in
-    match Stream.next s with
-    | Ident v ->
-       begin match Stream.next s with
-       | Kwd op when List.mem_assoc op Expr.test_ops -> let e = Expr.parse s in Test (v, op, e)
-       | _ -> raise Stream.Failure 
-       end
-    | _ -> raise Stream.Failure
-  let of_string s = p_cond (Expr.lexer s)                   (* BNF : <cond>   ::= ID <test_op> <exp> *)
-  let list_of_string s = ListExt.parse ";" p_cond (Expr.lexer s)
-  let lookup op =
-    try List.assoc op Expr.test_ops
-    with Not_found -> raise (Unknown_op op)
-  let eval env texp = match texp with
-  | Test (id, op, exp) -> (lookup op) (Expr.lookup env id) (Expr.eval env exp)
-end
-
-module type ACTION = sig
-  type t =
-  | Assign of Expr.ident * Expr.t        (* variable, value *)
-  val to_string: t -> string
-  val of_string: string -> t                   (* BNF : <act>   ::= ID ':=' <exp> *)
-  val list_of_string: string -> t list
-end
-
-module Action = struct
-  type t = 
-    | Assign of Expr.ident * Expr.t        (* variable, value *)
-  let to_string a = match a with
-    | Assign (id, expr) -> id ^ ":=" ^ Expr.to_string expr
-  let rec p_act s = match Stream.next s with
-    | Genlex.Ident e1 -> p_act1 e1 s
-    | _ -> raise Stream.Failure
-  and p_act1 e1 s = match Stream.next s with
-    | Genlex.Kwd ":=" -> let e2 = Expr.parse s in Assign (e1, e2)
-    | _ -> raise Stream.Failure
-  let of_string s = p_act (Expr.lexer s)
-  let list_of_string s = ListExt.parse ";" p_act (Expr.lexer s)
-end
-
-module type TRANSITION = sig
-  type t = Condition.t list * Action.t list
-  val compare: t -> t -> int
-  val to_string: t -> string
-  val of_string: string*string -> t
-end
-
-module Transition = struct
-
-  type t = Condition.t list * Action.t list
-
-  let compare = Stdlib.compare
-
-  let to_string (conds,acts) =
-    let s1 = ListExt.to_string Condition.to_string ", " conds in
-    let s2 = ListExt.to_string Action.to_string ", " acts in
-    let l = String.make (Misc.max (String.length s1) (String.length s2)) '_' in
-    if s2 <> ""
-    then Printf.sprintf "%s\\n%s\\n%s" s1 l s2 
-    else Printf.sprintf "%s" s1
-
-  let of_string (conds,acts) = Condition.list_of_string conds, Action.list_of_string acts
-end
-
 module type T = sig 
 
   type state
 
-  module Val : Valuation.T with type value = int (** for outputs and local variables *)
+  module Value: Fsm_value.T
 
-  type value = Val.value 
+  module Expr: Fsm_expr.T with type value = Value.t
 
-  type var_name = Val.name
-  type var_domain = value list
-  
+  module Transition: Fsm_transition.T with module Expr = Expr and type Condition.Expr.value = Value.t and type Action.Expr.value = Value.t
+       
+  module Valuation : Valuation.T with type value = Value.t (** for outputs and local variables *)
+
+  type var_name = Valuation.name
+  type var_domain = Value.t list
+                  
   type var_desc = var_name * var_domain
 
-  include Ltsa.T with type state := state and type label := Transition.t and type attr := Valuation.Int.t
+  include Ltsa.T with type state := state and type label := Transition.t and type attr := Valuation.t
 
-  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Valuation.Int.t
+  module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Valuation.t
 
   val create: 
       inps:var_desc list ->
       outps:var_desc list ->
       vars:var_desc list ->
-      states:(state * Valuation.Int.t) list ->
+      states:(state * Valuation.t) list ->
       istate:string * state ->
       trans:(state * (string*string) * state) list ->
       t
 
   val empty: inps:var_desc list -> outps:var_desc list -> lvars:var_desc list -> t
 
-  val add_state: state * Valuation.Int.t -> t -> t
+  val add_state: state * Valuation.t -> t -> t
   val add_transition: state * Transition.t * state -> t -> t
   val add_transition': state * (string*string) * state -> t -> t
-  val add_itransition: Action.t list * state -> t -> t
+  val add_itransition: Transition.Action.t list * state -> t -> t
   val add_itransition': string * state -> t -> t
 
   val lts_of: t -> M.t
@@ -149,9 +71,17 @@ module type T = sig
                -> unit
 end
 
-module Make (S: Ltsa.STATE) = struct 
+module Make (S: Ltsa.STATE) (V: Fsm_value.T) = struct 
 
-  module M = Ltsa.Make (S) (Transition) (Valuation.Int)
+  module Value = V
+
+  module Expr = Fsm_expr.Make(V)
+              
+  module Transition = Fsm_transition.Make(Expr)
+                    
+  module Valuation = Valuation.Make(V)
+
+  module M = Ltsa.Make (S) (Transition) (Valuation)
 
   type state = M.state
   type label = M.label
@@ -160,7 +90,7 @@ module Make (S: Ltsa.STATE) = struct
   module State = M.State
   module Label = Transition
   module States = M.States
-  module Attr = Valuation.Int
+  module Attr = Valuation
   module Attrs = Map.Make(struct type t = state let compare = compare end)
 
   module Tree =
@@ -175,11 +105,8 @@ module Make (S: Ltsa.STATE) = struct
   type transition = M.transition
   type itransition = M.itransition
 
-  module Val = Valuation.Int
-
-  type value = Val.value
-  type var_name = Val.name
-  type var_domain = value list
+  type var_name = Valuation.name
+  type var_domain = Value.t list
                   
   type var_desc = var_name * var_domain
 
@@ -222,7 +149,7 @@ module Make (S: Ltsa.STATE) = struct
   let add_itransition (acts,q) s =
       { s with lts = M.add_itransition (([],acts), q) s.lts }
   let add_itransition' (acts,q) s =
-   add_itransition (Action.list_of_string acts, q) s
+   add_itransition (Transition.Action.list_of_string acts, q) s
 
   let attr_of a q = M.attr_of a.lts q
 
@@ -278,7 +205,7 @@ module Make (S: Ltsa.STATE) = struct
   let is_reachable s q = M.is_reachable s.lts q
 
   let var_node a =
-      let string_of_var pfx (n,d) = pfx ^ n ^ " : {" ^ ListExt.to_string Val.string_of_value "," d ^ "}" in
+      let string_of_var pfx (n,d) = pfx ^ n ^ " : {" ^ ListExt.to_string Valuation.string_of_value "," d ^ "}" in
       let txt = StringExt.concat_sep "\\n"
         [ListExt.to_string (string_of_var "In: ") "\\n" a.ivs;
          ListExt.to_string (string_of_var "Out: ") "\\n" a.ovs;
@@ -298,4 +225,22 @@ module Make (S: Ltsa.STATE) = struct
     M.dot_output_execs name ~fname:fname ~options:options depth a.lts
 
   (* let dump a = M.dump a.lts *)
+end
+
+module Trans (S1: T) (S2: T) =
+struct
+  let map fs fv s1 =
+    let mk_iov (id,v) = id, List.map fv v in
+    let mk_val vs = List.map (fun (n,v) -> n, fv v) vs in
+    let add_states s = S1.fold_states (fun q ov acc -> S2.add_state (fs q, mk_val ov) acc) s1 s in
+    let mk_trans t =
+      let module F = Fsm_transition.Trans(S1.Transition)(S2.Transition) in
+      F.map fv t in
+    let add_transitions s = S1.fold_transitions (fun (q,t,q') acc -> S2.add_transition (fs q, mk_trans t, fs q') acc) s1 s in
+    let add_itransitions s = S1.fold_itransitions (fun (t,q') acc -> S2.add_itransition (snd (mk_trans t), fs q') acc) s1 s in
+    S2.empty
+      ~inps:(s1 |> S1.inps |> List.map mk_iov)
+      ~outps:(s1 |> S1.outps |> List.map mk_iov)
+      ~lvars:(s1 |> S1.vars |> List.map mk_iov)
+      |> add_states |> add_transitions |> add_itransitions
 end

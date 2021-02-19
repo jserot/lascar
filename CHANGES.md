@@ -6,7 +6,8 @@
       and `Lts.map_transition` and updated `examples/lts/map1` accordingly
     * fixed bug in defactorization algorithm for FSMs with output values attached to
       states (see for ex `examples/fsm/gensig2`)
-    * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules
+    * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules (now parametrized on
+      the type of values)
 
 ## 0.6.0 (Sep, 16, 2019)
     * minor rewritings for ocaml >= 4.08

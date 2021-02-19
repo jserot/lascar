@@ -15,8 +15,6 @@ module type T = sig
     type name = string
     type value
     type t = (name * value) list
-    (* val of_list: (name * value) list -> t *)
-    (* val to_list: t -> (name * value) list *)
     val compare: t -> t -> int
     val to_string: t -> string
     exception Invalid_valuation of t

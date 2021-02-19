@@ -66,10 +66,10 @@ end
 (** Functor for transforming FSMs *)
 module Fsm(F: Fsm.T) : sig
 
-  include Fsm.T with type state = F.state * Valuation.Int.t
+  include Fsm.T with type state = F.state * F.Valuation.t
 
-  val defactorize: ?init:(string * state) option -> ?clean:bool -> Valuation.Int.name list -> F.t -> t
-      (** [defactorize vars m] returns an equivalent FSM [m'] obtained by
+  val defactorize: ?init:(string * state) option -> ?clean:bool -> Valuation.name list -> F.t -> t
+(** [defactorize vars m] returns an equivalent FSM [m'] obtained by
           - removing variable listed in [vars] from [m] (all variables if [vars=[]])
           - introducing new states.
           - the optional argument [init] can be used to designate the initial state of the resulting
