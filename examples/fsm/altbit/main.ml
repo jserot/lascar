@@ -8,9 +8,9 @@ open Lascar
 
 module S1 =
     struct
-      type t = Init | E0 | E1
-      let compare = compare
-      let to_string = function Init -> "Init" | E0 -> "E0" | E1 -> "E1"
+      type t = Init | E0 | E1 [@@deriving show {with_path=false}]
+      let compare = Stdlib.compare
+      let to_string = show
     end
 
 open S1
@@ -38,9 +38,9 @@ let _ = F1.dot_output "m1"  m1
 
 module S2 =
     struct
-      type t = Init | E
-      let compare = compare
-      let to_string = function Init -> "Init" | E -> "E"
+      type t = Init | E [@@deriving show {with_path=false}]
+      let compare = Stdlib.compare
+      let to_string = show
     end
 
 open S2

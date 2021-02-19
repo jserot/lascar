@@ -1,4 +1,4 @@
-(lang dune 1.11)
+(lang dune 2.6)
 (name lascar)
 (source (github jserot/lascar))
 (license MIT)

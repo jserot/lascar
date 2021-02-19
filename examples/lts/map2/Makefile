@@ -4,13 +4,13 @@ APP=main
 all: run
 
 build:
-	dune build ./$(APP).bc
+	dune build ./$(APP).exe
 
 test:
-	dune exec ./$(APP).bc
+	dune exec ./$(APP).exe
 
 run:
-	dune exec ./$(APP).bc
+	dune exec ./$(APP).exe
 	for f in *.dot; do $(DOTVIEWER) $$f; done
 
 clean:

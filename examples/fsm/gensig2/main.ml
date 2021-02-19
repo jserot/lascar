@@ -5,9 +5,9 @@ open Lascar
 
 module S =
     struct
-      type t = Off | On
-      let compare = compare
-      let to_string = function Off -> "Off" | On -> "On"
+      type t = Off | On [@@deriving show {with_path=false}]
+      let compare = Stdlib.compare
+      let to_string = show
     end
 
 open S

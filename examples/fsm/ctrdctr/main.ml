@@ -7,9 +7,9 @@ open Lascar
 
 module S1 =
     struct
-      type t = Inc | Dec
-      let compare = compare
-      let to_string = function Inc -> "Inc" | Dec -> "Dec"
+      type t = Inc | Dec [@@deriving show {with_path=false}]
+      let compare = Stdlib.compare
+      let to_string = show
     end
 
 open S1
@@ -46,7 +46,7 @@ let _ = FF1.dot_output ~options:[Dot.RankdirLR] "m2" m2
       
 module S2 =
     struct
-      type t = E
+      type t = E [@@deriving show {with_path=false}]
       let compare = compare
       let to_string = function E -> "E"
     end

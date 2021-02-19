@@ -12,6 +12,8 @@
       libraries. The examples provided in `examples/xx/yy` can be executed interactively with this
       toplevel. For this, each example directory has a link to an `.ocamlinit` file telling where to
       find the corresponding `.cmi` files.
+    * rewrote examples to use `show` PPX extension to generate state names
+    * switched to Dune 2.6 (prev was 1.11)
 
 ## 0.6.0 (Sep, 16, 2019)
     * minor rewritings for ocaml >= 4.08

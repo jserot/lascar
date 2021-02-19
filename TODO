@@ -1,4 +1,3 @@
-- use ppx syntax extensions to generate S.to_string fn
 - use ppx syntax extensions to specify transitions, etc.. in concrete syntax 
 - "classical" operations (product, union, ...) for NFAs and DFAs
 - Kripke structures

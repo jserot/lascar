@@ -4,12 +4,9 @@ open Utils
 open Lascar
 
 module State = struct
-  type t = S0 | S1 | S2
+  type t = S0 | S1 | S2 [@@deriving show {with_path=false}]
   let compare = Stdlib.compare
-  let to_string = function
-      S0 -> "S0"
-    | S1 -> "S1"
-    | S2 -> "S2"
+  let to_string = show
 end
 
 module Attr = Builtins.Bool

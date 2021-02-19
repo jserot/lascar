@@ -5,9 +5,9 @@ open Lascar
 
 module S =
     struct
-      type t = A | B
-      let compare = compare
-      let to_string = function A -> "A" | B -> "B"
+      type t = A | B [@@deriving show {with_path=false}]
+      let compare = Stdlib.compare
+      let to_string = show
     end
 
 module ME = Mealy.Make (S)
