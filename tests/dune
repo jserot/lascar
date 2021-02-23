@@ -1,6 +1,30 @@
 (executable
  (name test_fsm_exprs)
  (modules test_fsm_exprs)
- (libraries  lascar)
+ (libraries lascar test)
  (modes byte))
+
+(executable
+ (name test_fsm_conditions)
+ (modules test_fsm_conditions)
+ (libraries lascar test)
+ (modes byte))
+
+(executable
+ (name test_fsm_actions)
+ (modules test_fsm_actions)
+ (libraries lascar test)
+ (modes byte))
+
+(executable
+ (name test_fsm_transitions)
+ (modules test_fsm_transitions)
+ (libraries lascar test)
+ (modes byte))
+
+(library 
+  (name test)
+  (modules test)
+  (libraries utils)
+  (modes byte))
 

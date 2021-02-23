@@ -12,7 +12,8 @@
 (** {2 Values occuring in FSM expressions and FSMs} *)
 
 module type T = sig
-  include Valuation.VALUE
+  type t [@@deriving show]
+  val to_string: t -> string
   val binary_ops: (string * ((t -> t -> t) * int)) list (** name, (fun, infix level); ex: +, -, *, ... *)
   val unary_ops: (char * (t -> t)) list (** name, fun *)
   val of_int: int -> t

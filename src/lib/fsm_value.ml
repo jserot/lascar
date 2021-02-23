@@ -10,7 +10,8 @@
 (**********************************************************************)
 
 module type T = sig
-  include Valuation.VALUE
+  type t [@@deriving show]
+  val to_string: t -> string
   val binary_ops: (string * ((t -> t -> t) * int)) list (** name, (fun, infix level) *)
   val unary_ops: (char * (t -> t)) list (** name, fun *)
   val of_int: int -> t
@@ -35,7 +36,7 @@ module Int = struct
 end
 
 module Bool = struct
-  type t = bool [@@deriving show]
+  type t = bool [@@deriving show] 
   let compare = Stdlib.compare
   let binary_ops = [
       "||", (( || ), 1);

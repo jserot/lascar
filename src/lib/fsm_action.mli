@@ -15,8 +15,10 @@ module type T = sig
   module Expr : Fsm_expr.T
   type t = 
   | Assign of Expr.ident * Expr.t          (* var, value *)
+      [@@deriving show {with_path=false}]
   val to_string: t -> string
   val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val lexer: string -> Genlex.token Stream.t
   val parse: Genlex.token Stream.t -> t               
 end
 

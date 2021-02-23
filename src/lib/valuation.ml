@@ -9,8 +9,6 @@
 (*                                                                    *)
 (**********************************************************************)
 
-module type VALUE = Utils.OrderedTypeExt.T
-
 module type T = sig
     type name = string
     type value 
@@ -28,7 +26,7 @@ module type T = sig
     val string_of_value: value -> string
 end
 
-module Make (V: VALUE) =
+module Make (V: Fsm_value.T) =
 struct
   type name = string
 
@@ -68,18 +66,6 @@ struct
   let string_of_value v = V.to_string v
 end
 
-module Bool =
-  Make(
-      struct
-        type t = bool
-        let compare = Stdlib.compare
-        let to_string = function true -> "1" | false -> "0"
-      end)
+module Bool = Make(Fsm_value.Bool)
 
-module Int =
-  Make(
-      struct
-        type t = int
-        let compare = Stdlib.compare
-        let to_string = string_of_int
-      end)
+module Int = Make(Fsm_value.Int)

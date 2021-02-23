@@ -13,8 +13,10 @@ module type T = sig
   module Expr : Fsm_expr.T
   type t = 
     | Test of Expr.ident * string * Expr.t (* var, op, expr *)
+      [@@deriving show {with_path=false}]
   val to_string: t -> string
   val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val lexer: string -> Genlex.token Stream.t
   val parse: Genlex.token Stream.t -> t               
   val eval: Expr.env -> t -> bool
 end
@@ -23,9 +25,12 @@ module Make (Expr: Fsm_expr.T) = struct
   module Expr = Expr
   type t = 
     | Test of Expr.ident * string * Expr.t (* var, op, expr *)
+      [@@deriving show {with_path=false}]
   let to_string c = match c with
   | Test (v,op,e) -> v ^ op ^ Expr.to_string e
   exception Unknown_op of string
+  let keywords = Expr.keywords
+  let lexer s = s |> Expr.mk_unaries |> Stream.of_string |> Genlex.make_lexer keywords 
   let p_cond s = 
     let open Genlex in
     match Stream.next s with
@@ -36,7 +41,7 @@ module Make (Expr: Fsm_expr.T) = struct
        end
     | _ -> raise Stream.Failure
   let parse = p_cond
-  let of_string ?(lexer=Expr.lexer) s = parse (lexer s)
+  let of_string ?(lexer=lexer) s = parse (lexer s)
   let lookup op =
     try List.assoc op Expr.test_ops
     with Not_found -> raise (Unknown_op op)

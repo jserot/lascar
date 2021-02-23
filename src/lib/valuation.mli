@@ -11,9 +11,6 @@
 
 (** {2 A [valuation] is a collection of [(name,value)] associations} *)
 
-module type VALUE = Utils.OrderedTypeExt.T
-(** Values must have an ordered type and must be stringable. *)
-
 module type T = sig
 
     type name = string
@@ -52,7 +49,7 @@ module type T = sig
 end
 
 (** Functor building an implementation of the Valuation structure given an implementation of values *)
-module Make (V: VALUE) : T with type value = V.t
+module Make (V: Fsm_value.T) : T with type value = V.t
 
 (** Some predefined instances *)
 

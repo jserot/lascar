@@ -16,9 +16,11 @@ module type T = sig
   module Condition: Fsm_condition.T with module Expr = Expr
   module Action: Fsm_action.T with module Expr = Expr
   type t = Condition.t list * Action.t list
+      [@@deriving show {with_path=false}]
   val compare: t -> t -> int
   val to_string: t -> string
-  val of_string: string -> t
+  val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val lexer: string -> Genlex.token Stream.t
   val parse: Genlex.token Stream.t -> t
 end
 

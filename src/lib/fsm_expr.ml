@@ -11,15 +11,16 @@
 
 module type T = sig
 
-  type ident = string 
+  type ident = string [@@deriving show]
 
-  type value
+  type value [@@deriving show]
 
   type t = 
     EConst of value            (** Constants *)   
   | EVar of ident              (** Input, output or local variable *)
   | EBinop of string * t * t   (** Binary operation  *)
   | EUnop of char * t          (** Unary operation  *)
+  [@@deriving show {with_path=false}]
 
   type env = (ident * value option) list
            
@@ -47,15 +48,16 @@ end
 
 module Make (V: Fsm_value.T) = struct
 
-    type ident = string 
+    type ident = string [@@deriving show]
 
-    type value = V.t 
+    type value = V.t  [@@deriving show]
 
     type t = 
       EConst of value            (** Constants *)   
     | EVar of ident              (** Input, output or local variable *)
     | EBinop of string * t * t   (** Binary operation *)
     | EUnop of char * t          (** Unary operation *)
+    [@@deriving show {with_path=false}]
 
     type env = (ident * value option) list
 

@@ -13,10 +13,10 @@
 
 module type T = sig
 
-  type ident = string 
+  type ident = string [@@deriving show]
   (** The type of identifiers occuring in expressions *)
 
-  type value
+  type value [@@deriving show]
   (** The type of expression values *)
 
   (** The type of expressions *)
@@ -25,7 +25,8 @@ module type T = sig
   | EVar of ident              (** Input, output or local variable *)
   | EBinop of string * t * t   (** Binary operation *)
   | EUnop of char * t        (** Unary operation  *)
-
+  [@@deriving show {with_path=false}]
+           
   type env = (ident * value option) list
            
   exception Unknown of ident
