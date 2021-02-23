@@ -109,7 +109,3 @@ val scatter: ('a -> int) -> 'a list -> 'a list array
         The length of the array is computed from the maximum value of [h] on [l].
         Example: [scatter String.length ["a";"bc";"de";"fghi"]] is [[|[];["a"];["bc;de"];[];["fghi"]|]].
         As for {!assoc} and {!mem_assoc}, the comparison function can be specified with the optional argument [cmp]. *)
-
-val parse: string -> (Genlex.token Stream.t -> 'a) -> Genlex.token Stream.t -> 'a list
-    (** Higher-order parser for lists *)
-    

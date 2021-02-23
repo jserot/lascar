@@ -206,7 +206,7 @@ module Fsm (F: Fsm.T) = struct
     let add_itransitions mm =
       match init with
         Some (acts,q) ->
-          FF.add_itransition' (acts,q) mm
+          FF.add_itransition (acts,q) mm
       | None ->
          let add_sub_itransitions ((conds,acts),(q,ov)) mm =
            let d2v = List.filter (filter_domain ([],acts)) (Utils.ListExt.cart_prod2 dom_v dom_v) in

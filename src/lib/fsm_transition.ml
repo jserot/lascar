@@ -18,7 +18,8 @@ module type T = sig
   type t = Condition.t list * Action.t list
   val compare: t -> t -> int
   val to_string: t -> string
-  val of_string: string*string -> t
+  val of_string: string -> t
+  val parse: Genlex.token Stream.t -> t
 end
 
 module Make (Expr: Fsm_expr.T) = struct
@@ -41,7 +42,34 @@ module Make (Expr: Fsm_expr.T) = struct
     then Printf.sprintf "%s\\n%s\\n%s" s1 l s2 
     else Printf.sprintf "%s" s1
 
-  let of_string (conds,acts) = Condition.list_of_string conds, Action.list_of_string acts
+  let keywords = Expr.keywords @ [","; "|"]
+
+  let p_conditions = Parsing.separated_list "," ~stop_on:(Some "|") Condition.parse
+
+  let p_actions = Parsing.separated_list "," Action.parse
+
+  let lexer s = s |> Expr.mk_unaries |> Stream.of_string |> Genlex.make_lexer keywords 
+               
+  let p_transition s =
+    let p_rest s =
+      match Stream.peek s with
+      | Some (Genlex.Kwd sep) when sep="|" -> Stream.junk s; p_actions s
+      | Some _ -> raise Stream.Failure
+      | None -> [] in
+    match Stream.peek s with
+    | Some (Genlex.Kwd sep) when sep="|" ->
+       Stream.junk s;
+       let acts = p_rest s in
+       ([], acts)
+    | Some _ ->
+       let conds = p_conditions s in
+       let acts = p_actions s in
+       conds, acts
+    | None ->
+       [], []
+      
+  let parse = p_transition
+  let of_string s = p_transition (lexer s)
 end
 
 module Trans (T1: T) (T2: T) =

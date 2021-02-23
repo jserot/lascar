@@ -41,6 +41,8 @@ module type T = sig
   val lexer: string -> Genlex.token Stream.t
   val parse: Genlex.token Stream.t -> t 
 
+  val keywords: string list
+  val mk_unaries: string -> string
 end
 
 module Make (V: Fsm_value.T) = struct
@@ -123,13 +125,9 @@ module Make (V: Fsm_value.T) = struct
         List.map (fun (op,_) -> String.make 1 op) V.unary_ops
       @ List.map fst V.binary_ops
       @ List.map fst test_ops
-      @ [":="; "("; ")"; ";"]
+      @ [":="; "("; ")"; ";"; "|"]
 
-    let mk_unaries s =
-      List.fold_left
-        (fun s op -> s |> String.split_on_char op |> String.concat (" " ^ String.make 1 op ^ " "))
-        s
-        (List.map fst V.unary_ops)
+    let mk_unaries s = Utils.Misc.space_chars (List.map fst V.unary_ops) s
                           
     let lexer s = s |> mk_unaries |> Stream.of_string |> Genlex.make_lexer keywords 
 

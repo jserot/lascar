@@ -16,8 +16,8 @@ module type T = sig
   type t = 
   | Assign of Expr.ident * Expr.t          (* var, value *)
   val to_string: t -> string
-  val of_string: string -> t               (* BNF : <act>   ::= ID ':=' <exp> *)
-  val list_of_string: string -> t list
+  val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val parse: Genlex.token Stream.t -> t               
 end
 
 module Make (Expr: Fsm_expr.T) : T with module Expr = Expr

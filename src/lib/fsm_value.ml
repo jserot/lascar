@@ -18,7 +18,7 @@ module type T = sig
 end
 
 module Int = struct
-  type t = int
+  type t = int [@@deriving show]
   let compare = Stdlib.compare
   let binary_ops = [
       "+", (( + ), 1);
@@ -35,7 +35,7 @@ module Int = struct
 end
 
 module Bool = struct
-  type t = bool
+  type t = bool [@@deriving show]
   let compare = Stdlib.compare
   let binary_ops = [
       "||", (( || ), 1);

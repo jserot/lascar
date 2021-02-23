@@ -37,17 +37,15 @@ module type T = sig
       outps:var_desc list ->
       vars:var_desc list ->
       states:(state * Valuation.t) list ->
-      istate:string * state ->
-      trans:(state * (string*string) * state) list ->
+      istate: Transition.Action.t list * state ->
+      trans: (state * Transition.t * state) list ->
       t
 
   val empty: inps:var_desc list -> outps:var_desc list -> lvars:var_desc list -> t
 
   val add_state: state * Valuation.t -> t -> t
   val add_transition: state * Transition.t * state -> t -> t
-  val add_transition': state * (string*string) * state -> t -> t
   val add_itransition: Transition.Action.t list * state -> t -> t
-  val add_itransition': string * state -> t -> t
 
   val lts_of: t -> M.t
 
@@ -143,21 +141,21 @@ module Make (S: Ltsa.STATE) (V: Fsm_value.T) = struct
 
   let add_transition (q,(conds,acts),q') s =
     { s with lts = M.add_transition (q, (conds,acts), q') s.lts }
-  let add_transition' (q,(conds,acts),q') s =
-    add_transition (q, Transition.of_string (conds,acts), q') s
+  (* let add_transition' (q,(conds,acts),q') s =
+   *   add_transition (q, Transition.of_string (conds,acts), q') s *)
 
   let add_itransition (acts,q) s =
       { s with lts = M.add_itransition (([],acts), q) s.lts }
-  let add_itransition' (acts,q) s =
-   add_itransition (Transition.Action.list_of_string acts, q) s
+  (* let add_itransition' (acts,q) s =
+   *  add_itransition (Transition.Action.list_of_string acts, q) s *)
 
   let attr_of a q = M.attr_of a.lts q
 
   let create ~inps:ivs ~outps:ovs ~vars:lvs ~states:qs ~istate:(acts,q0) ~trans:ts =
     if not (List.mem q0 (List.map fst qs)) then failwith "Mealy.create: the initial state is not listed in the set of states";
     let add_states qs s = List.fold_left (fun s q -> add_state q s) s qs in
-    let add_transitions ts s = List.fold_left (fun s (q,(conds,acts),q') -> add_transition' (q,(conds,acts),q') s) s ts in
-    empty ~inps:ivs ~outps:ovs ~lvars:lvs |> add_states qs |> add_transitions ts |> add_itransition' (acts,q0)
+    let add_transitions ts s = List.fold_left (fun s (q,(conds,acts),q') -> add_transition (q,(conds,acts),q') s) s ts in
+    empty ~inps:ivs ~outps:ovs ~lvars:lvs |> add_states qs |> add_transitions ts |> add_itransition (acts,q0)
 
   let states s = M.states s.lts
   let states' s = M.states' s.lts
@@ -224,7 +222,6 @@ module Make (S: Ltsa.STATE) (V: Fsm_value.T) = struct
   let dot_output_execs name ?(fname="") ?(options=[]) depth a =
     M.dot_output_execs name ~fname:fname ~options:options depth a.lts
 
-  (* let dump a = M.dump a.lts *)
 end
 
 module Trans (S1: T) (S2: T) =

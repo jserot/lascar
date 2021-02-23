@@ -136,21 +136,3 @@ let scatter p l =
   let t = Array.make (m+1) [] in 
   List.iter (function x -> let k = p x in t.(k) <- x::t.(k)) l;
   t
-
-let rec parse sep p s =
-  match Stream.peek s with
-  | Some _ ->
-     let e = p s in
-     let es = parse_aux p sep s in
-     e::es
-  | None ->
-     []
-              
-and parse_aux p sep s =
-  match Stream.next s with
-  | Genlex.Kwd sep' ->
-     if sep=sep' then parse sep p s else raise Stream.Failure
-  | _ ->
-     raise Stream.Failure
-  | exception Stream.Failure ->
-     []

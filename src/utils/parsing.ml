@@ -9,23 +9,32 @@
 (*                                                                    *)
 (**********************************************************************)
 
-(** {2 Conditions for FSM transitions} *)
+let separated_list sep ?(stop_on:string option=None) p s =
+  let rec p_rest s =
+  match Stream.peek s, stop_on with
+  | Some (Genlex.Kwd sep'), _ when sep'=sep ->
+     Stream.junk s;
+     let e = p s in
+     let es = p_rest s in
+     e::es
+  | Some (Genlex.Kwd c), Some c' when c=c' -> [] (* Special case: do not report error but return *)
+  | Some _, _ -> raise Stream.Failure
+  | None, _ -> [] in
+  match Stream.peek s with
+  | Some _ ->
+     let e = p s in
+     let es = p_rest s in
+     e::es
+  | None ->
+     []
 
-module type T = sig
-  module Expr : Fsm_expr.T
-  type t = 
-    | Test of Expr.ident * string * Expr.t (* var, op, expr *)
-  val to_string: t -> string
-  val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
-  val parse: Genlex.token Stream.t -> t               
-  val eval: Expr.env -> t -> bool
-end
-
-module Make (Expr: Fsm_expr.T) : T with module Expr = Expr
-
-(** Functor for converting a FSM condition, with a given implementation of values
-   into another one with a different implementations *)
-module Trans (C1: T) (C2: T) :
-sig
-  val map: (C1.Expr.value -> C2.Expr.value) -> C1.t -> C2.t
-end
+let run lexer parse s =
+  let ss = lexer s in
+  try
+    let e  = parse ss in
+    begin match Stream.peek ss with
+    | None -> Ok e
+    | t -> Error t
+    end
+  with
+    Stream.Failure -> Error (Stream.peek ss)

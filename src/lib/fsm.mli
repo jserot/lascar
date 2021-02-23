@@ -40,12 +40,12 @@ module type T = sig
   module M : Ltsa.T with type state = state and type label = Transition.t and type attr = Valuation.t
 
   val create: 
-      inps:var_desc list ->
-      outps:var_desc list ->
-      vars:var_desc list ->
-      states:(state * Valuation.t) list ->
-      istate:string * state ->
-      trans:(state * (string*string) * state) list ->
+      inps: var_desc list ->
+      outps: var_desc list ->
+      vars: var_desc list ->
+      states: (state * Valuation.t) list ->
+      istate: Transition.Action.t list * state ->
+      trans: (state * Transition.t * state) list ->
       t
            (** [create ivs ovs lvs qs q0 ts] builds an FSM structure from
               - a list of input, output and local variables (each being described by a name and a domain)
@@ -71,17 +71,9 @@ module type T = sig
   val add_transition: state * Transition.t * state -> t -> t
       (** [add_transition t m] returns the FSM obtained by adding transition [t] to FSM [m] *)
 
-  val add_transition': state * (string*string) * state -> t -> t
-      (** [add_transition] is a variant of [add_transition] for which the added transition is specified
-          using concrete syntax as a pair of strings  *)
-
   val add_itransition: Transition.Action.t list * state -> t -> t
       (** [add_itransition (acts,s) m] returns the FSM obtained by adding the initial transition [(acts,s)]
           to FSM [m] *)
-
-  val add_itransition': string * state -> t -> t
-      (** [add_itransition'] is a variant of [add_itransition] for which the initial actions are specified
-          using concrete syntax as a string  *)
 
   val lts_of: t -> M.t
       (** Return the underlying representation of the LTS as a LTSA *)

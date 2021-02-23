@@ -9,15 +9,13 @@
 (*                                                                    *)
 (**********************************************************************)
 
-open Utils
-
 module type T = sig
   module Expr : Fsm_expr.T
   type t = 
     | Test of Expr.ident * string * Expr.t (* var, op, expr *)
   val to_string: t -> string
-  val of_string: string -> t
-  val list_of_string: string -> t list
+  val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val parse: Genlex.token Stream.t -> t               
   val eval: Expr.env -> t -> bool
 end
 
@@ -37,8 +35,8 @@ module Make (Expr: Fsm_expr.T) = struct
        | _ -> raise Stream.Failure 
        end
     | _ -> raise Stream.Failure
-  let of_string s = p_cond (Expr.lexer s)
-  let list_of_string s = ListExt.parse ";" p_cond (Expr.lexer s)
+  let parse = p_cond
+  let of_string ?(lexer=Expr.lexer) s = parse (lexer s)
   let lookup op =
     try List.assoc op Expr.test_ops
     with Not_found -> raise (Unknown_op op)

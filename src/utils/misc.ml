@@ -33,3 +33,10 @@ let append_file f s =
   let oc = open_out_gen [Open_append] 0x644 f in
   Printf.fprintf oc "%s" s;
   close_out oc
+
+let space_chars cs s =
+      List.fold_left
+        (fun s op -> s |> String.split_on_char op |> String.concat (" " ^ String.make 1 op ^ " "))
+        s
+        cs
+                          

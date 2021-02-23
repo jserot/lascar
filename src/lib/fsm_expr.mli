@@ -46,6 +46,9 @@ module type T = sig
   val lexer: string -> Genlex.token Stream.t
   val parse: Genlex.token Stream.t -> t 
 
+  val keywords: string list
+  val mk_unaries: string -> string
+
 end
 
 (** Functor building an implementation of the Fsm_expr structure given an implementation of values *)

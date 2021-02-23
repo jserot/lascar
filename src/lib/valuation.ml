@@ -13,7 +13,7 @@ module type VALUE = Utils.OrderedTypeExt.T
 
 module type T = sig
     type name = string
-    type value
+    type value 
     type t = (name * value) list
     val compare: t -> t -> int
     val to_string: t -> string

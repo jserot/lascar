@@ -68,11 +68,11 @@ module Fsm(F: Fsm.T) : sig
 
   include Fsm.T with type state = F.state * F.Valuation.t
 
-  val defactorize: ?init:(string * state) option -> ?clean:bool -> Valuation.name list -> F.t -> t
+  val defactorize: ?init:(Transition.Action.t list * state) option -> ?clean:bool -> Valuation.name list -> F.t -> t
 (** [defactorize vars m] returns an equivalent FSM [m'] obtained by
           - removing variable listed in [vars] from [m] (all variables if [vars=[]])
           - introducing new states.
-          - the optional argument [init] can be used to designate the initial state of the resulting
+          - the optional argument [init] can be used to designate the initial state and actions of the resulting
             automata (when the operation leads to several initial states)
           - unreachable states are removed from the resulting automata unlesse the optional
             argument [clean] is set to false

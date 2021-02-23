@@ -5,5 +5,16 @@
 (library
   (name lascar)
   (public_name lascar)
+  (modules builtins conv dfa fsm fsm_action fsm_condition fsm_expr fsm_transition fsm_value lts ltsa mealy moore nfa valuation)
+  (preprocess (pps ppx_deriving.show))
   (libraries utils))
+
+(library
+ (name ppxs)
+ (modules fsm_ppxs)
+ (wrapped false)
+ (kind ppx_rewriter)
+ (libraries lascar ppxlib)
+ (ppx_runtime_libraries lascar)
+ (preprocess (pps ppxlib.metaquot)))
 

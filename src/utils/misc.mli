@@ -30,3 +30,7 @@ val iter_fix: ('a -> 'a -> bool) -> ('a -> 'a) -> 'a -> 'a
 
 val append_file: string -> string -> unit
     (** [append_file f s] appends [s] to file [f] *)
+
+val space_chars: char list -> string -> string 
+  (** [space_chars cs s] replaces each character [c] of [s] listed in [cs] by [" c "].
+      This function is used to properly handle unary operators when parsing [!Fsm_expr]s *)

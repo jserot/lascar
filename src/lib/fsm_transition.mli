@@ -18,14 +18,13 @@ module type T = sig
   type t = Condition.t list * Action.t list
   val compare: t -> t -> int
   val to_string: t -> string
-  val of_string: string*string -> t
+  val of_string: string -> t
+  val parse: Genlex.token Stream.t -> t
 end
 
 module Make (Expr: Fsm_expr.T) : T with module Expr = Expr
                                     and module Condition.Expr = Expr
                                     and module Action.Expr = Expr
-                                    (* and type Condition.Expr.value = Expr.value
-                                     * and type Action.Expr.value = Expr.value *)
 
 (** Functor for converting an FSM transition, with a given implementation of values
    into another one with a different implementation *)

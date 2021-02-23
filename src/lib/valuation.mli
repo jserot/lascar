@@ -19,10 +19,10 @@ module type T = sig
     type name = string
       (** The type of variable names *)
 
-    type value
+    type value 
       (** The type for variable values *)
 
-    type t = (name * value) list
+    type t = (name * value) list 
     (** The type of valuation. Basic, public implementation here *)
 
     val compare: t -> t -> int

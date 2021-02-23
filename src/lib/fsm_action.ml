@@ -9,15 +9,13 @@
 (*                                                                    *)
 (**********************************************************************)
 
-open Utils
-
 module type T = sig
   module Expr : Fsm_expr.T
   type t = 
   | Assign of Expr.ident * Expr.t          (* var, value *)
   val to_string: t -> string
-  val of_string: string -> t               (* BNF : <act>   ::= ID ':=' <exp> *)
-  val list_of_string: string -> t list
+  val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
+  val parse: Genlex.token Stream.t -> t               
 end
 
 module Make (Expr: Fsm_expr.T) = struct
@@ -32,8 +30,8 @@ module Make (Expr: Fsm_expr.T) = struct
   and p_act1 e1 s = match Stream.next s with
     | Genlex.Kwd ":=" -> let e2 = Expr.parse s in Assign (e1, e2)
     | _ -> raise Stream.Failure
-  let of_string s = p_act (Expr.lexer s)
-  let list_of_string s = ListExt.parse ";" p_act (Expr.lexer s)
+  let parse = p_act
+  let of_string ?(lexer=Expr.lexer) s = p_act (lexer s)
 end
 
 module Trans (A1: T) (A2: T) =
