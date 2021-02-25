@@ -61,12 +61,11 @@ module Make (Expr: Fsm_expr.T) = struct
       | None -> [] in
     match Stream.peek s with
     | Some (Genlex.Kwd sep) when sep="|" ->
-       Stream.junk s;
        let acts = p_rest s in
        ([], acts)
     | Some _ ->
        let conds = p_conditions s in
-       let acts = p_actions s in
+       let acts = p_rest s in
        conds, acts
     | None ->
        [], []
