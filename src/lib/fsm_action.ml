@@ -45,3 +45,6 @@ struct
   let map fv a1  = match a1 with
     | A1.Assign (id, exp) -> A2.Assign (id, F.map fv exp)
 end
+
+module Int = Make(Fsm_expr.Int)
+module Bool = Make(Fsm_expr.Bool)

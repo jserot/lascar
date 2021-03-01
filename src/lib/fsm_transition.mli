@@ -34,3 +34,10 @@ module Trans (T1: T) (T2: T) :
 sig
   val map: (T1.Expr.value -> T2.Expr.value) -> T1.t -> T2.t
 end
+
+(** Some predefined instances *)
+
+module Int : T with module Expr = Fsm_expr.Int
+
+module Bool : T with module Expr = Fsm_expr.Bool
+

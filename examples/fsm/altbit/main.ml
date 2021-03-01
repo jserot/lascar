@@ -37,24 +37,24 @@ let m1 =
 
 let _ = F1.dot_output "m1"  m1
 
-(* Idem, but with concrete syntax for transitions, thx to PPX extension *)
+(* Idem, but with concrete syntax for transitions, thx to PPX extensions *)
        
-(* let m11 = F1.create
- *   ~inps:["e",[0;1]]
- *   ~outps:["s",[0;1]]
- *   ~vars:[]
- *   ~states:[Init,[]; E0,[]; E1,[]]
- *   ~istate:([%fsm_action {|s:=0|}], Init)
- *   ~trans:[
- *     Init, [%fsm_trans {|e=0|}], E0;
- *     Init, [%fsm_trans {|e=1|}), E1;
- *     E0, [%fsm_trans {|e=1 / s:=0|}], E1;
- *     E0, [%fsm_trans {|e=0 /"s:=1|}], E0;
- *     E1, [%fsm_trans {|e=0 / s:=0|}], E0;
- *     E1, [%fsm_trans {|e=1 / s:=1|}], E1;
- *     ] *)
+let m11 = F1.create
+  ~inps:["e",[0;1]]
+  ~outps:["s",[0;1]]
+  ~vars:[]
+  ~states:[Init,[]; E0,[]; E1,[]]
+  ~istate:([[%fsm_action "s:=0"]], Init)
+  ~trans:[
+    Init, [%fsm_trans {|e=0|}], E0;
+    Init, [%fsm_trans {|e=1|}], E1;
+    E0, [%fsm_trans {|e=1 | s:=0|}], E1;
+    E0, [%fsm_trans {|e=0 | s:=1|}], E0;
+    E1, [%fsm_trans {|e=0 | s:=0|}], E0;
+    E1, [%fsm_trans {|e=1 | s:=1|}], E1;
+    ]
 
-(* let _ = F1.dot_output "m11"  m11 *)
+let _ = F1.dot_output "m11"  m11
 
 (* Second model : using a variable to memorize the last read input value *)
 

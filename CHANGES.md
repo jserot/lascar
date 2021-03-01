@@ -1,6 +1,6 @@
 # Changes
 
-## 0.6.1 (Feb XX, 2021)
+## 0.7.0 (Feb XX, 2021)
     * fixed formatting bugs in generated doc 
     * Added functions `Ltsa.map_state_attr`, `Ltsa.map_transition`, `Lts.map_state`
       and `Lts.map_transition` and updated `examples/lts/map1` accordingly

@@ -71,7 +71,8 @@ module Make (Expr: Fsm_expr.T) = struct
        [], []
       
   let parse = p_transition
-  let of_string ?(lexer=lexer) s = p_transition (lexer s)
+  (* let of_string ?(lexer=lexer) s = p_transition (lexer s) *)
+  let of_string ?(lexer=lexer) s = Utils.Parsing.try_run ~lexer ~parser:p_transition s
 end
 
 module Trans (T1: T) (T2: T) =
@@ -80,3 +81,6 @@ struct
   module FA = Fsm_action.Trans (T1.Action) (T2.Action)
   let map fv (conds,acts)  = List.map (FC.map fv) conds, List.map (FA.map fv) acts
 end
+
+module Int = Make(Fsm_expr.Int)
+module Bool = Make(Fsm_expr.Bool)

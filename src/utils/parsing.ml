@@ -28,13 +28,26 @@ let separated_list sep ?(stop_on:string option=None) p s =
   | None ->
      []
 
-let run lexer parse s =
+let run ~lexer ~parser s =
   let ss = lexer s in
   try
-    let e  = parse ss in
+    let e  = parser ss in
     begin match Stream.peek ss with
     | None -> Ok e
     | t -> Error t
     end
   with
     Stream.Failure -> Error (Stream.peek ss)
+
+exception Parse_error of string * Genlex.token  option
+
+let try_run ~lexer ~parser s =
+  let ss = lexer s in
+  try
+    let e  = parser ss in
+    begin match Stream.peek ss with
+    | None -> e
+    | t -> raise (Parse_error (s, Stream.peek ss))
+    end
+  with
+    Stream.Failure -> raise (Parse_error (s, Stream.peek ss))

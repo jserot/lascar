@@ -10,7 +10,7 @@
   (libraries utils))
 
 (library
- (name ppxs)
+ (name lascar_ppxs)
  (modules fsm_ppxs)
  (wrapped false)
  (kind ppx_rewriter)

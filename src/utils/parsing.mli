@@ -28,8 +28,23 @@ val separated_list :
 
 (** {3 Useful wrappers} *)
 
-val run : ('a -> 'b Stream.t) -> ('b Stream.t -> 'c) -> 'a -> ('c, 'b option) result
+val run :
+     lexer:(string -> Genlex.token Stream.t)
+  -> parser:(Genlex.token Stream.t -> 'a)
+  -> string 
+  -> ('a, Genlex.token option) Result.t
   (** [run lexer parser src] builds a stream of token [ss] by applying [lexer] to [src], applies [parser]
       to this stream and returns either [Ok r] if parsing succeeds (with result [r]) or [Error e] if 
       parsing fails (with [e=Some t] and [t] the current lookahead token or [e=None] if the remaining
       input stream is empty. *)
+
+exception Parse_error of string * Genlex.token option  (** Parsed string, lookahead token *)
+
+val try_run :
+     lexer:(string -> Genlex.token Stream.t)
+  -> parser:(Genlex.token Stream.t -> 'a)
+  -> string 
+  -> 'a
+  (** [try_run lexer parser src] is like {!run} except that it just raises exception {!Parse_error} 
+      if parsing fails *)
+

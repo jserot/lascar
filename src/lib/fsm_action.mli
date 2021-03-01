@@ -30,3 +30,9 @@ module Trans (A1: T) (A2: T) :
 sig
   val map: (A1.Expr.value -> A2.Expr.value) -> A1.t -> A2.t
 end
+
+(** Some predefined instances *)
+
+module Int : T with module Expr = Fsm_expr.Int
+
+module Bool : T with module Expr = Fsm_expr.Bool

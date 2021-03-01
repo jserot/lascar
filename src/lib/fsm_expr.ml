@@ -187,3 +187,6 @@ struct
     | E1.EBinop (op,e1,e2) -> E2.EBinop (op, map fv e1, map fv e2)
     | E1.EUnop (op,e) -> E2.EUnop (op, map fv e)
 end
+
+module Int = Make(Fsm_value.Int)
+module Bool = Make(Fsm_value.Bool)

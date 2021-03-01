@@ -61,3 +61,9 @@ module Trans (E1: T) (E2: T) :
 sig
   val map: (E1.value -> E2.value) -> E1.t -> E2.t
 end
+
+(** Some predefined instances *)
+
+module Int : T with type value = int
+
+module Bool : T with type value = bool
