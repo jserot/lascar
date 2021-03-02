@@ -1,4 +1,3 @@
-- use ppx syntax extensions to specify transitions, etc.. in concrete syntax 
 - "classical" operations (product, union, ...) for NFAs and DFAs
 - Kripke structures
 - Buchi automata
