@@ -16,17 +16,20 @@ open S1
 
 module F1 = Fsm.Make(S1)(Fsm_value.Int)
 
-let mk1 n = F1.create
-  ~inps:[]
-  ~outps:[]
-  ~vars:["c", ListExt.range Fun.id 0 (n-1)]
-  ~states:[Inc,[];Dec,[]]
-  ~istate:("c:=0", Inc)
-  ~trans:[
-    Inc, ("c<"^string_of_int (n-1),"c:=c+1"), Inc;
-    Inc, ("c="^string_of_int (n-1),"c:=c-1"), Dec;
-    Dec, ("c>0","c:=c-1"), Dec;
-    Dec, ("c=0","c:=c+1"), Inc;
+let mk1 n =
+  let open F1 in
+  let open Transition.Condition in
+  create
+    ~inps:[]
+    ~outps:[]
+    ~vars:["c", ListExt.range Fun.id 0 (n-1)]
+    ~states:[Inc,[];Dec,[]]
+    ~istate:(F1.mk_acts "c:=0", Inc)
+    ~trans:[
+      Inc, ([Test ("c", "<", EBinop ("-", EConst n, EConst 1))], mk_acts "c:=c+1"), Inc;
+      Inc, ([Test ("c", "=", EBinop ("-", EConst n, EConst 1))], mk_acts "c:=c-1"), Dec;
+      Dec, mk_trans "c>0 | c:=c-1", Dec;
+      Dec, mk_trans "c=0 | c:=c+1", Inc;
     ]
 
 let m1 = mk1 4
@@ -37,7 +40,7 @@ module FF1 = Conv.Fsm(F1)
 
 (* By defactorizing [m1] wrt. the [c] variable, we get the classical, variable-less automata *)
 
-let m2 = FF1.defactorize ~init:(Some ("",(Inc,["c",0]))) ["c"] m1
+let m2 = FF1.defactorize ~init:(Some ([],(Inc,["c",0]))) ["c"] m1
 
 let _ = FF1.dot_output ~options:[Dot.RankdirLR] "m2" m2
 
@@ -55,18 +58,20 @@ open S2
 
 module F2 = Fsm.Make(S2)(Fsm_value.Int)
 
-let mk2 n = F2.create
-  ~inps:[]
-  ~outps:[]
-  ~states:[E,[]]      
-  ~vars:["dir", [0;1];  (* dir=0 => inc; dir=1 => dec *)
-         "c", ListExt.range Fun.id 0 (n-1)] 
-  ~istate:("c:=0;dir:=0", E)
-  ~trans:[
-    E, ("dir=0;c<"^string_of_int (n-1),"c:=c+1"), E;
-    E, ("dir=0;c="^string_of_int (n-1),"c:=c-1;dir:=1"), E;
-    E, ("dir=1;c>0","c:=c-1"), E;
-    E, ("dir=1;c=0","c:=c+1;dir:=0"), E;
+let mk2 n =
+  let open F2 in
+  create
+    ~inps:[]
+    ~outps:[]
+    ~states:[E,[]]      
+    ~vars:["dir", [0;1];  (* dir=0 => inc; dir=1 => dec *)
+           "c", ListExt.range Fun.id 0 (n-1)] 
+    ~istate:(mk_acts "c:=0,dir:=0", E)
+    ~trans:[
+      E, ([Test ("dir", "=", EConst 0); Test ("c", "<", EBinop ("-", EConst n, EConst 1))], mk_acts "c:=c+1"), E;
+      E, ([Test ("dir", "=", EConst 0); Test ("c", "=", EBinop ("-", EConst n, EConst 1))], mk_acts "c:=c-1,dir:=1"), E;
+      E, mk_trans "dir=1,c>0 | c:=c-1", E;
+      E, mk_trans "dir=1,c=0 | c:=c+1,dir:=0", E;
     ]
 
 let m3 = mk2 4

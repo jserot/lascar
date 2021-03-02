@@ -110,6 +110,14 @@ module type T = sig
     (** [dot_output_oc name oc s] is a variant of [dot_output] in which the description of [s]
         is written to the (previously opened) output channel [oc]. *)
 
+  (** Helping parsers *)
+
+  val mk_cond: string -> Transition.Condition.t
+  val mk_conds: string -> Transition.Condition.t list
+  val mk_act: string -> Transition.Action.t
+  val mk_acts: string -> Transition.Action.t list
+  val mk_trans: string -> Transition.t
+
 end
 
 module Make (S: Ltsa.STATE) (V: Fsm_value.T) : T with type state = S.t

@@ -14,16 +14,18 @@ open S
 
 module F = Fsm.Make(S)(Fsm_value.Int)
 
-let mk n = F.create
-  ~inps:["start",[0;1]]
-  ~outps:["s",[0;1]]
-  ~vars:["k", ListExt.range Fun.id 0 n]
-  ~states:[Off,["s",0]; On,["s",1]]
-  ~istate:("", Off)
-  ~trans:[
-    Off, ("start=1","k:=0"), On;
-    On, ("k<"^string_of_int n,"k:=k+1"), On;
-    On, ("k="^string_of_int n,""), Off
+let mk n =
+  let open F in
+  create
+    ~inps:["start",[0;1]]
+    ~outps:["s",[0;1]]
+    ~vars:["k", ListExt.range Fun.id 0 n]
+    ~states:[Off,["s",0]; On,["s",1]]
+    ~istate:([], Off)
+    ~trans:[
+      Off, mk_trans "start=1 | k:=0", On;
+      On, ([Test ("k", "<", EConst n)], mk_acts "k:=k+1"), On; 
+      On, ([Test ("k", "=", EConst n)], []), Off
     ]
 
 let m1 = mk 2
@@ -32,7 +34,7 @@ let _ = F.dot_output "m1"  m1
 
 module FF = Conv.Fsm(F)
 
-let m2 = FF.defactorize ~init:(Some ("",(Off,["k",0]))) [] m1
+let m2 = FF.defactorize ~init:(Some ([],(Off,["k",0]))) [] m1
 
 let _ = FF.dot_output ~options:[Dot.RankdirLR] "m2" m2
 

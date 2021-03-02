@@ -67,6 +67,13 @@ module type T = sig
                -> ?options:Utils.Dot.graph_style list
                -> t
                -> unit
+
+  val mk_cond: string -> Transition.Condition.t
+  val mk_conds: string -> Transition.Condition.t list
+  val mk_act: string -> Transition.Action.t
+  val mk_acts: string -> Transition.Action.t list
+  val mk_trans: string -> Transition.t
+
 end
 
 module Make (S: Ltsa.STATE) (V: Fsm_value.T) = struct 
@@ -221,6 +228,17 @@ module Make (S: Ltsa.STATE) (V: Fsm_value.T) = struct
 
   let dot_output_execs name ?(fname="") ?(options=[]) depth a =
     M.dot_output_execs name ~fname:fname ~options:options depth a.lts
+
+  let mk_lexer keywords s = s |> Expr.mk_unaries |> Stream.of_string |> Genlex.make_lexer keywords
+  let mk_cond s = Transition.Condition.of_string s
+  let mk_act s = Transition.Action.of_string s
+  let mk_conds s =
+    let lexer = mk_lexer (Transition.Condition.keywords @ [","]) in
+    s |> lexer |> Parsing.separated_list "," Transition.Condition.parse
+  let mk_acts s =
+    let lexer = mk_lexer (Transition.Action.keywords @ [","]) in
+    s |> lexer |> Parsing.separated_list "," Transition.Action.parse
+  let mk_trans s = Transition.of_string s
 
 end
 

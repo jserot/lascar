@@ -19,6 +19,7 @@ module type T = sig
   val to_string: t -> string
   val of_string: ?lexer:(string->Genlex.token Stream.t) -> string -> t               
   val lexer: string -> Genlex.token Stream.t
+  val keywords: string list
   val parse: Genlex.token Stream.t -> t               
 end
 
