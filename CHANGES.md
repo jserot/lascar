@@ -1,19 +1,19 @@
 # Changes
 
-## 0.7.0 (Feb XX, 2021)
-    * fixed formatting bugs in generated doc 
+## 0.7.0 (Mar 6, 2021)
+    * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules (now parametrized on
+      the type of values)
+    * rewrote examples to use ad-hoc parsers for conditions, actions and transitions 
     * Added functions `Ltsa.map_state_attr`, `Ltsa.map_transition`, `Lts.map_state`
       and `Lts.map_transition` and updated `examples/lts/map1` accordingly
     * fixed bug in defactorization algorithm for FSMs with output values attached to
       states (see for ex `examples/fsm/gensig2`)
-    * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules (now parametrized on
-      the type of values)
     * `make` now also builds a custom toplevel (`lascar_top`) embedding the `utils` and `lascar`
       libraries. The examples provided in `examples/xx/yy` can be executed interactively with this
       toplevel. For this, each example directory has a link to an `.ocamlinit` file telling where to
       find the corresponding `.cmi` files.
-    * rewrote examples to use ad-hoc parsers for conditions, actions and transitions 
-    * switched to Dune 2.6 (prev was 1.11)
+    * fixed formatting bugs in generated doc 
+    * switched to dune 2.6 (prev was 1.11)
 
 ## 0.6.0 (Sep, 16, 2019)
     * minor rewritings for ocaml >= 4.08
