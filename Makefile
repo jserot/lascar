@@ -31,8 +31,10 @@ opam.show:
 doc.view:
 	open -a Safari _build/default/_doc/_html/index.html
 
-doc:
+doc: 
 	dune build @doc
+	rm -rf ../../github.io/lascar
+	cp -r _build/default/_doc/_html ../../github.io/lascar
 
 html: README.md
 	pandoc -t html -o README.html README.md
