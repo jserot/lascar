@@ -15,7 +15,7 @@
   (description "A library for manipulating Labeled Transition Systems in OCaml")
   (depends
     (ppxlib (>= 0.13.0))
-    (ppx_deriving)
+    (ppx_deriving (>= 4.5))
     (ocaml (>= 4.10))))
 
 (generate_opam_files true)
