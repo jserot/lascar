@@ -1,6 +1,5 @@
 _build/
-doc/tutorial.key/
-doc/tutorial.bak.key/
+docs/tutorial.key/
 config
 config-stamp
 doc/api/

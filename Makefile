@@ -33,8 +33,7 @@ doc.view:
 
 doc: 
 	dune build @doc
-	rm -rf ../../github.io/lascar
-	cp -r _build/default/_doc/_html ../../github.io/lascar
+	cp -r _build/default/_doc/_html/* ./docs
 
 html: README.md
 	pandoc -t html -o README.html README.md
