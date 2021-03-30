@@ -26,10 +26,10 @@ Documentation
 -------------
 
 The library API is documented
-[here](https://jserot.github.io/lascar/index.html).
+[here](https://jserot.github.io/lascar/index.html)
 
 Some annotated code snippets can be found
-[here](https://jserot.github.io/lascar-tutorial/tutorial/tutorial.html)
+[here](https://jserot.github.io/lascar/tutorial/tutorial/tutorial.html)
 
 Other examples are provided in a dedicated [directory](https://github.com/jserot/lascar/tree/master/examples).
 
