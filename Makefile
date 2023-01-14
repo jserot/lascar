@@ -14,7 +14,7 @@ utop:
 install:
 	dune build @install
 
-INSTALL_DOCDIR=`opam config var doc`
+INSTALL_DOCDIR=`opam var doc`
 
 opam.install: 
 	opam install .
@@ -33,7 +33,7 @@ doc.view:
 
 doc: 
 	dune build @doc
-	cp -r _build/default/_doc/_html/* ./docs
+	cp -r _build/default/_doc/_html/* ./docs/html
 
 html: README.md
 	pandoc -t html -o README.html README.md

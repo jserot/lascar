@@ -1,6 +1,8 @@
 (env
   (dev
-    (flags (:standard -annot) (:standard -w -27-32-34-50))))
+    (flags
+      (:standard -annot)
+      (:standard -w -27-32-34-50))))
 
 (library
   (name lascar)

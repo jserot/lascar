@@ -1,4 +1,4 @@
-(lang dune 2.6)
+(lang dune 3.1)
 (name lascar)
 (source (github jserot/lascar))
 (license MIT)
@@ -7,7 +7,6 @@
 (bug_reports "jocelyn.serot@uca.fr")
 (homepage "http://github.com/jserot/lascar")
 (documentation "http://jserot.github.io/lascar")
-(allow_approximate_merlin)
 
 (package
   (name lascar)
