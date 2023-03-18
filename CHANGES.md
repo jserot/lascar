@@ -1,5 +1,8 @@
 # Changes
 
+## 0.7.1 (Mar 18, 2023)
+    * Updates for OCaml 5.0 
+    
 ## 0.7.0 (Mar 6, 2021)
     * revised (generalized) interface for the `Fsm_expr` and `Fsm` modules (now parametrized on
       the type of values)
