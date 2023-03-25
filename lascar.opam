@@ -6,7 +6,7 @@ maintainer: ["Jocelyn Sérot <jocelyn.serot@uca.fr>"]
 authors: ["Jocelyn Sérot <jocelyn.serot@uca.fr>"]
 license: "MIT"
 homepage: "http://github.com/jserot/lascar"
-doc: "http://jserot.github.io/lascar"
+doc: "https://jserot.github.io/lascar/"
 bug-reports: "jocelyn.serot@uca.fr"
 depends: [
   "dune" {>= "3.1"}
