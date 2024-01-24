@@ -41,7 +41,33 @@ module ToDfa (N : Nfa.T) = struct
   include D
 
   let conv nfa =
-    let states' = Q.power (N.states nfa) in
+    let init_state =
+        match N.istate nfa with
+        | None -> Q.empty
+        | Some q0 -> (Q.singleton q0) in
+    let symbols = N.symbols' nfa in
+    let successors q =
+      let successors_with q s =
+        Q.elements q
+        |> List.map (fun q ->
+               N.states' nfa
+               |> List.map fst
+               |> List.filter (fun q' ->
+                      N.is_transition nfa (q, s, q')))
+        |> List.concat
+        |> Q.of_list in
+      List.map (successors_with q) symbols in
+    let reachable_states =
+      let rec next_reachable_states states new_states =
+        if (List.length new_states) == 0 then
+          states
+        else
+          let new_states_succ = List.map successors new_states |> List.concat in
+          let next_new_states = List.filter (fun q -> not (List.mem q states)) new_states_succ in
+          (* Since states and new_states_succ are disjoint, just appending is enough *)
+          let next_states = List.append states new_states_succ in
+          next_reachable_states next_states next_new_states in
+      next_reachable_states [init_state] [init_state] in
     let add_states dfa =
       let is_init_state q =
         match N.istate nfa with
@@ -52,7 +78,7 @@ module ToDfa (N : Nfa.T) = struct
         (fun m q ->
           D.add_state (q, is_init_state q, is_acc_state q) m)
         dfa
-        states' in
+        reachable_states in
     let delta qs s = (* [$(delta(qs,s) = \{ q' \in Q | \exists q \in qs, (q,s,q') \in R \}] *)
        Q.filter
          (fun q' -> Q.exists (fun q -> N.is_transition nfa (q,s,q')) qs)
@@ -60,7 +86,7 @@ module ToDfa (N : Nfa.T) = struct
     let add_transition dfa (qs,s) =
        D.add_transition (qs, s, delta qs s) dfa in
     let add_transitions dfa =
-      List.fold_left add_transition dfa (Utils.ListExt.cart_prod2 states' (N.symbols' nfa)) in
+      List.fold_left add_transition dfa (Utils.ListExt.cart_prod2 reachable_states (N.symbols' nfa)) in
     D.empty (N.symbols' nfa) |> add_states |> add_transitions |> D.clean
 end
 
